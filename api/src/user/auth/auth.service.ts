@@ -11,7 +11,7 @@ export class AuthService {
     @Inject(AuthHelper) private readonly helper: AuthHelper;
 
     public async register(body: RegisterDto): Promise<User | never> {
-        const { name, last_name, password }: RegisterDto = body;
+        const { name, last_name, email, photo, password, isAdmin }: RegisterDto = body;
         let user: User = await this.repository.findOne({ where: { last_name } });
 
         if (user) {
@@ -22,7 +22,10 @@ export class AuthService {
 
         user.name = name;
         user.last_name = last_name;
+        user.email = email;
+        user.photo = photo;
         user.password = this.helper.encodePassword(password);
+        user.isAdmin = isAdmin;
 
         await this.repository.save(user);
 
@@ -30,8 +33,8 @@ export class AuthService {
     }
 
     public async login(body: LoginDto): Promise<string | never> {
-        const { name, last_name, password }: LoginDto = body;
-        const user: User = await this.repository.findOne({ where: { last_name } });
+        const { email, password }: LoginDto = body;
+        const user: User = await this.repository.findOne({ where: { email } });
 
         if (!user) {
             throw new HttpException('No user found', HttpStatus.NOT_FOUND);
@@ -40,8 +43,10 @@ export class AuthService {
         const isPasswordValid: boolean = this.helper.isPasswordValid(password, user.password);
 
         if (!isPasswordValid) {
-            throw new HttpException('No user found', HttpStatus.NOT_FOUND);
+            throw new HttpException('Incorrect password', HttpStatus.NOT_FOUND);
         }
+        console.log(user);
+        
 
         return this.helper.generateToken(user);
     }

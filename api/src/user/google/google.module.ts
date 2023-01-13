@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthHelper } from '../auth/auth.helper';
 import { AuthService } from '../auth/auth.service';
+import { JwtStrategy } from '../auth/auth.strategy';
 import { User } from '../user.entity';
 import { UserService } from '../user.service';
 import { GoogleController } from './google.controller';
@@ -11,9 +14,17 @@ import { GoogleStrategy } from './google.strategy';
 
 @Module({
   imports: [
+    PassportModule.register({ defaultStrategy: 'jwt', property: 'user' }),
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get('JWT_KEY'),
+        signOptions: { expiresIn: config.get('JWT_EXPIRES') },
+      }),
+    }),
     TypeOrmModule.forFeature([User]),
   ],
   controllers: [GoogleController],
-  providers: [GoogleService, AuthService, UserService, AuthHelper, JwtService, GoogleStrategy]
+  providers: [GoogleService, AuthService, UserService, AuthHelper, JwtService, GoogleStrategy, JwtStrategy]
 })
 export class GoogleModule {}

@@ -10,7 +10,7 @@ import { AuthHelper } from './auth.helper';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   @Inject(AuthHelper)
   private readonly helper: AuthHelper;
-
+  
   constructor(@Inject(ConfigService) config: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
