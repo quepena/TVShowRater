@@ -23,8 +23,9 @@ export class AuthService {
         user.name = name;
         user.last_name = last_name;
         user.email = email;
-        user.photo = photo;
+        user.photo = photo;        
         user.password = this.helper.encodePassword(password);
+        console.log("register " + user.password);
         user.isAdmin = isAdmin;
 
         await this.repository.save(user);
@@ -39,14 +40,12 @@ export class AuthService {
         if (!user) {
             throw new HttpException('No user found', HttpStatus.NOT_FOUND);
         }
-
+            
         const isPasswordValid: boolean = this.helper.isPasswordValid(password, user.password);
 
         if (!isPasswordValid) {
             throw new HttpException('Incorrect password', HttpStatus.NOT_FOUND);
         }
-        console.log(user);
-        
 
         return this.helper.generateToken(user);
     }
