@@ -10,16 +10,28 @@ export class RoleService {
         @InjectRepository(Role) private readonly roleRepository: Repository<Role>,
     ) { }
 
-    createRole(createRoleDto: CreateRoleDto) {
+    async findAllRoles(): Promise<Role[]> {
+        return await this.roleRepository.find({ order: { name: 'ASC' } });
+    }
+
+    async findRoleById(id: number) {
+        return this.roleRepository.findOneBy({ id: id })
+    }
+
+    async createRole(createRoleDto: CreateRoleDto) {
         const newRole = this.roleRepository.create(createRoleDto);
-        return this.roleRepository.save(newRole);
+        return await this.roleRepository.save(newRole);
     }
 
-    findRoles() {
-        return this.roleRepository.find();
+    async deleteRole(id: number) {
+        return await this.roleRepository.delete(id);
     }
 
-    findRole(id: number) {
-        return this.roleRepository.findOneBy({id: id});
+    async updateRole(id: number, createRoleDto: CreateRoleDto) {
+        await this.roleRepository.update(id, createRoleDto);
+        const updatedRole = await this.roleRepository.findOneBy({ id: id });
+        if (updatedRole) {
+            return updatedRole;
+        }
     }
 }

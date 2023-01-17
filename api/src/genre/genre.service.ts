@@ -10,12 +10,28 @@ export class GenreService {
     @InjectRepository(Genre) private readonly genreRepository: Repository<Genre>,
   ) { }
 
-  createGenre(createGenreDto: CreateGenreDto) {
-    const newGenre = this.genreRepository.create(createGenreDto);
-    return this.genreRepository.save(newGenre);
+  async findAllGenres(): Promise<Genre[]> {
+    return await this.genreRepository.find({ order: { name: 'ASC' } });
   }
 
-  findGenres() {
-    return this.genreRepository.find();
+  async findGenreById(id: number) {
+    return this.genreRepository.findOneBy({ id: id })
+  }
+
+  async createGenre(createGenreDto: CreateGenreDto) {
+    const newGenre = this.genreRepository.create(createGenreDto);
+    return await this.genreRepository.save(newGenre);
+  }
+
+  async deleteGenre(id: number) {
+    return await this.genreRepository.delete(id);
+  }
+
+  async updateGenre(id: number, createGenreDto: CreateGenreDto) {
+    await this.genreRepository.update(id, createGenreDto);
+    const updatedGenre = await this.genreRepository.findOneBy({ id: id });
+    if (updatedGenre) {
+      return updatedGenre;
+    }
   }
 }

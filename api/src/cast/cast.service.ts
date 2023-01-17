@@ -10,12 +10,28 @@ export class CastService {
         @InjectRepository(Cast) private readonly castRepository: Repository<Cast>,
     ) { }
 
-    createCast(createCastDto: CreateCastDto) {
+    async createCast(createCastDto: CreateCastDto) {
         const newCast = this.castRepository.create(createCastDto);
-        return this.castRepository.save(newCast);
+        return await this.castRepository.save(newCast);
     }
 
-    findCast() {
-        return this.castRepository.find();
+    async findCast() {
+        return await this.castRepository.find();
+    }
+
+    async findCastById(id: number) {
+        return await this.castRepository.findOneBy({ id: id });
+    }
+
+    async updateCast(id: number, createCastDto: CreateCastDto) {
+        await this.castRepository.update(id, createCastDto);
+        const updatedCast = await this.castRepository.findOneBy({id: id});
+        if (updatedCast) {
+            return updatedCast;
+        }
+    }
+
+    async deleteCast(id: number) {
+        return await this.castRepository.delete(id);
     }
 }

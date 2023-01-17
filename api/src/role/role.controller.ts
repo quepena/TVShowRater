@@ -1,19 +1,34 @@
-import { Body, Controller, Get, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CreateRoleDto } from './role.dto';
 import { RoleService } from './role.service';
 
-@Controller('role')
+@Controller('roles')
 export class RoleController {
     constructor(private readonly roleService: RoleService) { }
 
     @Get()
-    findRoles() {
-        return this.roleService.findRoles();
+    getRoles() {
+        return this.roleService.findAllRoles();
     }
 
-    @Post('create')
+    @Get(':id')
+    getRoleById(@Param('id') id: number) {
+        return this.roleService.findRoleById(id);
+    }
+
+    @Post()
     @UsePipes(ValidationPipe)
     createRole(@Body() createRoleDto: CreateRoleDto) {
         return this.roleService.createRole(createRoleDto);
+    }
+
+    @Delete(':id')
+    deleteGenre(@Param('id', ParseIntPipe) id: number) {
+        return this.roleService.deleteRole(id);
+    }
+
+    @Put(':id')
+    async updateGenre(@Param('id') id: number, @Body() role: CreateRoleDto) {
+        return this.roleService.updateRole(id, role);
     }
 }

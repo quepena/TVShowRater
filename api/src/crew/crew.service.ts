@@ -29,7 +29,23 @@ export class CrewService {
         return await this.crewRepository.save(crew);
     }
 
-    findCrew() {
-        return this.crewRepository.find();
+    async findCrew() {
+        return await this.crewRepository.find();
+    }
+
+    async findCrewById(id: number) {
+        return this.crewRepository.findOneBy({ id: id })
+    }
+
+    async deleteCrew(id: number) {
+        return await this.crewRepository.delete(id);
+    }
+
+    async updateCrew(id: number, createCrewDto: any) {
+        await this.crewRepository.update(id, createCrewDto);
+        const updatedCrew = await this.crewRepository.findOneBy({ id: id });
+        if (updatedCrew) {
+            return updatedCrew;
+        }
     }
 }
