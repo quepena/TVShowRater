@@ -30,7 +30,11 @@ export class CrewService {
     }
 
     async findCrew() {
-        return await this.crewRepository.find();
+        return await this.crewRepository.find({
+            relations: {
+                roles: true
+            }
+        });
     }
 
     async findCrewById(id: number) {
@@ -41,11 +45,33 @@ export class CrewService {
         return await this.crewRepository.delete(id);
     }
 
-    async updateCrew(id: number, createCrewDto: any) {
-        await this.crewRepository.update(id, createCrewDto);
-        const updatedCrew = await this.crewRepository.findOneBy({ id: id });
-        if (updatedCrew) {
-            return updatedCrew;
+    async updateCrew(id: number, crewDetails: any) {
+        const { name, photo, biography, roles } = crewDetails;
+        const crew = new Crew();
+        crew.id = id;
+        crew.name = name;
+        crew.photo = photo;
+        crew.biography = biography;
+        crew.roles = [];
+        console.log(crewDetails);
+        for (let i = 0; i < roles.length; i++) {
+            const role = await this.roleRepository.findOne({
+                where: { id: roles[i] }
+            });
+            console.log(role);
+            crew.roles.push(role);
         }
+        console.log(crewDetails);
+
+        const newV = await this.crewRepository.update(id, crewDetails);
+        return newV
+        
+        // const updatedCrew = this.crewRepository.findOneBy({
+        //    id: id,
+        // });
+
+        // if (updatedCrew) {
+        //     return updatedCrew
+        // }
     }
 }

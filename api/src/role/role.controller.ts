@@ -23,12 +23,12 @@ export class RoleController {
     }
 
     @Delete(':id')
-    deleteGenre(@Param('id', ParseIntPipe) id: number) {
+    deleteRole(@Param('id', ParseIntPipe) id: number) {
         return this.roleService.deleteRole(id);
     }
 
     @Put(':id')
-    async updateGenre(@Param('id') id: number, @Body() role: CreateRoleDto) {
+    async updateRole(@Param('id') id: number, @Body() role: CreateRoleDto) {
         return this.roleService.updateRole(id, role);
     }
 }
