@@ -48,7 +48,6 @@ export class CrewService {
     async updateCrew(id: number, crewDetails: any) {
         const { name, photo, biography, roles } = crewDetails;
         const crew = new Crew();
-        crew.id = id;
         crew.name = name;
         crew.photo = photo;
         crew.biography = biography;
@@ -62,8 +61,9 @@ export class CrewService {
             crew.roles.push(role);
         }
         console.log(crewDetails);
+        console.log(roles);
 
-        const newV = await this.crewRepository.update(id, crewDetails);
+        const newV = await this.crewRepository.update(id, crew);
         return newV
         
         // const updatedCrew = this.crewRepository.findOneBy({

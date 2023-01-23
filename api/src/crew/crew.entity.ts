@@ -18,7 +18,7 @@ export class Crew {
   @ManyToMany(type => Role, {
     cascade: true,
     onDelete: 'CASCADE',
-    onUpdate: 'CASCADE'
+    onUpdate: 'CASCADE',
   })
   @JoinTable()
   roles: Role[];
