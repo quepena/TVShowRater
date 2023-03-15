@@ -19,7 +19,7 @@ export class TvShowService {
         tvShow.photo = photo;
         tvShow.description = description;
         tvShow.length = length;
-        tvShow.trailer= trailer;
+        tvShow.trailer = trailer;
         tvShow.country = country;
         tvShow.genres = [];
         for (let i = 0; i < genres.length; i++) {
@@ -32,7 +32,19 @@ export class TvShowService {
         return await this.tvShowRepository.save(tvShow);
     }
 
-    findTvShows() {
-        return this.tvShowRepository.find();
+    async findTvShows() {
+        return await this.tvShowRepository.find({
+            relations: {
+                genres: true
+            }
+        });
+    }
+
+    async findTVShowById(id: number) {
+        return this.tvShowRepository.findOneBy({ id: id })
+    }
+
+    async deleteTVShow(id: number) {
+        return await this.tvShowRepository.delete(id);
     }
 }

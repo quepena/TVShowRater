@@ -53,6 +53,8 @@ export class CrewService {
         crew.biography = biography;
         crew.roles = [];
         console.log(crewDetails);
+        console.log(id);
+
         for (let i = 0; i < roles.length; i++) {
             const role = await this.roleRepository.findOne({
                 where: { id: roles[i] }
@@ -63,15 +65,11 @@ export class CrewService {
         console.log(crewDetails);
         console.log(roles);
 
-        const newV = await this.crewRepository.update(id, crew);
-        return newV
-        
-        // const updatedCrew = this.crewRepository.findOneBy({
-        //    id: id,
-        // });
 
-        // if (updatedCrew) {
-        //     return updatedCrew
-        // }
+        const newV = await this.crewRepository.save(
+            { id: Number(id), name: crewDetails.name, biography: crewDetails.biography, roles: crewDetails.roles, photo: crewDetails.photo }
+        );
+        
+        return newV
     }
 }

@@ -1,5 +1,5 @@
 import { Genre, Season } from 'src/entities';
-import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class TvShow {
@@ -9,7 +9,8 @@ export class TvShow {
     @Column()
     name: string;
 
-    @ManyToMany(type => Genre)
+    @ManyToMany(type => Genre, genre => genre.tvshows)
+    @JoinTable()
     genres: Genre[]
 
     @Column()

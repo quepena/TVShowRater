@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { TvShow } from 'src/entities';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Genre {
@@ -7,4 +8,7 @@ export class Genre {
 
   @Column()
   name: string;
+
+  @ManyToMany(type => TvShow, tvshow => tvshow.genres)
+  tvshows: TvShow[]
 }
