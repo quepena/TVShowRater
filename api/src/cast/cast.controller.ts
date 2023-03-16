@@ -16,7 +16,7 @@ export class CastController {
         return this.castService.findCastById(id);
     }
 
-    @Post('create')
+    @Post()
     @UsePipes(ValidationPipe)
     createGenre(@Body() createCastDto: CreateCastDto) {
         return this.castService.createCast(createCastDto);

@@ -66,10 +66,10 @@ export class CrewService {
         console.log(roles);
 
 
-        const newV = await this.crewRepository.save(
+        const newCrew = await this.crewRepository.save(
             { id: Number(id), name: crewDetails.name, biography: crewDetails.biography, roles: crewDetails.roles, photo: crewDetails.photo }
         );
         
-        return newV
+        return newCrew
     }
 }

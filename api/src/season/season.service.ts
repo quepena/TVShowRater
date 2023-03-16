@@ -19,17 +19,57 @@ export class SeasonService {
         season.numSeason = numSeason;
         season.tvShow = await this.tvShowRepository.findOne({ where: { id: tvShow } })
         season.episodes = []
-        for (let i = 0; i < episodes.length; i++) {
-            const episode = await this.episodeRepository.findOne({
-                where: { id: episodes[i] }
-            });
-            season.episodes.push(episode);
+        if (episodes) {
+            for (let i = 0; i < episodes.length; i++) {
+                const episode = await this.episodeRepository.findOne({
+                    where: { id: episodes[i] }
+                });
+                season.episodes.push(episode);
+            }
         }
 
         return await this.seasonRepository.save(season);
     }
 
-    findSeason() {
-        return this.seasonRepository.find();
+    async findSeasons() {
+        return await this.seasonRepository.find({
+            relations: {
+                tvShow: true
+            }
+        });
+    }
+
+    async findSeasonById(id: number) {
+        return await this.seasonRepository.findOneBy({ id: id })
+    }
+
+    async deleteSeason(id: number) {
+        return await this.seasonRepository.delete(id);
+    }
+
+    async updateSeason(id: number, seasonDetails: CreateSeasonDto): Promise<Season> {
+        const { numSeason, tvShow, episodes } = seasonDetails;
+        const season = new Season();
+        season.numSeason = numSeason;
+        season.tvShow = await this.tvShowRepository.findOne({ where: { id: tvShow } });
+        season.episodes = [];
+        if (episodes) {
+            for (let i = 0; i < episodes.length; i++) {
+                const episode = await this.episodeRepository.findOne({
+                    where: { id: episodes[i] }
+                });
+                season.episodes.push(episode);
+            }
+        }
+
+        const newSeason = await this.seasonRepository.save(
+            { id: Number(id), numSeason: season.numSeason, tvShow: season.tvShow, episodes: season.episodes }
+        )
+
+        return newSeason
+    }
+
+    async findSeasonsByTVShows(id: number) {
+        return await this.seasonRepository.findBy({ tvShow: { id: id } })
     }
 }

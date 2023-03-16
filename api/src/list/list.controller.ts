@@ -1,4 +1,4 @@
 import { Controller } from '@nestjs/common';
 
-@Controller('list')
+@Controller('lists')
 export class ListController {}

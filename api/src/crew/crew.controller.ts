@@ -11,7 +11,7 @@ export class CrewController {
         return this.crewService.findCrew();
     }
 
-    @Post('create')
+    @Post()
     @UsePipes(ValidationPipe)
     createCrew(@Body() createCrewDto: CreateCrewDto) {
         return this.crewService.createCrew(createCrewDto);

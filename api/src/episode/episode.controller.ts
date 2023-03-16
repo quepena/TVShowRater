@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, UsePipes, ValidationPipe } from '@nestjs/c
 import { CreateEpisodeDto } from './episode.dto';
 import { EpisodeService } from './episode.service';
 
-@Controller('episode')
+@Controller('episodes')
 export class EpisodeController {
     constructor(private readonly episodeService: EpisodeService) { }
 
@@ -11,7 +11,7 @@ export class EpisodeController {
         return this.episodeService.findEpisode();
     }
 
-    @Post('create')
+    @Post()
     @UsePipes(ValidationPipe)
     createEpisode(@Body() createEpisodeDto: CreateEpisodeDto) {
         return this.episodeService.createEpisode(createEpisodeDto);

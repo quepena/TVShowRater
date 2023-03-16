@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UsePipes
 import { CreateTvShowDto } from './tv-show.dto';
 import { TvShowService } from './tv-show.service';
 
-@Controller('tv-show')
+@Controller('tv-shows')
 export class TvShowController {
     constructor(private readonly tvShowService: TvShowService) { }
 
@@ -25,5 +25,10 @@ export class TvShowController {
     @Get(':id')
     getTVShowById(@Param('id') id: number) {
         return this.tvShowService.findTVShowById(id);
+    }
+
+    @Put(':id')
+    updateTVShow(@Param('id') id: number, @Body() createTVShowDto: CreateTvShowDto) {
+        return this.tvShowService.updateTvShow(id, createTVShowDto);
     }
 }
