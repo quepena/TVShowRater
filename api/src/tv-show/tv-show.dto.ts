@@ -23,4 +23,6 @@ export class CreateTvShowDto {
     trailer: string;
 
     seasons: number[]
+
+    lists: number[]
 }

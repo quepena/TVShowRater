@@ -1,4 +1,6 @@
 import { Genre, Season } from 'src/entities';
+import { List } from 'src/list/list.entity';
+import { Progress } from 'src/progress/progress.entity';
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -30,4 +32,11 @@ export class TvShow {
 
     @OneToMany(type => Season, season => season.tvShow)
     seasons: Season[]
+
+    @ManyToMany(type => List, list => list.tvShows)
+    @JoinTable()
+    lists: List[]
+
+    @OneToMany(type => Progress, progress => progress.tvShow)
+    progress: Progress[];
 }

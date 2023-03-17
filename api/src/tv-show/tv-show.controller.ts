@@ -31,4 +31,9 @@ export class TvShowController {
     updateTVShow(@Param('id') id: number, @Body() createTVShowDto: CreateTvShowDto) {
         return this.tvShowService.updateTvShow(id, createTVShowDto);
     }
+
+    @Get('/genre/:id')
+    getTVShowsByGenre(@Param('id') id: number) {
+        return this.tvShowService.findTVShowsByGenre(id);
+    }
 }

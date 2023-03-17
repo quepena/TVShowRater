@@ -37,20 +37,20 @@ export class EpisodeService {
         return await this.episodeRepository.delete(id);
     }
 
-    async updateEpisode(id: number, episodeDetails: CreateEpisodeDto): Promise<Season> {
+    async updateEpisode(id: number, episodeDetails: CreateEpisodeDto): Promise<Episode> {
         const { name, season } = episodeDetails;
         const episode = new Episode();
         episode.name = name;
         episode.season = await this.seasonRepository.findOne({ where: { id: season } });
 
         const newEpisode = await this.episodeRepository.save(
-            { id: Number(id), name: episode.name, season: episode.season }
+            { id: Number(id), name: episode.name, season: episode.season, tvShow: episode.season.tvShow, numSeason: episode.season.numSeason, episodes: episode.season.episodes }
         )
 
         return newEpisode
     }
 
-    async findSeasonsByTVShows(id: number) {
-        return await this.seasonRepository.findBy({ tvShow: { id: id } })
+    async findEpisodesBySeasons(id: number) {
+        return await this.episodeRepository.find({ where: { season: { id: id } } })
     }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CreateEpisodeDto } from './episode.dto';
 import { EpisodeService } from './episode.service';
 
@@ -15,5 +15,25 @@ export class EpisodeController {
     @UsePipes(ValidationPipe)
     createEpisode(@Body() createEpisodeDto: CreateEpisodeDto) {
         return this.episodeService.createEpisode(createEpisodeDto);
+    }
+
+    @Get(':id')
+    getEpisodeById(@Param('id') id: number) {
+        return this.episodeService.findEpisodeById(id);
+    }
+
+    @Delete(':id')
+    deleteEpisode(@Param('id', ParseIntPipe) id: number) {
+        return this.episodeService.deleteEpisode(id);
+    }
+
+    @Put(':id')
+    async updateEpisode(@Param('id') id: number, @Body() episode: CreateEpisodeDto) {
+        return this.episodeService.updateEpisode(id, episode);
+    }
+
+    @Get('/season/:id')
+    getEpisodesBySeasons(@Param('id') id: number) {
+        return this.episodeService.findEpisodesBySeasons(id);
     }
 }

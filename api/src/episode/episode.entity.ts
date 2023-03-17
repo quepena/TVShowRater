@@ -1,5 +1,6 @@
 import { Season } from 'src/entities';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Progress } from 'src/progress/progress.entity';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Episode {
@@ -11,4 +12,7 @@ export class Episode {
 
   @Column()
   name: string;
+
+  @OneToMany(type => Progress, progress => progress.episode)
+  progress: Progress[];
 }

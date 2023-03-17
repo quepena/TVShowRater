@@ -31,6 +31,7 @@ import { ProgressModule } from './progress/progress.module';
         database: configService.get('DB_NAME'),
         entities: entities,
         synchronize: true,
+        autoLoadEntities: true,
       }),
       inject: [ConfigService],
     }),
