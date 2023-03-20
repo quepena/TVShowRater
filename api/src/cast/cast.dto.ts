@@ -9,4 +9,17 @@ export class CreateCastDto {
   
   @IsNotEmpty()
   biography: string;
+
+  tvShows: number[];
+}
+
+export class CreateCastTvShowDto {
+  @IsNotEmpty()
+  character: string;
+  
+  @IsNotEmpty()
+  castId: number;
+
+  @IsNotEmpty()
+  tvShowId: number;
 }

@@ -8,10 +8,11 @@ import { GoogleModule } from './google/google.module';
 import { List } from 'src/list/list.entity';
 import { TvShow } from 'src/entities';
 import { Rating } from 'src/rating/rating.entity';
+import { Review } from 'src/review/review.entity';
 
 @Module({
   controllers: [UserController],
   providers: [UserService],
-  imports: [AuthModule, TypeOrmModule.forFeature([User, List, TvShow, Rating]), GoogleModule,]
+  imports: [AuthModule, TypeOrmModule.forFeature([User, List, TvShow, Rating, Review]), GoogleModule,]
 })
 export class UserModule { }

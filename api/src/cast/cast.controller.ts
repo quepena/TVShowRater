@@ -31,4 +31,9 @@ export class CastController {
     deleteCast(@Param('id') id: number) {
         return this.castService.deleteCast(id);
     }
+
+    @Get('/tv-show/:id')
+    getCastByTvShow(@Param('id') id: number) {
+        return this.castService.findCastByTvShow(id);
+    }
 }

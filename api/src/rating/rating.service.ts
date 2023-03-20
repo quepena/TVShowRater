@@ -18,7 +18,7 @@ export class RatingService {
         const newRating = new Rating();
         newRating.user = await this.userRepository.findOne({ where: { id: user } })
         newRating.tvShow = await this.tvShowRepository.findOne({ where: { id: tvShow } })
-        newRating.rating = rating
+        newRating.rating = rating;
 
         return await this.ratingRepository.save(newRating);
     }
@@ -58,5 +58,39 @@ export class RatingService {
         )
 
         return saveNewRating
+    }
+
+    async findRatingsByUser(id: number) {
+        return await this.ratingRepository.find({
+            where: { user: { id: id } },
+            relations: {
+                user: true,
+                tvShow: true,
+            }
+        })
+    }
+
+    async findRatingsByTvShow(id: number) {
+        return await this.ratingRepository.find({
+            where: { tvShow: { id: id } },
+            relations: {
+                user: true,
+                tvShow: true,
+            }
+        })
+    }
+    
+    async findMeanRatingForTvShow(id: number) {
+        const ratings = await this.ratingRepository.findAndCount({ where: { tvShow: { id: id } } })
+        
+        let rate = 0
+        for(let i = 0; i < ratings[1]; i++) {
+            rate += ratings[0][i].rating;
+        }
+
+        const mean = rate / ratings[1]
+
+        if(mean) return mean
+        else return "0.0"
     }
 }

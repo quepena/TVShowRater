@@ -2,7 +2,7 @@ import { TvShow, User } from "src/entities";
 import { Entity, ManyToOne, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity()
-export class Rating {
+export class Review {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -13,5 +13,5 @@ export class Rating {
     tvShow: TvShow;
 
     @Column()
-    rating: number;
+    review: string;
 }
