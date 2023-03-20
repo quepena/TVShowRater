@@ -25,4 +25,6 @@ export class CreateTvShowDto {
     seasons: number[]
 
     lists: number[]
+
+    ratings: number[]
 }

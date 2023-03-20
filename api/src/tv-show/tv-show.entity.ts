@@ -1,6 +1,7 @@
 import { Genre, Season } from 'src/entities';
 import { List } from 'src/list/list.entity';
 import { Progress } from 'src/progress/progress.entity';
+import { Rating } from 'src/rating/rating.entity';
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -39,4 +40,7 @@ export class TvShow {
 
     @OneToMany(type => Progress, progress => progress.tvShow)
     progress: Progress[];
+
+    @OneToMany(type => Rating, rating => rating.tvShow)
+    ratings: Rating[];
 }

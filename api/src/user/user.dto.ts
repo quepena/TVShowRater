@@ -20,4 +20,6 @@ export class CreateUserDto {
     isAdmin: boolean;
 
     lists: number[]
+
+    ratings: number[]
 }

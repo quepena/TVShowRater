@@ -8,6 +8,7 @@ import { Season } from "./season/season.entity";
 import { Episode } from "./episode/episode.entity";
 import { List } from "./list/list.entity";
 import { Progress } from "./progress/progress.entity"
+import { Rating } from "./rating/rating.entity";
 
 const entities = [
     Genre,
@@ -19,8 +20,9 @@ const entities = [
     Season,
     Episode,
     List,
-    Progress
+    Progress,
+    Rating,
 ];
 
-export {Genre, Cast, Role, Crew, User, TvShow, Season, Episode};
+export {Genre, Cast, Role, Crew, User, TvShow, Season, Episode, Progress, Rating};
 export default entities;

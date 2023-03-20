@@ -1,6 +1,6 @@
 import { IsNotEmpty } from "class-validator";
 
-export class CreateProgressDto {
+export class CreateRatingDto {
   @IsNotEmpty()
   tvShow: number;
 
@@ -8,5 +8,5 @@ export class CreateProgressDto {
   user: number;
 
   @IsNotEmpty()
-  episode: number;
+  rating: number;
 }
