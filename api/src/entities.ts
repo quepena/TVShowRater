@@ -1,5 +1,5 @@
 import { Cast, CastTvShow } from "./cast/cast.entity";
-import { Crew } from "./crew/crew.entity";
+import { Crew, CrewTvShow } from "./crew/crew.entity";
 import { Genre } from "./genre/genre.entity";
 import { Role } from "./role/role.entity";
 import { User } from "./user/user.entity";
@@ -25,7 +25,8 @@ const entities = [
     Rating,
     Review,
     CastTvShow,
+    CrewTvShow
 ];
 
-export {Genre, Cast, Role, Crew, User, TvShow, Season, Episode, Progress, Rating, Review, CastTvShow};
+export {Genre, Cast, Role, Crew, User, TvShow, Season, Episode, Progress, Rating, Review, CastTvShow, CrewTvShow};
 export default entities;

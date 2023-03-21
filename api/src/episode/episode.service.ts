@@ -23,14 +23,12 @@ export class EpisodeService {
 
     async findEpisode() {
         return await this.episodeRepository.find({
-            relations: {
-                season: true,
-            }
+            relations: ['season', 'season.tvShow']
         });
     }
 
     async findEpisodeById(id: number) {
-        return await this.episodeRepository.findOneBy({ id: id })
+        return await this.episodeRepository.findOne({ where: { id: id }, relations: ['season', 'season.tvShow'] })
     }
 
     async deleteEpisode(id: number) {
@@ -51,6 +49,6 @@ export class EpisodeService {
     }
 
     async findEpisodesBySeasons(id: number) {
-        return await this.episodeRepository.find({ where: { season: { id: id } } })
+        return await this.episodeRepository.find({ where: { season: { id: id } }, relations: ['season', 'season.tvShow'] })
     }
 }

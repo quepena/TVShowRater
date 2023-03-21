@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { CrewTvShow } from 'src/crew/crew.entity';
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class Role {
@@ -7,4 +8,7 @@ export class Role {
 
   @Column()
   name: string;
+
+  @OneToMany(() => CrewTvShow, crewTvShow => crewTvShow.roles)
+  crewTvShow: CrewTvShow[];
 }

@@ -1,3 +1,4 @@
+import { CrewTvShow } from 'src/crew/crew.entity';
 import { Genre, Season, Cast, CastTvShow } from 'src/entities';
 import { List } from 'src/list/list.entity';
 import { Progress } from 'src/progress/progress.entity';
@@ -48,10 +49,13 @@ export class TvShow {
     @OneToMany(type => Review, review => review.tvShow)
     reviews: Review[];
 
-    @ManyToMany(type => Cast, cast => cast.tvShows)
-    @JoinTable()
-    cast: Cast[]
+    // @ManyToMany(type => Cast, cast => cast.tvShows)
+    // @JoinTable()
+    // cast: Cast[]
 
-    @OneToMany(() => CastTvShow, castTvShow => castTvShow.tvShowId)
+    @OneToMany(() => CastTvShow, castTvShow => castTvShow.tvShow)
     castTvShow: CastTvShow[];
+
+    @OneToMany(() => CrewTvShow, crewTvShow => crewTvShow.tvShow)
+    crewTvShow: CrewTvShow[];
 }

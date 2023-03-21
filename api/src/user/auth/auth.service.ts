@@ -4,10 +4,12 @@ import { AuthHelper } from './auth.helper';
 import { Repository } from 'typeorm';
 import { User } from '../user.entity';
 import { LoginDto, RegisterDto } from './auth.dto';
+import { ListService } from 'src/list/list.service';
 
 @Injectable()
 export class AuthService {
     @InjectRepository(User) private readonly repository: Repository<User>;
+    @Inject(ListService) private readonly listService: ListService;
     @Inject(AuthHelper) private readonly helper: AuthHelper;
 
     public async register(body: RegisterDto): Promise<User | never> {
@@ -25,10 +27,13 @@ export class AuthService {
         user.email = email;
         user.photo = photo;        
         user.password = this.helper.encodePassword(password);
-        console.log("register " + user.password);
         user.isAdmin = isAdmin;
 
         await this.repository.save(user);
+
+        this.listService.createList({"name": "Watched", "user": user.id, tvShows: []})
+        this.listService.createList({"name": "Currently Watching", "user": user.id, tvShows: []})
+        this.listService.createList({"name": "Watchlist", "user": user.id, tvShows: []})
 
         return user
     }

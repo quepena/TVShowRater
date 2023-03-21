@@ -15,10 +15,10 @@ export class Cast {
   @Column()
   biography: string;
 
-  @ManyToMany(type => TvShow, tvShow => tvShow.cast)
-  tvShows: TvShow[];
+  // @ManyToMany(type => TvShow, tvShow => tvShow.cast)
+  // tvShows: TvShow[];
 
-  @OneToMany(() => CastTvShow, castTvShow => castTvShow.castId)
+  @OneToMany(() => CastTvShow, castTvShow => castTvShow.cast)
   castTvShow: CastTvShow[];
 }
 
@@ -31,8 +31,8 @@ export class CastTvShow {
   character: string;
 
   @ManyToOne(() => TvShow, tvShowId => tvShowId.castTvShow)
-  tvShowId: TvShow;
+  tvShow: TvShow;
 
   @ManyToOne(() => Cast, castId => castId.castTvShow)
-  castId: TvShow;
+  cast: Cast;
 }

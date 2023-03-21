@@ -13,3 +13,14 @@ export class CreateCrewDto {
   @IsNotEmpty()
   roles: number[];
 }
+
+export class CreateCrewTvShowDto {
+  @IsNotEmpty()
+  roles: number[];
+  
+  @IsNotEmpty()
+  crew: number;
+
+  @IsNotEmpty()
+  tvShow: number;
+}

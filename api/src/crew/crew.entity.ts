@@ -1,5 +1,5 @@
-import { Role } from 'src/entities';
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Role, TvShow } from 'src/entities';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class Crew {
@@ -22,4 +22,23 @@ export class Crew {
   })
   @JoinTable()
   roles: Role[];
+
+  @OneToMany(() => CrewTvShow, crewTvShow => crewTvShow.crew)
+  crewTvShow: CrewTvShow[];
+}
+
+@Entity('tv_show_crew_crew')
+export class CrewTvShow {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @ManyToMany(() => Role, roleId => roleId.crewTvShow)
+  @JoinTable()
+  roles: Role[];
+
+  @ManyToOne(() => TvShow, tvShowId => tvShowId.crewTvShow)
+  tvShow: TvShow;
+
+  @ManyToOne(() => Crew, crewId => crewId.crewTvShow)
+  crew: Crew;
 }

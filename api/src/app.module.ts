@@ -46,7 +46,7 @@ import { ProgressModule } from './progress/progress.module';
     ListModule,
     ReviewModule,
     RatingModule,
-    ProgressModule
+    ProgressModule,
   ],
   controllers: [AppController],
   providers: [AppService],
