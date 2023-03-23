@@ -1,6 +1,11 @@
 import React from 'react'
+import { useGetListsQuery } from '../store/slices/listSlice';
 
 const MyShows = () => {
+    const { data, error, isLoading } = useGetListsQuery(28)
+
+    console.log(data);
+    
     return (
         <>
             <div className='my-0 mx-auto max-w-7xl'>
