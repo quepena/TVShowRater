@@ -28,3 +28,8 @@ export class LoginDto {
   @IsString()
   public readonly email: string;
 }
+
+export class TokenDto {
+  @IsString()
+  public readonly token: string;
+}

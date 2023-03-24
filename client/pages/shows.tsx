@@ -1,5 +1,6 @@
 import React from 'react'
-import { useGetListsQuery } from '../store/slices/listSlice';
+import { useGetListsQuery } from '../store/slices/apiSlice';
+// import { useGetListsQuery } from '../store/slices/listSlice';
 
 const MyShows = () => {
     const { data, error, isLoading } = useGetListsQuery(28)

@@ -3,13 +3,13 @@ import React, { Dispatch } from 'react'
 import { useDispatch } from 'react-redux'
 import NavBar from '../components/NavBar'
 import navButtons from '../components/NavButtons'
-import { fetchUsers } from '../store/slices/userSlice'
+// import { fetchUsers } from '../store/slices/userSlice'
 
 const Hero = () => {
   const dispatch = useDispatch<any>();
 
   const findUsers = () => {
-    dispatch(fetchUsers());
+    // dispatch(fetchUsers());
   };
 
   return (

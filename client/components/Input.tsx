@@ -18,12 +18,12 @@ const Input = ({
 }: InputProps) => {
 
     return (
-        <div className="input-div">
-            <div className="label-error">
+        <div>
+            <div>
                 <label htmlFor={id}>
                     {label}
                 </label>
-                {error && <p className="error-message">*{errorMessage}</p>}
+                {error && <p>*{errorMessage}</p>}
             </div>
             <input
                 {...props}
@@ -31,7 +31,7 @@ const Input = ({
                 id={id}
                 name={name}
                 placeholder={placeholder}
-                className="contact-input"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
         </div>
     );

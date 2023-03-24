@@ -1,4 +1,4 @@
-export type User = {
+export interface User {
     email: string;
     name: string;
     last_name: string;
@@ -6,3 +6,8 @@ export type User = {
     password: string;
     isAdmin: boolean;
 }
+
+export interface IGenericResponse {
+    status: string;
+    message: string;
+  }

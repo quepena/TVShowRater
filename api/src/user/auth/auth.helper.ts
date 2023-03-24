@@ -5,12 +5,12 @@ import { Repository } from 'typeorm';
 import { User } from '../user.entity';
 import * as bcrypt from 'bcryptjs';
 import { config } from 'dotenv';
+import { TokenDto } from './auth.dto';
 
 @Injectable()
 export class AuthHelper {
   @InjectRepository(User)
   private readonly repository: Repository<User>;
-
   private readonly jwt: JwtService;
 
   constructor(jwt: JwtService) {
@@ -59,5 +59,14 @@ export class AuthHelper {
     }
 
     return true;
+  }
+
+  async getProfile(token: TokenDto): Promise<User> {
+    const decoded: unknown = this.jwt.verify(token.token);
+
+    console.log();
+    const user: User = await this.repository.findOne({ where: { id: decoded['id'] } });
+    
+    return user;
   }
 }

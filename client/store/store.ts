@@ -10,14 +10,14 @@ export const store = () => configureStore({
     reducer: {
         // user: userSlice,
         // list: listSlice,
-        [fetchLists.reducerPath]: fetchLists.reducer,
+        // [fetchLists.reducerPath]: fetchLists.reducer,
         [apiSlice.reducerPath]: apiSlice.reducer,
     },
     devTools: true,
     // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
     middleware:
         (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(apiSlice.middleware).concat(fetchLists.middleware),
+        getDefaultMiddleware().concat(apiSlice.middleware),
 });
 
 // export type RootState = ReturnType<typeof listSlice>;

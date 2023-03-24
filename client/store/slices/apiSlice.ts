@@ -12,7 +12,7 @@ export const apiSlice = createApi({
         getLists: builder.query<List, number>({
             query: (id: number) => '/lists/user/' + id,
         }),
-        login: builder.mutation<Object, Auth>({
+        login: builder.mutation<Object, Object>({
             query: (details) => {
                 return {
                     url: '/auth/login',
@@ -25,6 +25,44 @@ export const apiSlice = createApi({
             //     response: { status: string | number },
             // ) => response.status,
         }),
+        // login: builder.mutation<
+        //     { access_token: string; status: string },
+        //     LoginInput
+        // >({
+        //     query(data) {
+        //         return {
+        //             url: 'login',
+        //             method: 'POST',
+        //             body: data,
+        //             credentials: 'include',
+        //         };
+        //     },
+        //     async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        //         try {
+        //             await queryFulfilled;
+        //             await dispatch(userApi.endpoints.getMe.initiate(null));
+        //         } catch (error) { }
+        //     },
+        // }),
+        // verifyEmail: builder.mutation<
+        //     IGenericResponse,
+        //     { verificationCode: string }
+        // >({
+        //     query({ verificationCode }) {
+        //         return {
+        //             url: `verifyemail/${verificationCode}`,
+        //             method: 'GET',
+        //         };
+        //     },
+        // }),
+        // logoutUser: builder.mutation<void, void>({
+        //     query() {
+        //         return {
+        //             url: 'logout',
+        //             credentials: 'include',
+        //         };
+        //     },
+        // }),
     }),
 })
 

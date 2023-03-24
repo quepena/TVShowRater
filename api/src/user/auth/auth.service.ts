@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AuthHelper } from './auth.helper';
 import { Repository } from 'typeorm';
 import { User } from '../user.entity';
-import { LoginDto, RegisterDto } from './auth.dto';
+import { LoginDto, RegisterDto, TokenDto } from './auth.dto';
 import { ListService } from 'src/list/list.service';
 
 @Injectable()
@@ -38,7 +38,7 @@ export class AuthService {
         return user
     }
 
-    public async login(body: LoginDto): Promise<string | never> {
+    public async login(body: LoginDto): Promise<TokenDto> {
         const { email, password }: LoginDto = body;
         const user: User = await this.repository.findOne({ where: { email } });
 
@@ -52,10 +52,18 @@ export class AuthService {
             throw new HttpException('Incorrect password', HttpStatus.NOT_FOUND);
         }
 
-        return this.helper.generateToken(user);
+        const token: TokenDto = {
+            token: this.helper.generateToken(user)
+        }
+
+        return token;
     }
 
     public async refresh(user: User): Promise<string> {
         return this.helper.generateToken(user);
+    }
+
+    async getProfile(token: TokenDto) {
+        return this.helper.getProfile(token)
     }
 }
