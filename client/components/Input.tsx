@@ -18,12 +18,12 @@ const Input = ({
 }: InputProps) => {
 
     return (
-        <div>
-            <div>
-                <label htmlFor={id}>
+        <div className="mb-5">
+            <div className="mb-3 flex flex-row">
+                <label htmlFor={id} className="text-lg mr-3">
                     {label}
                 </label>
-                {error && <p>*{errorMessage}</p>}
+                {error && <p className="text-sm pt-1 text-red-600">*{errorMessage}</p>}
             </div>
             <input
                 {...props}
@@ -31,7 +31,7 @@ const Input = ({
                 id={id}
                 name={name}
                 placeholder={placeholder}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-96"
             />
         </div>
     );

@@ -3,20 +3,28 @@ import React, { Dispatch } from 'react'
 import { useDispatch } from 'react-redux'
 import NavBar from '../components/NavBar'
 import navButtons from '../components/NavButtons'
+import { logout } from '../store/slices/userSlice'
 // import { fetchUsers } from '../store/slices/userSlice'
 
 const Hero = () => {
-  const dispatch = useDispatch<any>();
+  // const dispatch = useDispatch<any>();
 
-  const findUsers = () => {
-    // dispatch(fetchUsers());
-  };
+  // const log = () => {
+  //   console.log("click");
+    
+  //   dispatch(logout());
+  // };
+
+  // const logoutF = () => {
+  //   // dispatch(fetchUsers());
+  //   dispatch(logout)
+  // };
 
   return (
     <>
       <div className='my-0 mx-auto max-w-7xl'>
         <div>
-          <button onClick={findUsers}>
+          <button onClick={() => localStorage.removeItem("userInfo")}>
             find
           </button>
           <div className='text-3xl mt-12 mb-6'>Popular Shows</div>

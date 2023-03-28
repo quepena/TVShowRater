@@ -5,21 +5,25 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Input from "../components/Input";
 import { validate } from "../components/Validation";
-import { useLoginMutation } from "../store/slices/apiSlice";
-import { Auth } from "../types/auth";
+import { useRegisterMutation } from "../store/slices/apiSlice";
+import { User } from "../types/user";
 
-interface IErrors extends Partial<Auth> { }
+interface IErrors extends Partial<User> { }
 
-const loginForm = () => {
+const registerForm = () => {
   const [values, setValues] = useState({
     password: "",
     email: "",
+    name: "",
+    last_name: "",
+    photo: "",
+    isAdmin: false,
   });
 
   const [errors, setErrors] = useState<IErrors>({});
   const [messageState, setMessageState] = useState("");
 
-  const [loginUser, { isLoading, isSuccess, error, isError, data }] = useLoginMutation();
+  const [registerUser, { isLoading, isSuccess, error, isError, data }] = useRegisterMutation();
 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -33,11 +37,15 @@ const loginForm = () => {
 
     const details = {
       password: values.password,
-      email: values.email
+      email: values.email,
+      name: values.name,
+      last_name: values.last_name,
+      photo: "",
+      isAdmin: false,
     }
-    console.log({ password: values.password, email: values.email });
+    console.log(details);
 
-    loginUser(details);
+    registerUser(details);
     console.log(isLoading, isSuccess, error, isError);
   };
   const handleChange = (
@@ -64,7 +72,7 @@ const loginForm = () => {
 
       const message: string = JSON.stringify(error['data' as keyof Object]['message' as keyof Object]).replace(/['"]+/g, '')
 
-      setValues({ password: "", email: "" });
+      setValues({ password: "", email: "", name: "", last_name: "", photo: "", isAdmin: false });
       setMessageState("")
       setMessageState(message)
     }
@@ -73,7 +81,7 @@ const loginForm = () => {
 
   return (
     <div className="flex items-center justify-center flex-col">
-      <div className="text-2xl font-bold my-6">SIGN IN</div>
+      <div className="text-2xl font-bold my-6">SIGN UP</div>
       <form className="flex items-center justify-center flex-col" onSubmit={handleSubmit}>
         <Input
           value={values.email}
@@ -85,6 +93,28 @@ const loginForm = () => {
           type="email"
           error={!!errors.email}
           errorMessage={!!errors.email ? errors.email : ""}
+        />
+        <Input
+          value={values.name}
+          onChange={handleChange}
+          id="name"
+          name="name"
+          label="Name"
+          placeholder="John"
+          type="text"
+          error={!!errors.name}
+          errorMessage={!!errors.name ? errors.name : ""}
+        />
+        <Input
+          value={values.last_name}
+          onChange={handleChange}
+          id="last_name"
+          name="last_name"
+          label="Last Name"
+          placeholder="Doe"
+          type="text"
+          error={!!errors.last_name}
+          errorMessage={!!errors.last_name ? errors.last_name : ""}
         />
         <Input
           value={values.password}
@@ -102,9 +132,9 @@ const loginForm = () => {
           disabled={isLoading}
           className="w-96 bg-sky-400 py-3 mt-3 text-lg rounded-md hover:bg-sky-500 hover:text-white"
         >
-          Login
+          Register
         </button>
-        <p>
+        <p className="text-red-500 mt-3">
           {isError ? (
             messageState
           ) : (
@@ -116,4 +146,4 @@ const loginForm = () => {
   );
 };
 
-export default loginForm;
+export default registerForm;

@@ -13,13 +13,13 @@ import { User } from '../user.entity';
 import { UserService } from '../user.service';
 import { GoogleController } from './google.controller';
 import { GoogleService } from './google.service';
-import { GoogleStrategy } from './google.strategy';
+// import { GoogleStrategy } from './google.strategy';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, List, TvShow]),
   ],
   controllers: [GoogleController],
-  providers: [GoogleService, AuthService, UserService, AuthHelper, JwtService, GoogleStrategy, JwtStrategy, ListService]
+  providers: [GoogleService, AuthService, UserService, AuthHelper, JwtService, JwtStrategy, ListService]
 })
 export class GoogleModule {}

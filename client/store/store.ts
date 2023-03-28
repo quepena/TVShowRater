@@ -1,10 +1,11 @@
 import { AnyAction, configureStore, ThunkDispatch } from '@reduxjs/toolkit';
-import userSlice from './slices/userSlice';
+// import userSlice from './slices/userSlice';
 import { createWrapper } from 'next-redux-wrapper';
 // import listSlice from './slices/listSlice';
 import { useDispatch } from 'react-redux';
 import { fetchLists } from './slices/listSlice';
 import { apiSlice } from './slices/apiSlice';
+import { userSlice } from './slices/userSlice';
 
 export const store = () => configureStore({
     reducer: {
@@ -12,6 +13,7 @@ export const store = () => configureStore({
         // list: listSlice,
         // [fetchLists.reducerPath]: fetchLists.reducer,
         [apiSlice.reducerPath]: apiSlice.reducer,
+        user: userSlice.reducer,
     },
     devTools: true,
     // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),

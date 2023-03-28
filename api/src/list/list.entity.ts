@@ -13,7 +13,11 @@ export class List {
     })
     tvShows: TvShow[];
 
-    @ManyToOne(type => User, user => user.lists)
+    @ManyToOne(type => User, user => user.lists, {
+        cascade: true,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      })
     user: User;
 
     @Column()

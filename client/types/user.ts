@@ -10,4 +10,4 @@ export interface User {
 export interface IGenericResponse {
     status: string;
     message: string;
-  }
+}

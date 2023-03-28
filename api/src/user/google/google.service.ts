@@ -1,10 +1,11 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { Body, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { LoginDto } from '../auth/auth.dto';
 import { AuthHelper } from '../auth/auth.helper';
 import { AuthService } from '../auth/auth.service';
 import { User } from '../user.entity';
+import { Logger } from '@nestjs/common'
 
 @Injectable()
 export class GoogleService {
@@ -12,9 +13,9 @@ export class GoogleService {
         @InjectRepository(User) private readonly repository: Repository<User>,
         @Inject(AuthService) private readonly authRepository: AuthService,
     ) { }
-
-    async googleRegister(req: { user: any; }) {
-        const { email, name, last_name, photo, id } = req.user;
+    
+    async googleRegister(body: any) {  
+        const { email, name, last_name, photo, sub } = body;
 
         const newUser = new User();
 
@@ -23,7 +24,7 @@ export class GoogleService {
         newUser.last_name = last_name;
         newUser.photo = photo;
         newUser.isAdmin = false;
-        newUser.password = id;
+        newUser.password = sub;
 
         const userExists = await this.repository.find({ where: { email: newUser.email } })
 

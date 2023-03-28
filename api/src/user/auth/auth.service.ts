@@ -14,10 +14,10 @@ export class AuthService {
 
     public async register(body: RegisterDto): Promise<User | never> {
         const { name, last_name, email, photo, password, isAdmin }: RegisterDto = body;
-        let user: User = await this.repository.findOne({ where: { last_name } });
+        let user: User = await this.repository.findOne({ where: { email } });
 
         if (user) {
-            throw new HttpException('Conflict', HttpStatus.CONFLICT);
+            throw new HttpException('ERROR: User with this E-mail already exists', HttpStatus.CONFLICT);
         }
 
         user = new User();
