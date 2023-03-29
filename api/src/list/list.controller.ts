@@ -36,4 +36,9 @@ export class ListController {
     getListsByUser(@Param('id') id: number) {
         return this.listService.findListsByUser(id);
     }
+
+    @Get('name/:name')
+    getListsByName(@Param('name') name: string) {
+        return this.listService.findAdminListByName(name);
+    }
 }

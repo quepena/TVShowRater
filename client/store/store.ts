@@ -13,7 +13,7 @@ export const store = () => configureStore({
         // list: listSlice,
         // [fetchLists.reducerPath]: fetchLists.reducer,
         [apiSlice.reducerPath]: apiSlice.reducer,
-        user: userSlice.reducer,
+        // user: userSlice.reducer,
     },
     devTools: true,
     // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),

@@ -3,11 +3,15 @@ import React, { Dispatch } from 'react'
 import { useDispatch } from 'react-redux'
 import NavBar from '../components/NavBar'
 import navButtons from '../components/NavButtons'
+import { useGetTvShowsQuery } from '../store/slices/apiSlice'
 import { logout } from '../store/slices/userSlice'
 // import { fetchUsers } from '../store/slices/userSlice'
 
 const Hero = () => {
-  // const dispatch = useDispatch<any>();
+  const { data, error, isLoading } = useGetTvShowsQuery()
+  console.log('====================================');
+  console.log(data);
+  console.log('====================================');
 
   // const log = () => {
   //   console.log("click");

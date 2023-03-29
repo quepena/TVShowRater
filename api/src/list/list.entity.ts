@@ -17,7 +17,8 @@ export class List {
         cascade: true,
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
-      })
+        nullable: true,
+    })
     user: User;
 
     @Column()

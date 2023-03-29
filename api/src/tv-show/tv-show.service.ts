@@ -84,4 +84,12 @@ export class TvShowService {
     async findTVShowsByGenre(id: number) {
         return await this.tvShowRepository.find({ where: { genres: { id: id } } })
     }
+
+    async findTVShowsByAdminLists() {
+        
+    }
+
+    async search() {
+
+    }
 }

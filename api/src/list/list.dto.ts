@@ -7,6 +7,5 @@ export class CreateListDto {
   @IsNotEmpty()
   tvShows: number[];
 
-  @IsNotEmpty()
   user: number;
 }

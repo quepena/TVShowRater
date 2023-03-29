@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { Auth } from "../../types/auth"
 import { List } from "../../types/list"
+import { TvShow } from "../../types/tvShow"
 import { User } from "../../types/user"
 
 export const apiSlice = createApi({
@@ -67,45 +68,60 @@ export const apiSlice = createApi({
                 };
             },
         }),
-    // login: builder.mutation<
-    //     { access_token: string; status: string },
-    //     LoginInput
-    // >({
-    //     query(data) {
-    //         return {
-    //             url: 'login',
-    //             method: 'POST',
-    //             body: data,
-    //             credentials: 'include',
-    //         };
-    //     },
-    //     async onQueryStarted(args, { dispatch, queryFulfilled }) {
-    //         try {
-    //             await queryFulfilled;
-    //             await dispatch(userApi.endpoints.getMe.initiate(null));
-    //         } catch (error) { }
-    //     },
-    // }),
-    // verifyEmail: builder.mutation<
-    //     IGenericResponse,
-    //     { verificationCode: string }
-    // >({
-    //     query({ verificationCode }) {
-    //         return {
-    //             url: `verifyemail/${verificationCode}`,
-    //             method: 'GET',
-    //         };
-    //     },
-    // }),
-    // logoutUser: builder.mutation<void, void>({
-    //     query() {
-    //         return {
-    //             url: 'logout',
-    //             credentials: 'include',
-    //         };
-    //     },
-    // }),
-}),
+        getTvShows: builder.query<TvShow, number>({
+            query() {
+                return {
+                    url: '/tv-shows/',
+                    method: "get"
+                }
+            }
+        })
+        // login: builder.mutation<
+        //     { access_token: string; status: string },
+        //     LoginInput
+        // >({
+        //     query(data) {
+        //         return {
+        //             url: 'login',
+        //             method: 'POST',
+        //             body: data,
+        //             credentials: 'include',
+        //         };
+        //     },
+        //     async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        //         try {
+        //             await queryFulfilled;
+        //             await dispatch(userApi.endpoints.getMe.initiate(null));
+        //         } catch (error) { }
+        //     },
+        // }),
+        // verifyEmail: builder.mutation<
+        //     IGenericResponse,
+        //     { verificationCode: string }
+        // >({
+        //     query({ verificationCode }) {
+        //         return {
+        //             url: `verifyemail/${verificationCode}`,
+        //             method: 'GET',
+        //         };
+        //     },
+        // }),
+        // logoutUser: builder.mutation<void, void>({
+        //     query() {
+        //         return {
+        //             url: 'logout',
+        //             credentials: 'include',
+        //         };
+        //     },
+        // }),
+    }),
 })
 
-export const { useGetListsQuery, useLoginMutation, useRegisterMutation, useGoogleMutation, useGetMeQuery } = apiSlice
+export const {
+    useGetListsQuery,
+    useLoginMutation,
+    useRegisterMutation,
+    useGoogleMutation,
+    useGetMeQuery,
+    useGetTvShowsQuery
+} = apiSlice
