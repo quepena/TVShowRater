@@ -68,10 +68,10 @@ export const apiSlice = createApi({
                 };
             },
         }),
-        getTvShows: builder.query<TvShow, number>({
-            query() {
+        getAdminLists: builder.query<TvShow, string>({
+            query(name: string) {
                 return {
-                    url: '/tv-shows/',
+                    url: '/lists/name/'+name,
                     method: "get"
                 }
             }
@@ -123,5 +123,5 @@ export const {
     useRegisterMutation,
     useGoogleMutation,
     useGetMeQuery,
-    useGetTvShowsQuery
+    useGetAdminListsQuery,
 } = apiSlice

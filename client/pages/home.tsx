@@ -3,26 +3,15 @@ import React, { Dispatch } from 'react'
 import { useDispatch } from 'react-redux'
 import NavBar from '../components/NavBar'
 import navButtons from '../components/NavButtons'
-import { useGetTvShowsQuery } from '../store/slices/apiSlice'
+import { useGetAdminListsQuery } from '../store/slices/apiSlice'
 import { logout } from '../store/slices/userSlice'
+import { TvShow } from '../types/tvShow'
 // import { fetchUsers } from '../store/slices/userSlice'
 
 const Hero = () => {
-  const { data, error, isLoading } = useGetTvShowsQuery()
-  console.log('====================================');
-  console.log(data);
-  console.log('====================================');
+  const { data, error, isLoading, isSuccess } = useGetAdminListsQuery("Best Shows of All Time")
+  data?.map((el: TvShow) => console.log(el));
 
-  // const log = () => {
-  //   console.log("click");
-    
-  //   dispatch(logout());
-  // };
-
-  // const logoutF = () => {
-  //   // dispatch(fetchUsers());
-  //   dispatch(logout)
-  // };
 
   return (
     <>
@@ -47,12 +36,21 @@ const Hero = () => {
           <div className='text-3xl mt-12 mb-6'>Best shows of All Time</div>
           <div>
             <div className='flex justify-between align-center'>
-              <img src="https://resizing.flixster.com/K17peCvHQfgIvFPXcfQcxwz5P1c=/fit-in/180x240/v2/https://flxt.tmsimg.com/assets/p8679006_b_v8_ac.jpg" alt="" />
+              {
+                isSuccess ?
+                data.map((el: TvShow) =>
+                  <div className='bg-sky-500'>
+                    {el.id}
+                  </div>
+                ) 
+                : <></>
+              }
+              {/* <img src="https://resizing.flixster.com/K17peCvHQfgIvFPXcfQcxwz5P1c=/fit-in/180x240/v2/https://flxt.tmsimg.com/assets/p8679006_b_v8_ac.jpg" alt="" />
               <img src="https://resizing.flixster.com/b855WA2jfWRodJ3P2zdUQ8GiqXo=/fit-in/180x240/v2/https://flxt.tmsimg.com/assets/p185595_b_v8_ai.jpg" alt="" />
               <img src="https://resizing.flixster.com/D6BAvtv3eVV4nmVJziWrpm6hZBQ=/fit-in/180x240/v2/https://flxt.tmsimg.com/assets/p12991665_b_v13_am.jpg" alt="" />
               <img src="https://resizing.flixster.com/B6yliDFPyIoXEVMyfRZ2CION_fI=/fit-in/180x240/v2/https://flxt.tmsimg.com/assets/p8204516_b_v8_at.jpg" alt="" />
               <img src="https://resizing.flixster.com/x44BmZzzU6ta6SovPPJeGWyaH94=/fit-in/180x240/v2/https://flxt.tmsimg.com/assets/p185846_b_v8_ad.jpg" alt="" />
-              <img src="https://resizing.flixster.com/PLeQtZHMj4wElEOG6pgeIkdaZ9s=/fit-in/180x240/v2/https://flxt.tmsimg.com/assets/p9960168_b_v13_aa.jpg" alt="" />
+              <img src="https://resizing.flixster.com/PLeQtZHMj4wElEOG6pgeIkdaZ9s=/fit-in/180x240/v2/https://flxt.tmsimg.com/assets/p9960168_b_v13_aa.jpg" alt="" /> */}
             </div>
           </div>
         </div>

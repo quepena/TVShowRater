@@ -28,5 +28,5 @@ export class CreateTvShowDto {
 
     ratings: number[]
 
-    cast: number[]
+    castTvShow: number[]
 }

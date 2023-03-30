@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User, TvShow } from 'src/entities';
-import { IsNull, Repository } from 'typeorm';
+import { User, TvShow, Genre } from 'src/entities';
+import { In, IsNull, Repository } from 'typeorm';
 import { CreateListDto } from './list.dto';
 import { List } from './list.entity';
 
@@ -43,19 +43,31 @@ export class ListService {
         return await this.listRepository.findOneBy({ id: id })
     }
 
-    async findAdminListByName(name: string) {
-        // const myRnId = () => parseInt(Date.now() + Math.random())
-        // const random = 
-
-        return await this.listRepository
-            .findAndCount({
+    async findAdminListByName(name: string): Promise<TvShow[]> {
+        const list = this.listRepository
+            .findOne({
                 where:
                 {
                     user: IsNull(),
-                    name: name
+                    name: name,
                 },
                 relations: ['tvShows', 'user'],
             })
+
+        let arr = [];
+        (await list).tvShows.forEach((tvShow) => arr.push(tvShow.id)
+        )
+
+        const tv = this.tvShowRepository.createQueryBuilder()
+            .select()
+            .orderBy("RANDOM()")
+            .take(6)
+            .skip(0)
+            .where({ id: In([...arr]) })
+            .getMany()
+
+        return (await tv)
+
     }
 
     async deleteList(id: number) {
@@ -66,7 +78,8 @@ export class ListService {
         const { name, tvShows, user } = listDetails;
         const list = new List();
         list.name = name;
-        list.user = await this.userRepository.findOne({ where: { id: user } })
+        if (user) list.user = await this.userRepository.findOne({ where: { id: user } })
+        else list.user = null
         list.tvShows = [];
         for (let i = 0; i < tvShows.length; i++) {
             const tvShow = await this.tvShowRepository.findOne({

@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TvShow, Genre, Season, Episode } from 'src/entities';
+import { TvShow, Genre, Season, Episode, Cast, Crew } from 'src/entities';
 import { EpisodeService } from 'src/episode/episode.service';
 import { GenreService } from 'src/genre/genre.service';
 import { List } from 'src/list/list.entity';
@@ -26,7 +26,7 @@ import { JwtStrategy } from './auth.strategy';
         signOptions: { expiresIn: config.get('JWT_EXPIRES') },
       }),
     }),
-    TypeOrmModule.forFeature([User, List, TvShow, Genre, Season, Episode]),
+    TypeOrmModule.forFeature([User, List, TvShow, Genre, Season, Episode, Cast, Crew]),
   ],
   controllers: [AuthController],
   providers: [AuthService, AuthHelper, JwtStrategy, ListService, TvShowService, GenreService, SeasonService, EpisodeService]

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Episode, Genre, Season, Cast } from 'src/entities';
+import { Episode, Genre, Season, Cast, Crew } from 'src/entities';
 import { Rating } from 'src/rating/rating.entity';
 import { TvShowController } from './tv-show.controller';
 import { TvShow } from './tv-show.entity';
@@ -8,7 +8,7 @@ import { TvShowService } from './tv-show.service';
 import { Review } from 'src/review/review.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TvShow, Genre, Episode, Season, Rating, Review, Cast]),],
+  imports: [TypeOrmModule.forFeature([TvShow, Genre, Episode, Season, Rating, Review, Cast, Crew]),],
   controllers: [TvShowController],
   providers: [TvShowService]
 })

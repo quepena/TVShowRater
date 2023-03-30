@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Genre, Season } from 'src/entities';
+import { Genre, Season, Cast, Crew } from 'src/entities';
 import { TvShow } from 'src/entities';
 import { Repository } from 'typeorm';
 import { CreateTvShowDto } from './tv-show.dto';
@@ -11,6 +11,8 @@ export class TvShowService {
         @InjectRepository(TvShow) private readonly tvShowRepository: Repository<TvShow>,
         @InjectRepository(Genre) private readonly genreRepository: Repository<Genre>,
         @InjectRepository(Season) private readonly seasonRepository: Repository<Season>,
+        @InjectRepository(Cast) private readonly castRepository: Repository<Cast>,
+        @InjectRepository(Crew) private readonly crewRepository: Repository<Crew>,
     ) { }
 
     async createTvShow(tvShowDetails: CreateTvShowDto): Promise<TvShow> {
@@ -85,11 +87,37 @@ export class TvShowService {
         return await this.tvShowRepository.find({ where: { genres: { id: id } } })
     }
 
-    async findTVShowsByAdminLists() {
-        
-    }
+    async search(name?: string, country?: string) {
+        // if (!country) {
+            const show = await this.tvShowRepository.createQueryBuilder("tvshow")
+                .select()
+                .where("LOWER(REPLACE(tvshow.name, ' ', '')) like LOWER(REPLACE(:name, ' ', ''))", { name: `%${name}%` })
+                .getMany()
 
-    async search() {
+            const cast = await this.castRepository.createQueryBuilder("cast")
+                .select()
+                .where("LOWER(REPLACE(cast.name, ' ', '')) like LOWER(REPLACE(:name, ' ', ''))", { name: `%${name}%` })
+                .getMany()
 
+            const crew = await this.crewRepository.createQueryBuilder("crew")
+                .select()
+                .where("LOWER(REPLACE(crew.name, ' ', '')) like LOWER(REPLACE(:name, ' ', ''))", { name: `%${name}%` })
+                .getMany()
+
+            if (show.length > 0) return show
+            else if (cast.length > 0) return cast
+            else if (crew.length > 0) return crew
+            else if (cast.length > 0 && crew.length > 0) return cast
+        // } else {
+        //     const country = await this.tvShowRepository.createQueryBuilder("tvshow")
+        //         .select()
+        //         .where("LOWER(REPLACE(tvshow.name, ' ', '')) like LOWER(REPLACE(:name, ' ', '')) and tvshow.country like :country", { name: `%${name}%`, country: `%${country}` })
+        //         .getMany()
+
+        //     const genre = await this.genreRepository.createQueryBuilder("genre")
+        //         .select()
+        //         .where("LOWER(REPLACE(crew.name, ' ', '')) like LOWER(REPLACE(:name, ' ', '')) and tvshow.country like :country", { name: `%${name}%` })
+        //         .getMany()
+        // }
     }
 }

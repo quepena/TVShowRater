@@ -36,4 +36,9 @@ export class TvShowController {
     getTVShowsByGenre(@Param('id') id: number) {
         return this.tvShowService.findTVShowsByGenre(id);
     }
+
+    @Get('/search/:name?/:country?')
+    search(@Param('name') name: string, @Param('country') country?: string) {
+        return this.tvShowService.search(name, country);
+    }
 }
