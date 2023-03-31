@@ -32,9 +32,9 @@ export class CrewTvShow {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToMany(() => Role, roleId => roleId.crewTvShow)
-  @JoinTable()
-  roles: Role[];
+  // @ManyToMany(() => Role, roleId => roleId.crewTvShow)
+  // @JoinTable()
+  // roles: Role[];
 
   @ManyToOne(() => TvShow, tvShowId => tvShowId.crewTvShow)
   tvShow: TvShow;

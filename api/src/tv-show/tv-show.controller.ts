@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Req, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CreateTvShowDto } from './tv-show.dto';
 import { TvShowService } from './tv-show.service';
 
@@ -37,8 +37,12 @@ export class TvShowController {
         return this.tvShowService.findTVShowsByGenre(id);
     }
 
-    @Get('/search/:name?/:country?')
-    search(@Param('name') name: string, @Param('country') country?: string) {
+    // @Get('/search/:name?/:country?')
+    @Get('search/name/')
+    // search(@Param('name') name: string, @Param('country') country?: string) {
+    // search(@Body() body: { name?: string, country?: string }) {
+    //     return this.tvShowService.search(body?.name, body?.country);
+    search(@Query('name') name: string, @Query('country') country: string, @Query('genre') genre: string[]) {
         return this.tvShowService.search(name, country);
     }
 }

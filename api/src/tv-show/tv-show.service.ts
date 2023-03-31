@@ -88,7 +88,14 @@ export class TvShowService {
     }
 
     async search(name?: string, country?: string) {
-        // if (!country) {
+        console.log(country.split('-'), typeof country);
+        let countryArr = country.split('-');
+        console.log(typeof countryArr);
+        
+        // let countries: string[] = []
+        // countryArr.forEach((country) => countries.push(country))
+        // console.log(name, countries);
+        if (countryArr.length === 0) {
             const show = await this.tvShowRepository.createQueryBuilder("tvshow")
                 .select()
                 .where("LOWER(REPLACE(tvshow.name, ' ', '')) like LOWER(REPLACE(:name, ' ', ''))", { name: `%${name}%` })
@@ -108,16 +115,19 @@ export class TvShowService {
             else if (cast.length > 0) return cast
             else if (crew.length > 0) return crew
             else if (cast.length > 0 && crew.length > 0) return cast
-        // } else {
-        //     const country = await this.tvShowRepository.createQueryBuilder("tvshow")
-        //         .select()
-        //         .where("LOWER(REPLACE(tvshow.name, ' ', '')) like LOWER(REPLACE(:name, ' ', '')) and tvshow.country like :country", { name: `%${name}%`, country: `%${country}` })
-        //         .getMany()
+        } else {
+            //LOWER(REPLACE(tvshow.name, ' ', '')) like LOWER(REPLACE(:name, ' ', '')) and 
+            const countryQuery = await this.tvShowRepository.createQueryBuilder("tvshow")
+                .select()
+                .where("LOWER(tvshow.country) like LOWER(:country)", { country: `%${name}%` })
+                .getMany()
 
-        //     const genre = await this.genreRepository.createQueryBuilder("genre")
-        //         .select()
-        //         .where("LOWER(REPLACE(crew.name, ' ', '')) like LOWER(REPLACE(:name, ' ', '')) and tvshow.country like :country", { name: `%${name}%` })
-        //         .getMany()
-        // }
+            const genre = await this.genreRepository.createQueryBuilder("genre")
+                .select()
+                .where("LOWER(REPLACE(crew.name, ' ', '')) like LOWER(REPLACE(:name, ' ', '')) and tvshow.country like :country", { name: `%${name}%` })
+                .getMany()
+
+            return countryQuery
+        }
     }
 }

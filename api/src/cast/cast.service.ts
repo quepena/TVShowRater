@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Cast, CastTvShow, TvShow } from 'src/entities';
+import { Cast, CastTvShow, TvShow, Role } from 'src/entities';
 import { Repository } from 'typeorm';
 import { CreateCastDto, CreateCastTvShowDto } from './cast.dto';
 
@@ -10,6 +10,7 @@ export class CastService {
         @InjectRepository(Cast) private readonly castRepository: Repository<Cast>,
         @InjectRepository(CastTvShow) private readonly castTvShowRepository: Repository<CastTvShow>,
         @InjectRepository(TvShow) private readonly tvShowRepository: Repository<TvShow>,
+        @InjectRepository(Role) private readonly roleRepository: Repository<Role>,
     ) { }
 
     async createCast(castDetails: CreateCastDto): Promise<Cast> {
