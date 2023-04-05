@@ -13,6 +13,9 @@ export class Episode {
   @Column()
   name: string;
 
+  @Column()
+  numEp: number;
+
   @OneToMany(type => Progress, progress => progress.episode)
   progress: Progress[];
 }

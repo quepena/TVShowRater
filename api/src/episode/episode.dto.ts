@@ -6,4 +6,7 @@ export class CreateEpisodeDto {
 
   @IsNotEmpty()
   season: number;
+
+  @IsNotEmpty()
+  numEp: number;
 }

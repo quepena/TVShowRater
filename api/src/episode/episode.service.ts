@@ -13,9 +13,10 @@ export class EpisodeService {
     ) { }
 
     async createEpisode(episodeDetails: CreateEpisodeDto): Promise<Episode> {
-        const { name, season } = episodeDetails;
+        const { name, season, numEp } = episodeDetails;
         const episode = new Episode();
         episode.name = name;
+        episode.numEp = numEp;
         episode.season = await this.seasonRepository.findOne({ where: { id: season } })
 
         return await this.episodeRepository.save(episode);
@@ -36,9 +37,10 @@ export class EpisodeService {
     }
 
     async updateEpisode(id: number, episodeDetails: CreateEpisodeDto): Promise<Episode> {
-        const { name, season } = episodeDetails;
+        const { name, season, numEp } = episodeDetails;
         const episode = new Episode();
         episode.name = name;
+        episode.numEp = numEp;
         episode.season = await this.seasonRepository.findOne({ where: { id: season } });
 
         const newEpisode = await this.episodeRepository.save(
