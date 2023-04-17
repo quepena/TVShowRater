@@ -4,6 +4,7 @@ import { User } from '../user.entity';
 import { LoginDto, RegisterDto, TokenDto } from './auth.dto';
 import { JwtAuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
+import { faker } from '@faker-js/faker'
 
 @Controller('auth')
 export class AuthController {
@@ -30,5 +31,18 @@ export class AuthController {
     @Get('profile')
     getProfile(@Body() token: TokenDto) {
         return this.service.getProfile(token);
+    }
+
+    @Get('faker/users')
+    async fakeUsers() {
+        const rounds = 100;
+
+        const name = faker.name.firstName();
+        const lastName = faker.name.lastName()
+        for (let index = 0; index < rounds; index++) {
+            this.service.register({ name: name, last_name: lastName, email: faker.internet.email(name, lastName), password: faker.internet.password(), photo: faker.internet.avatar(), isAdmin: false } as RegisterDto)
+        }
+
+        return 0;
     }
 }

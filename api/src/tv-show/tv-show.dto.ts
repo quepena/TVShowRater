@@ -18,8 +18,7 @@ export class CreateTvShowDto {
 
     @IsNotEmpty()
     length: number;
-
-    @IsNotEmpty()
+    
     trailer: string;
 
     seasons: number[]

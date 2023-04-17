@@ -1,10 +1,13 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
+import { TvShowService } from 'src/tv-show/tv-show.service';
 import { CreateListDto } from './list.dto';
 import { ListService } from './list.service';
+import { faker } from '@faker-js/faker'
+import { UserService } from 'src/user/user.service';
 
 @Controller('lists')
 export class ListController {
-    constructor(private readonly listService: ListService) { }
+    constructor(private readonly listService: ListService, private readonly tvShowService: TvShowService, private readonly userService: UserService) { }
 
     @Get()
     findList() {
@@ -40,5 +43,35 @@ export class ListController {
     @Get('name/:name')
     getListsByName(@Param('name') name: string) {
         return this.listService.findAdminListByName(name);
+    }
+
+    @Get('faker/lists')
+    async fakeLists() {
+        const rounds = 100;
+        function getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min) + min);
+        }
+
+        for (let index = 0; index < rounds; index++) {
+        const tvShowsNum = getRandomInt(1, 50)
+        let shows = []
+        for(let i = 0; i < tvShowsNum; i++) {
+            const showId = getRandomInt(1, 80000)
+            const show = await this.tvShowService.findTVShowById(showId);
+                if (show) shows.push(show.id)
+        }
+        const name = faker.random.words()
+        let user = null
+        let userId = 0
+        while(!user) {
+            userId = getRandomInt(1, 200)
+            user = await this.userService.findUserById(userId);
+        }
+            this.listService.createList({ name: name, tvShows: shows, user: userId } as CreateListDto)
+        }
+
+        return 0;
     }
 }

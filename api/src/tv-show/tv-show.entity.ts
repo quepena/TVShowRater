@@ -27,10 +27,10 @@ export class TvShow {
     @Column()
     photo: string;
 
-    @Column()
+    @Column({ nullable: true })
     length: number;
 
-    @Column()
+    @Column({ nullable: true })
     trailer: string;
 
     @OneToMany(type => Season, season => season.tvShow)

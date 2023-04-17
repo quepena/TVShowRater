@@ -18,6 +18,10 @@ export class GenreService {
     return this.genreRepository.findOneBy({ id: id })
   }
 
+  async findGenreByName(name: string) {
+    return this.genreRepository.findOneBy({ name: name })
+  }
+
   async createGenre(createGenreDto: CreateGenreDto) {
     const newGenre = this.genreRepository.create(createGenreDto);
     return await this.genreRepository.save(newGenre);

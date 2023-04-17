@@ -47,6 +47,10 @@ export class TvShowService {
         return this.tvShowRepository.findOneBy({ id: id })
     }
 
+    async findShowByName(name: string) {
+    return this.tvShowRepository.findOneBy({ name: name })
+  }
+
     async deleteTVShow(id: number) {
         return await this.tvShowRepository.delete(id);
     }
