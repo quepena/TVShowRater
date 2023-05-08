@@ -70,12 +70,34 @@ export const apiSlice = createApi({
         }),
         getAdminLists: builder.query<TvShow, string>({
             query(name: string) {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
+                }
+
                 return {
                     url: '/lists/name/'+name,
-                    method: "get"
+                    method: "get",
+                    headers: headers,
                 }
             }
-        })
+        }),
+        getShowById: builder.query<TvShow, number>({
+            query(id: number) {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
+                }
+
+                return {
+                    url: '/tv-shows/'+id,
+                    method: "get",
+                    headers: headers,
+                }
+            }
+        }),
         // login: builder.mutation<
         //     { access_token: string; status: string },
         //     LoginInput
@@ -124,4 +146,5 @@ export const {
     useGoogleMutation,
     useGetMeQuery,
     useGetAdminListsQuery,
+    useGetShowByIdQuery,
 } = apiSlice

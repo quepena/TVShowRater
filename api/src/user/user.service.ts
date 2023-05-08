@@ -18,7 +18,7 @@ export class UserService {
         });
     }
 
-    async findUserById(id: number) {
+    async findUserById(id: number): Promise<User> {
         return await this.userRepository.findOneBy({ id: id })
     }
 
@@ -26,8 +26,8 @@ export class UserService {
         return await this.userRepository.delete(id);
     }
 
-    async updateUser(id: number, userDetails: CreateUserDto) {
-        const { name, last_name, email, photo, password, isAdmin, lists } = userDetails;
+    async updateUser(id: number, userDetails: CreateUserDto): Promise<User> {
+        const { name, last_name, email, photo, password, isAdmin } = userDetails;
         const user = new User();
         user.name = name;
         user.last_name = last_name;
@@ -35,13 +35,13 @@ export class UserService {
         user.photo = photo;
         user.password = password;
         user.isAdmin = isAdmin;
-        for (let i = 0; i < lists.length; i++) {
-            const list = await this.listRepository.findOne({
-                where: { id: lists[i] }
-            });
-            user.lists.push(list);
-        }
-        const updatedUser = await this.userRepository.save({ id: Number(id), name: user.name, last_name: user.last_name, email: user.email, photo: user.photo, password: user.password, isAdmin: user.isAdmin, lists: user.lists });
+        // for (let i = 0; i < lists.length; i++) {
+        //     const list = await this.listRepository.findOne({
+        //         where: { id: lists[i] }
+        //     });
+        //     user.lists.push(list);
+        // }
+        const updatedUser = await this.userRepository.save({ id: Number(id), name: user.name, last_name: user.last_name, email: user.email, photo: user.photo, password: user.password, isAdmin: user.isAdmin });
 
         return updatedUser;
     }

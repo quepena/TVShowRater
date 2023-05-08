@@ -7,11 +7,13 @@ import { useGetAdminListsQuery } from '../store/slices/apiSlice'
 import { logout } from '../store/slices/userSlice'
 import { TvShow } from '../types/tvShow'
 // import { fetchUsers } from '../store/slices/userSlice'
+import Image from 'next/image'
+import Show from './shows/[show]'
+import { Router } from 'next/router'
 
 const Hero = () => {
   const { data, error, isLoading, isSuccess } = useGetAdminListsQuery("Best Shows of All Time")
   data?.map((el: TvShow) => console.log(el));
-
 
   return (
     <>
@@ -38,12 +40,23 @@ const Hero = () => {
             <div className='flex justify-between align-center'>
               {
                 isSuccess ?
-                data.map((el: TvShow) =>
-                  <div className='bg-sky-500'>
-                    {el.id}
-                  </div>
-                ) 
-                : <></>
+                  data.map((el) =>
+                    <Link href={{
+                      pathname: `/shows/${el.name}`, query: {
+                        id: el.id,
+                        name: el.name,
+                        photo: el.photo,
+                        country: el.country,
+                        description: el.description,
+                        length: el.length,
+                        genres: el.genres,
+                        trailer: el.trailer,
+                      }
+                    }}>
+                      <Image src={el.photo} width={180} height={240} alt="" />
+                    </Link>
+                  )
+                  : <></>
               }
               {/* <img src="https://resizing.flixster.com/K17peCvHQfgIvFPXcfQcxwz5P1c=/fit-in/180x240/v2/https://flxt.tmsimg.com/assets/p8679006_b_v8_ac.jpg" alt="" />
               <img src="https://resizing.flixster.com/b855WA2jfWRodJ3P2zdUQ8GiqXo=/fit-in/180x240/v2/https://flxt.tmsimg.com/assets/p185595_b_v8_ai.jpg" alt="" />

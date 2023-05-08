@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { range } from 'rxjs';
 import { User, TvShow, Genre } from 'src/entities';
 import { In, IsNull, Repository } from 'typeorm';
 import { CreateListDto } from './list.dto';
@@ -55,10 +56,10 @@ export class ListService {
             })
 
         let arr = [];
-        (await list).tvShows.forEach((tvShow) => arr.push(tvShow.id)
-        )
+        (await list).tvShows.forEach((tvShow) => arr.push(tvShow.id))
 
-        const tv = this.tvShowRepository.createQueryBuilder()
+        const tv = this.tvShowRepository
+            .createQueryBuilder()
             .select()
             .orderBy("RANDOM()")
             .take(6)
@@ -66,8 +67,59 @@ export class ListService {
             .where({ id: In([...arr]) })
             .getMany()
 
-        return (await tv)
+        const showsWGenres = [];
+        (await tv).forEach((TvShow) => {
+            showsWGenres.push(TvShow.id)
+            // console.log(show);
+            
+            // showsWGenres.push(show)
+            // console.log(TvShow.id);
+            
+        })
 
+        const showFunc = (el: number) => {
+            const show = this.tvShowRepository
+            .findOne({
+                where:
+                {
+                    id: el,
+                },
+                relations: ['genres'],
+            })
+            return show
+
+        }
+        
+        const showG = []
+        showsWGenres.forEach(async (el) => {
+            const g = showFunc(el)
+            const gr = await g
+
+            // console.log(el, gr);
+            
+            
+            showG.push(gr)
+
+            if(gr.id == showsWGenres[showsWGenres.length-1]) return showG
+        })
+
+        // console.log(showG);
+        
+        
+        
+
+        // console.log(shows);
+        
+        
+        // for i in range(tv.length) {
+        //     const tvGenre = this.tvShowRepository.findOne({
+        //         where: {
+        //             id: tv.id
+        //         }
+        //     })
+        // }
+
+        return (await tv);
     }
 
     async deleteList(id: number) {

@@ -49,7 +49,7 @@ export class TvShowController {
 
     @Get('faker/shows')
     async fakeShows() {
-        const rounds = 100;
+        const rounds = 300;
         function getRandomInt(min, max) {
             min = Math.ceil(min);
             max = Math.floor(max);

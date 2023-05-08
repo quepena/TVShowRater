@@ -44,7 +44,10 @@ export class TvShowService {
     }
 
     async findTVShowById(id: number) {
-        return this.tvShowRepository.findOneBy({ id: id })
+        return this.tvShowRepository.findOne({
+            where: { id: id }, relations: {
+            genres: true
+        }})
     }
 
     async findShowByName(name: string) {
