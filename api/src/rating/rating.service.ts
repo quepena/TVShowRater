@@ -70,6 +70,16 @@ export class RatingService {
         })
     }
 
+    async findRatingOfShowByUser(user: number, show: number) {
+        return await this.ratingRepository.find({
+            where: { user: { id: user }, tvShow: { id: show } },
+            relations: {
+                user: true,
+                tvShow: true,
+            }
+        })
+    }
+
     async findRatingsByTvShow(id: number) {
         return await this.ratingRepository.find({
             where: { tvShow: { id: id } },

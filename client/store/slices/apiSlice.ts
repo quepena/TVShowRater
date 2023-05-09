@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { Auth } from "../../types/auth"
 import { List } from "../../types/list"
+import { Rating } from "../../types/rating"
 import { TvShow } from "../../types/tvShow"
 import { User } from "../../types/user"
 
@@ -98,6 +99,39 @@ export const apiSlice = createApi({
                 }
             }
         }),
+        getMeanRatingByShow: builder.query<number, number>({
+            query(id: number) {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
+                }
+
+                return {
+                    url: '/ratings/tv-show/'+id+'/rate',
+                    method: "get",
+                    headers: headers,
+                }
+            }
+        }),
+        getRatingOfShowByUser: builder.query<Rating, { user: number, show: number }>({
+            query(args) {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
+                }
+
+                const { user, show } = args
+
+                return {
+                    url: '/ratings/user/'+user+'/show/'+show,
+                    method: "get",
+                    headers: headers,
+                    params: { user, show }
+                }
+            }
+        }),
         // login: builder.mutation<
         //     { access_token: string; status: string },
         //     LoginInput
@@ -147,4 +181,6 @@ export const {
     useGetMeQuery,
     useGetAdminListsQuery,
     useGetShowByIdQuery,
+    useGetMeanRatingByShowQuery,
+    useGetRatingOfShowByUserQuery,
 } = apiSlice

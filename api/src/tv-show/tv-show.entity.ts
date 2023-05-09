@@ -14,6 +14,9 @@ export class TvShow {
     @Column()
     name: string;
 
+    @Column({ nullable: true })
+    year: string;
+
     @ManyToMany(type => Genre, genre => genre.tvshows)
     @JoinTable()
     genres: Genre[]

@@ -37,6 +37,11 @@ export class RatingController {
         return this.ratingService.findRatingsByUser(id);
     }
 
+    @Get('/user/:user/show/:show')
+    getRatingOfShowByUser(@Param('user') user: number, @Param('show') show: number) {
+        return this.ratingService.findRatingOfShowByUser(user, show);
+    }
+
     @Get('/tv-show/:id')
     getRatingsByTvShow(@Param('id') id: number) {
         return this.ratingService.findRatingsByTvShow(id);

@@ -16,6 +16,8 @@ export class CreateTvShowDto {
     @IsNotEmpty()
     photo: string;
 
+    year: string;
+
     @IsNotEmpty()
     length: number;
     

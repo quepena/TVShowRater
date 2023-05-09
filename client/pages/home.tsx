@@ -13,7 +13,7 @@ import { Router } from 'next/router'
 
 const Hero = () => {
   const { data, error, isLoading, isSuccess } = useGetAdminListsQuery("Best Shows of All Time")
-  data?.map((el: TvShow) => console.log(el));
+  // data?.map((el: TvShow) => console.log(el));
 
   return (
     <>
@@ -41,7 +41,7 @@ const Hero = () => {
               {
                 isSuccess ?
                   data.map((el) =>
-                    <Link href={{
+                    <Link key={el.id} href={{
                       pathname: `/shows/${el.name}`, query: {
                         id: el.id,
                         name: el.name,
