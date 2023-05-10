@@ -8,7 +8,7 @@ import { TvShowService } from './tv-show.service';
 import { Review } from 'src/review/review.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TvShow, Genre, Episode, Season, Rating, Review, Cast, Crew]),],
+  imports: [TypeOrmModule.forFeature([TvShow, Genre, Episode, Season, Rating, Review, Cast]),],
   controllers: [TvShowController],
   providers: [TvShowService]
 })

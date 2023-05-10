@@ -14,19 +14,19 @@ export class SeasonService {
     ) { }
 
     async createSeason(seasonDetails: CreateSeasonDto): Promise<Season> {
-        const { tvShow, numSeason, episodes } = seasonDetails;
+        const { tvShow, numSeason } = seasonDetails;
         const season = new Season();
         season.numSeason = numSeason;
         season.tvShow = await this.tvShowRepository.findOne({ where: { id: tvShow } })
-        season.episodes = []
-        if (episodes) {
-            for (let i = 0; i < episodes.length; i++) {
-                const episode = await this.episodeRepository.findOne({
-                    where: { id: episodes[i] }
-                });
-                season.episodes.push(episode);
-            }
-        }
+        // season.episodes = []
+        // if (episodes) {
+        //     for (let i = 0; i < episodes.length; i++) {
+        //         const episode = await this.episodeRepository.findOne({
+        //             where: { id: episodes[i] }
+        //         });
+        //         season.episodes.push(episode);
+        //     }
+        // }
 
         return await this.seasonRepository.save(season);
     }
@@ -48,22 +48,22 @@ export class SeasonService {
     }
 
     async updateSeason(id: number, seasonDetails: CreateSeasonDto): Promise<Season> {
-        const { numSeason, tvShow, episodes } = seasonDetails;
+        const { numSeason, tvShow } = seasonDetails;
         const season = new Season();
         season.numSeason = numSeason;
         season.tvShow = await this.tvShowRepository.findOne({ where: { id: tvShow } });
-        season.episodes = [];
-        if (episodes) {
-            for (let i = 0; i < episodes.length; i++) {
-                const episode = await this.episodeRepository.findOne({
-                    where: { id: episodes[i] }
-                });
-                season.episodes.push(episode);
-            }
-        }
+        // season.episodes = [];
+        // if (episodes) {
+        //     for (let i = 0; i < episodes.length; i++) {
+        //         const episode = await this.episodeRepository.findOne({
+        //             where: { id: episodes[i] }
+        //         });
+        //         season.episodes.push(episode);
+        //     }
+        // }
 
         const newSeason = await this.seasonRepository.save(
-            { id: Number(id), numSeason: season.numSeason, tvShow: season.tvShow, episodes: season.episodes }
+            { id: Number(id), numSeason: season.numSeason, tvShow: season.tvShow }
         )
 
         return newSeason

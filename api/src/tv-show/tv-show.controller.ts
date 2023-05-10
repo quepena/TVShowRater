@@ -49,7 +49,7 @@ export class TvShowController {
 
     @Get('faker/shows')
     async fakeShows() {
-        const rounds = 300;
+        const rounds = 500;
         function getRandomInt(min, max) {
             min = Math.ceil(min);
             max = Math.floor(max);
@@ -62,8 +62,9 @@ export class TvShowController {
             })
             const allGenre = await res.json();
             const show = await this.tvShowService.findShowByName(allGenre.tvShow.name);
-            console.log(!show)
-            if (!show) this.tvShowService.createTvShow({ name: allGenre.tvShow.name, genres: allGenre.tvShow.genres, description: allGenre.tvShow.description, country: allGenre.tvShow.country, photo: allGenre.tvShow.image_thumbnail_path, length: allGenre.tvShow.runtime, trailer: allGenre.tvShow.youtube_link } as CreateTvShowDto)
+            console.log(allGenre.tvShow.start_date);
+            
+            if (!show) this.tvShowService.createTvShow({ name: allGenre.tvShow.name, genres: allGenre.tvShow.genres, description: allGenre.tvShow.description, country: allGenre.tvShow.country, photo: allGenre.tvShow.image_thumbnail_path, length: allGenre.tvShow.runtime, trailer: allGenre.tvShow.youtube_link, year: allGenre.tvShow.start_date } as CreateTvShowDto)
         }
 
         return 0;

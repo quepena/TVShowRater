@@ -4,8 +4,6 @@ export class CreateSeasonDto {
   @IsNotEmpty()
   tvShow: number;
 
-  episodes: number[];
-
   @IsNotEmpty()
   numSeason: number;
 }

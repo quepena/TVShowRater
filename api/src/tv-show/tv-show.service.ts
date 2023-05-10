@@ -12,11 +12,11 @@ export class TvShowService {
         @InjectRepository(Genre) private readonly genreRepository: Repository<Genre>,
         @InjectRepository(Season) private readonly seasonRepository: Repository<Season>,
         @InjectRepository(Cast) private readonly castRepository: Repository<Cast>,
-        @InjectRepository(Crew) private readonly crewRepository: Repository<Crew>,
+        // @InjectRepository(Crew) private readonly crewRepository: Repository<Crew>,
     ) { }
 
     async createTvShow(tvShowDetails: CreateTvShowDto): Promise<TvShow> {
-        const { name, photo, description, length, genres, trailer, country } = tvShowDetails;
+        const { name, photo, description, length, genres, trailer, country, year } = tvShowDetails;
         const tvShow = new TvShow();
         tvShow.name = name;
         tvShow.photo = photo;
@@ -25,6 +25,7 @@ export class TvShowService {
         tvShow.trailer = trailer;
         tvShow.country = country;
         tvShow.genres = [];
+        tvShow.year = year;
         for (let i = 0; i < genres.length; i++) {
             const genre = await this.genreRepository.findOne({
                 where: { name: genres[i] }
@@ -36,7 +37,7 @@ export class TvShowService {
     }
 
     async findTvShows() {
-        return await this.tvShowRepository.find({
+        return await this.tvShowRepository.findAndCount({
             relations: {
                 genres: true
             }
@@ -113,15 +114,15 @@ export class TvShowService {
                 .where("LOWER(REPLACE(cast.name, ' ', '')) like LOWER(REPLACE(:name, ' ', ''))", { name: `%${name}%` })
                 .getMany()
 
-            const crew = await this.crewRepository.createQueryBuilder("crew")
-                .select()
-                .where("LOWER(REPLACE(crew.name, ' ', '')) like LOWER(REPLACE(:name, ' ', ''))", { name: `%${name}%` })
-                .getMany()
+            // const crew = await this.crewRepository.createQueryBuilder("crew")
+            //     .select()
+            //     .where("LOWER(REPLACE(crew.name, ' ', '')) like LOWER(REPLACE(:name, ' ', ''))", { name: `%${name}%` })
+            //     .getMany()
 
             if (show.length > 0) return show
             else if (cast.length > 0) return cast
-            else if (crew.length > 0) return crew
-            else if (cast.length > 0 && crew.length > 0) return cast
+            // else if (crew.length > 0) return crew
+            // else if (cast.length > 0 && crew.length > 0) return cast
         } else {
             //LOWER(REPLACE(tvshow.name, ' ', '')) like LOWER(REPLACE(:name, ' ', '')) and 
             const countryQuery = await this.tvShowRepository.createQueryBuilder("tvshow")
