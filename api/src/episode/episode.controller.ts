@@ -48,7 +48,7 @@ export class EpisodeController {
 
     @Get('faker/episodes')
     async fakeSeasons() {
-        const rounds = 1000;
+        const rounds = 50;
         function getRandomInt(min, max) {
             min = Math.ceil(min);
             max = Math.floor(max);
@@ -67,25 +67,30 @@ export class EpisodeController {
             const allGenre = await res.json();
             const show = await this.tvShowService.findShowByName(allGenre.tvShow.name);
             if (show) {
+                console.log("show");
+                
                 // console.log(show);
                 const season = await this.seasonService.findSeasonsByTVShows(show.id);
                 const seasons = []
                 if (season) {
-                    console.log("seas  " + season);
-                    console.log(allGenre.tvShow);
+                    // console.log("seas  " + season);
+                    // console.log(allGenre.tvShow);
 
                     if (allGenre.tvShow.episodes) {
                         season.forEach(el => {
                             allGenre.tvShow.episodes.forEach((item) => {
-                                seasons.push(item.episode, item.name);
+                                console.log(item);
+                                
+                                if(item.season == el.numSeason)
+                                this.episodeService.createEpisode({ name: item.name, season: el.id, numEp: item.episode } as CreateEpisodeDto)
+                                    // seasons.push([item.episode, item.name]);
                             });
-                            console.log("what?");
+                            // console.log("what?");
 
-                            seasons.forEach(element => {
-                                console.log(element);
+                            // seasons.forEach(element => {
+                                // console.log(element);
 
-                                this.episodeService.createEpisode({ name: seasons[1], season: el.id, numEp: seasons[0] } as CreateEpisodeDto)
-                            });
+                            // });
                         });
                     }
                 }
@@ -101,16 +106,22 @@ export class EpisodeController {
                             this.seasonService.createSeason({ tvShow: show.id, numSeason: element } as CreateSeasonDto)
                         });
 
+                        const season = await this.seasonService.findSeasonsByTVShows(show.id);
+
                         season.forEach(el => {
                             allGenre.tvShow.episodes.forEach((item) => {
-                                seasons.push(item.episode, item.name);
+                                console.log("1 + "+item);
+                                
+                                if(item.season == el.numSeason)
+                                    // seasons.push([item.episode, item.name]);
+                                    this.episodeService.createEpisode({ name: item.name, season: el.id, numEp: item.episode } as CreateEpisodeDto)
                             });
 
-                            seasons.forEach(element => {
-                                console.log(element);
+                            // seasons.forEach(element => {
+                                // console.log(element);
 
-                                this.episodeService.createEpisode({ name: seasons[1], season: el.id, numEp: seasons[0] } as CreateEpisodeDto)
-                            });
+                                // this.episodeService.createEpisode({ name: seasons[1], season: el.id, numEp: seasons[0] } as CreateEpisodeDto)
+                            // });
                         });
 
                     }
@@ -118,27 +129,34 @@ export class EpisodeController {
 
             }
             else {
-                this.tvShowService.createTvShow({ name: allGenre.tvShow.name, genres: allGenre.tvShow.genres, description: allGenre.tvShow.description, country: allGenre.tvShow.country, photo: allGenre.tvShow.image_thumbnail_path, length: allGenre.tvShow.runtime, trailer: allGenre.tvShow.youtube_link, year: allGenre.tvShow.start_date } as CreateTvShowDto)
-                const show = await this.tvShowService.findShowByName(allGenre.tvShow.name);
+                const show = this.tvShowService.createTvShow({ name: allGenre.tvShow.name, genres: allGenre.tvShow.genres, description: allGenre.tvShow.description, country: allGenre.tvShow.country, photo: allGenre.tvShow.image_thumbnail_path, length: allGenre.tvShow.runtime, trailer: allGenre.tvShow.youtube_link, year: allGenre.tvShow.start_date, addId: allGenre.tvShow.id } as CreateTvShowDto)
+                // const show = await this.tvShowService.findShowByName(allGenre.tvShow.name);
+                const showC = await show;
+                console.log("no show");
+                
+                // console.log(showC);
+                
+                
 
-                if (show) {
-                    const season = await this.seasonService.findSeasonsByTVShows(show.id);
+                // if (show) {
+                //     const season = await this.seasonService.findSeasonsByTVShows(show.id);
+                //     const seasons = []
+                //     if (season) {
+                //         if (allGenre.tvShow.episodes) {
+                //             season.forEach(el => {
+                //                 allGenre.tvShow.episodes.forEach((item) => {
+                //                     seasons.push(item.episode, item.name);
+                //                 });
+
+                //                 seasons.forEach(element => {
+                //                     console.log(element);
+
+                //                     this.episodeService.createEpisode({ name: seasons[1], season: el.id, numEp: seasons[0] } as CreateEpisodeDto)
+                //                 });
+                //             });
+                //         }
+                //     } else {
                     const seasons = []
-                    if (season) {
-                        if (allGenre.tvShow.episodes) {
-                            season.forEach(el => {
-                                allGenre.tvShow.episodes.forEach((item) => {
-                                    seasons.push(item.episode, item.name);
-                                });
-
-                                seasons.forEach(element => {
-                                    console.log(element);
-
-                                    this.episodeService.createEpisode({ name: seasons[1], season: el.id, numEp: seasons[0] } as CreateEpisodeDto)
-                                });
-                            });
-                        }
-                    } else {
                         if (allGenre.tvShow.episodes) {
                             allGenre.tvShow.episodes.forEach((item) => {
                                 if (seasons.indexOf(item.season) === -1) {
@@ -147,24 +165,27 @@ export class EpisodeController {
                             });
 
                             seasons.forEach(element => {
-                                this.seasonService.createSeason({ tvShow: show.id, numSeason: element } as CreateSeasonDto)
+                                this.seasonService.createSeason({ tvShow: showC.id, numSeason: element } as CreateSeasonDto)
                             });
+
+                            console.log(showC.id);
+                            
+                            const season = await this.seasonService.findSeasonsByTVShows(showC.id);
+                            console.log(season);
+                                                       
 
                             season.forEach(el => {
+                                console.log(el.numSeason);
+                                
                                 allGenre.tvShow.episodes.forEach((item) => {
-                                    seasons.push(item.episode, item.name);
-                                });
-
-                                seasons.forEach(element => {
-                                    console.log(element);
-
-                                    this.episodeService.createEpisode({ name: seasons[1], season: el.id, numEp: seasons[0] } as CreateEpisodeDto)
+                                    if(item.season == el.numSeason)
+                                        this.episodeService.createEpisode({ name: item.name, season: el.id, numEp: item.episode } as CreateEpisodeDto)
                                 });
                             });
 
 
-                        }
-                    }
+                        // }
+                    // }
                 }
             }
         }

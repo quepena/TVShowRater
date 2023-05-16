@@ -11,6 +11,9 @@ export class TvShow {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({ nullable: true })
+    addId: number;
+
     @Column()
     name: string;
 
