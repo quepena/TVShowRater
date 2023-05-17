@@ -6,13 +6,13 @@ export class Cast {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   name: string;
 
   @Column()
   photo: string;
 
-  @Column()
+  @Column({ nullable: true })
   biography: string;
 
   // @ManyToMany(type => TvShow, tvShow => tvShow.cast)

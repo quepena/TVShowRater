@@ -4,7 +4,8 @@ export class CreateTvShowDto {
     @IsNotEmpty()
     name: string;
 
-    addId: number;
+    @IsNotEmpty()
+    addId: string;
 
     @IsNotEmpty()
     genres: string[];
@@ -25,11 +26,11 @@ export class CreateTvShowDto {
     
     trailer: string;
 
-    seasons: number[]
+    // seasons: number[]
 
-    lists: number[]
+    // lists: number[]
 
-    ratings: number[]
+    // ratings: number[]
 
-    castTvShow: number[]
+    // castTvShow: number[]
 }

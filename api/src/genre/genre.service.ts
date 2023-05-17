@@ -19,7 +19,7 @@ export class GenreService {
   }
 
   async findGenreByName(name: string) {
-    return this.genreRepository.findOneBy({ name: name })
+    return await this.genreRepository.findOneBy({ name: name })
   }
 
   async createGenre(createGenreDto: CreateGenreDto) {

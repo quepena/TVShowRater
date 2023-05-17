@@ -10,7 +10,7 @@ export class CreateCastDto {
   @IsNotEmpty()
   biography: string;
 
-  tvShows: number[]
+  roles: number[]
 }
 
 export class CreateCastTvShowDto {

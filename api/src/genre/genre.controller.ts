@@ -44,19 +44,23 @@ export class GenreController {
             return Math.floor(Math.random() * (max - min) + min);
         }
 
-        for (let index = 0; index < rounds; index++) {
-            const res = await fetch("https://www.episodate.com/api/show-details?q=" + getRandomInt(1, 80000), {
-                method: "GET"
-            })
-            const allGenre = await res.json();
-            console.log(allGenre.tvShow.genres)
-            console.log(allGenre.tvShow.genres.length)
-            for (let i = 0; i < allGenre.tvShow.genres.length; i++) {
-                const genre = await this.genreService.findGenreByName(allGenre.tvShow.genres[i]);
-                console.log(!genre)
-                if (!genre) this.genreService.createGenre({ name: allGenre.tvShow.genres[i] })
-                else continue
+        const options = {
+            method: 'GET',
+            url: 'https://api.themoviedb.org/3/genre/tv/list?language=en',
+            headers: {
+              accept: 'application/json',
+              Authorization: process.env.TMDB_AUTH
             }
+          };
+
+        // for (let index = 0; index < rounds; index++) {
+            const res = await fetch(options.url, options)
+            const allGenre = await res.json();
+            for (let i = 0; i < allGenre.genres.length; i++) {
+                // const genre = await this.genreService.findGenreByName(allGenre.genres[i]);
+                // console.log(!genre)
+                this.genreService.createGenre({ name: allGenre.genres[i].name })
+            // }
         }
 
         return 0;

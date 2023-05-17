@@ -16,7 +16,7 @@ export class TvShowService {
     ) { }
 
     async createTvShow(tvShowDetails: CreateTvShowDto): Promise<TvShow> {
-        const { name, photo, description, length, genres, trailer, country, year } = tvShowDetails;
+        const { name, photo, description, length, genres, trailer, country, year, addId } = tvShowDetails;
         const tvShow = new TvShow();
         tvShow.name = name;
         tvShow.photo = photo;
@@ -26,6 +26,7 @@ export class TvShowService {
         tvShow.country = country;
         tvShow.genres = [];
         tvShow.year = year;
+        tvShow.addId = addId;
         for (let i = 0; i < genres.length; i++) {
             const genre = await this.genreRepository.findOne({
                 where: { name: genres[i] }
@@ -51,6 +52,15 @@ export class TvShowService {
         }})
     }
 
+    async findTVShowByAddId(addId: string) {
+        return await this.tvShowRepository.findOne({
+            where: { addId: addId },
+            relations: {
+                genres: true
+            }
+        });
+    }
+
     async findShowByName(name: string) {
     return this.tvShowRepository.findOneBy({ name: name })
   }
@@ -60,7 +70,7 @@ export class TvShowService {
     }
 
     async updateTvShow(id: number, tvShowDetails: CreateTvShowDto): Promise<TvShow> {
-        const { name, photo, description, length, genres, trailer, country, seasons } = tvShowDetails;
+        const { name, photo, description, length, genres, trailer, country, addId } = tvShowDetails;
         const tvShow = new TvShow();
         tvShow.name = name;
         tvShow.photo = photo;
@@ -69,6 +79,7 @@ export class TvShowService {
         tvShow.trailer = trailer;
         tvShow.country = country;
         tvShow.genres = [];
+        tvShow.addId = addId;
         for (let i = 0; i < genres.length; i++) {
             const genre = await this.genreRepository.findOne({
                 where: { name: genres[i] }
@@ -76,16 +87,16 @@ export class TvShowService {
             tvShow.genres.push(genre);
         }
 
-        tvShow.seasons = [];
-        for (let i = 0; i < seasons.length; i++) {
-            const season = await this.seasonRepository.findOne({
-                where: { id: seasons[i] }
-            });
-            tvShow.seasons.push(season);
-        }
+        // tvShow.seasons = [];
+        // for (let i = 0; i < seasons.length; i++) {
+        //     const season = await this.seasonRepository.findOne({
+        //         where: { id: seasons[i] }
+        //     });
+        //     tvShow.seasons.push(season);
+        // }
 
         const newShow = await this.tvShowRepository.save(
-            { id: Number(id), name: tvShow.name, photo: tvShow.description, description: tvShow.description, length: tvShow.length, trailer: tvShow.trailer, country: tvShow.trailer, genres: tvShow.genres, seasons: tvShow.seasons }
+            { id: Number(id), name: tvShow.name, photo: tvShow.description, description: tvShow.description, length: tvShow.length, trailer: tvShow.trailer, country: tvShow.trailer, genres: tvShow.genres, addId: tvShow.addId }
         )
 
         return newShow

@@ -12,7 +12,7 @@ export class TvShow {
     id: number;
 
     @Column({ nullable: true })
-    addId: number;
+    addId: string;
 
     @Column()
     name: string;

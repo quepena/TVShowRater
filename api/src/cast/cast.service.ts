@@ -14,11 +14,18 @@ export class CastService {
     ) { }
 
     async createCast(castDetails: CreateCastDto): Promise<Cast> {
-        const { name, biography, photo, tvShows } = castDetails;
+        const { name, biography, photo, roles } = castDetails;
         const cast = new Cast();
         cast.name = name;
         cast.biography = biography;
         cast.photo = photo;
+        cast.roles = []
+        for (let i = 0; i < roles.length; i++) {
+            const role = await this.roleRepository.findOne({
+                where: { id: roles[i] }
+            });
+           cast.roles.push(role);
+        }
 
         return await this.castRepository.save(cast);
     }
@@ -32,6 +39,13 @@ export class CastService {
     async findCastById(id: number) {
         return await this.castRepository.findOne({
             where: { id: id },
+            relations: ['castTvShow', 'castTvShow.tvShow']
+        });
+    }
+
+    async findCastByName(name: string) {
+        return await this.castRepository.findOne({
+            where: { name: name },
             relations: ['castTvShow', 'castTvShow.tvShow']
         });
     }
