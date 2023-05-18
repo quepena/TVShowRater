@@ -53,7 +53,7 @@ export class TvShowController {
 
     @Get('faker/shows')
     async fakeShows() {
-        const rounds = 15;
+        const rounds = 500;
         // function getRandomInt(min, max) {
         //     min = Math.ceil(min);
         //     max = Math.floor(max);
@@ -81,31 +81,44 @@ export class TvShowController {
             // console.log(allGenre.tvShow.start_date)
 
             const genreList = []
-            for (const element of allGenre.genres){
-                const genre = await this.genreService.findGenreByName(element.name)
-                
-                genreList.push(genre.id);
+            if (allGenre.genres) {
+                for (const element of allGenre.genres) {
+                    const genre = await this.genreService.findGenreByName(element.name)
+
+                    genreList.push(genre.id);
+                }
             }
-            
+
             // allGenre.genres.forEach(async element => {
             //     const genre = await this.genreService.findGenreByName(element.name)
             //     const genreAsync = genre;
-                
+
             //     genreList.push(genreAsync);
             // });
 
             const youtube = await fetch(`https://api.themoviedb.org/3/tv/${round}/videos?language=en-US`, options)
             const youtubeRes = await youtube.json()
+            console.log(youtubeRes.status_code == "34" ? "hey" : youtubeRes.results[0]?.key);
+            // console.log(youtubeRes);
             
+            
+
             const addId = await fetch(`https://api.themoviedb.org/3/tv/${round}/external_ids`, options)
             const addIdRes = await addId.json()
-            // console.log(addIdRes.imdb_id);
-            
-            
-            
-            // const genre = this.genreService.findGenreByName()
+            console.log(allGenre);
+            // console.log(allGenre.episode_run_time[0]);
 
-            this.tvShowService.createTvShow({ name: allGenre.name, genres: genreList, description: allGenre.overview, country: allGenre.origin_country, photo: `https://image.tmdb.org/t/p/w500/${allGenre.poster_path}`, length: allGenre.episode_run_time[0], trailer: `https://www.youtube.com/watch?v=${youtubeRes.results[0]?.key}`, year: allGenre.first_air_date, addId: addIdRes.imdb_id })
+            const lenghtNew = allGenre.status_code == "34" ? null : allGenre.episode_run_time[0]
+            
+            
+            
+            // console.log(addIdRes.imdb_id);
+
+
+
+            // const genre = this.genreService.findGenreByName()
+            if(allGenre.status_code != "34")
+                this.tvShowService.createTvShow({ name: allGenre.name, genres: genreList, description: allGenre.overview, country: allGenre.origin_country, photo: `https://image.tmdb.org/t/p/w500/${allGenre.poster_path}`, length: lenghtNew, trailer: `https://www.youtube.com/watch?v=${youtubeRes.status_code == "34" ? null : youtubeRes.results[0]?.key }`, year: allGenre.first_air_date, addId: addIdRes.imdb_id })
         }
 
         return 0;

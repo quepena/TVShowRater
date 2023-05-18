@@ -72,7 +72,7 @@ export class CastController {
 
     @Get('faker/cast')
     async fakeCast() {
-        const rounds = 15;
+        const rounds = 100;
         // function getRandomInt(min, max) {
         //     min = Math.ceil(min);
         //     max = Math.floor(max);
@@ -95,39 +95,50 @@ export class CastController {
             const res = await fetch(options.url, options)
             const allCast = await res.json();
             // console.log(allCast);
-            
+
             // console.log(allGenre);
 
             // const show = await this.tvShowService.findShowByName(allGenre.tvShow.name);
             // console.log(allGenre.tvShow.start_date)
 
             // const castList = []
-            if (allCast.cast.length > 0) {
+         if (allCast.cast.length > 0) {
                 for (const element of allCast.cast) {
                     // const genre = await this.castService.findGenreByName(element.name)
-                    const cast = await fetch(`https://api.themoviedb.org/3/person/${element.id}/?language=en-US`, options)
+                    const cast = await fetch(`https://api.themoviedb.org/3/person/${element.id}?language=en-US`, options)
                     const castRes = await cast.json()
+                    // console.log(castRes);
+
 
                     const exists = await this.castService.findCastByName(castRes.name)
-                    if (!exists) {
-                        await this.castService.createCast({ name: castRes.name, photo: `https://image.tmdb.org/t/p/w500/${castRes.profile_path}`, biography: castRes.biography, roles: [1] })
-                        const elNew = await this.castService.findCastByName(castRes.name)
-                        const cast = await fetch(`https://api.themoviedb.org/3/tv/${element.id}?language=en-US`, options)
-                        const castResult = await cast.json()
-                        const elTv = await this.tvShowService.findTVShowByAddId(castResult.imdb_id)
-                        console.log(elNew);
-                        console.log(elTv)
-                        
-                        this.castService.createCharacter({ character: element.roles[0].character, cast: elNew.id, tvShow: elTv.id })
-                    }
-                    else continue
+                    // if (!exists) {
+                    await this.castService.createCast({ name: castRes.name, photo: `https://image.tmdb.org/t/p/w500/${castRes.profile_path}`, biography: castRes.biography, roles: [1] })
+                    const elNew = await this.castService.findCastByName(castRes.name)
+                    const addId = await fetch(`https://api.themoviedb.org/3/tv/${round}/external_ids`, options)
+                    const addIdRes = await addId.json()
+                    console.log(round);
+
+
+                    // console.log(element.id);
+
+                    // console.log(castResult.id);
+
+                    const elTv = await this.tvShowService.findTVShowByAddId(addIdRes.imdb_id)
+                    console.log(elTv.addId);
+
+                    // console.log(await elNew);
+                    // console.log(await elTv)
+
+                    await this.castService.createCharacter({ character: element.roles[0].character, cast: elNew.id, tvShow: elTv.id })
+                    // }
+                    // else continue
 
                     // genreList.push(genre.id);
                 }
             }
 
             if (allCast.crew.length > 0) {
-                console.log(round);
+                // console.log(round);
 
 
                 for (const element of allCast.crew) {
@@ -145,22 +156,24 @@ export class CastController {
                         if (!elEx) {
                             this.roleService.createRole({ name: el.job })
                             elEx = await this.roleService.findRoleByName(el.job)
+                            console.log("stmh");
+                            
                         }
 
                         console.log(elEx);
-                        
+
 
                         allJobs.push(elEx.id)
                     }
 
                     const exists = await this.castService.findCastByName(castRes.name)
                     // console.log(exists);
-                    console.log(allJobs);
-                    
+                    // console.log(allJobs);
 
-                    if (!exists)
-                        this.castService.createCast({ name: castRes.name, photo: `https://image.tmdb.org/t/p/w500/${castRes.profile_path}`, biography: castRes.biography, roles: allJobs })
-                    else continue
+
+                    // if (!exists)
+                    this.castService.createCast({ name: castRes.name, photo: `https://image.tmdb.org/t/p/w500/${castRes.profile_path}`, biography: castRes.biography, roles: allJobs })
+                    // else continue
                     // genreList.push(genre.id);
                 }
             }
