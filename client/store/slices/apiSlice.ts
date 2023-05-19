@@ -132,6 +132,21 @@ export const apiSlice = createApi({
                 }
             }
         }),
+        getNumSeasonsByShow: builder.query<Array<Object>, number>({
+            query(id: number) {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
+                }
+
+                return {
+                    url: '/seasons/tvshow/count/'+id,
+                    method: "get",
+                    headers: headers
+                }
+            }
+        }),
         // login: builder.mutation<
         //     { access_token: string; status: string },
         //     LoginInput
@@ -183,4 +198,5 @@ export const {
     useGetShowByIdQuery,
     useGetMeanRatingByShowQuery,
     useGetRatingOfShowByUserQuery,
+    useGetNumSeasonsByShowQuery,
 } = apiSlice

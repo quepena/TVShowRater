@@ -70,9 +70,19 @@ export class CastController {
         return this.castService.deleteCharacter(id);
     }
 
+    @Get('/show/actors/:id')
+    findActorsByShow(@Param('id') id: number) {
+        return this.castService.findActorsByShow(id)
+    }
+
+    @Get('/show/crew/:id')
+    findCrewByShow(@Param('id') id: number) {
+        return this.castService.findCrew(id)
+    }
+
     @Get('faker/cast')
     async fakeCast() {
-        const rounds = 100;
+        const rounds = 20;
         // function getRandomInt(min, max) {
         //     min = Math.ceil(min);
         //     max = Math.floor(max);

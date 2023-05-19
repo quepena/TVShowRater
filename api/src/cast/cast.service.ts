@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cast, CastTvShow, TvShow, Role } from 'src/entities';
-import { Repository } from 'typeorm';
+import { Any, In, Not, Repository } from 'typeorm';
 import { CreateCastDto, CreateCastTvShowDto } from './cast.dto';
 
 @Injectable()
@@ -24,7 +24,7 @@ export class CastService {
             const role = await this.roleRepository.findOne({
                 where: { id: roles[i] }
             });
-           cast.roles.push(role);
+            cast.roles.push(role);
         }
 
         return await this.castRepository.save(cast);
@@ -32,8 +32,59 @@ export class CastService {
 
     async findCast() {
         return await this.castRepository.find({
-            relations: ['castTvShow', 'castTvShow.tvShow']
+            relations: ['castTvShow', 'castTvShow.tvShow', 'roles']
         });
+    }
+
+    async findActorsByShow(id: number) {
+        const role = await this.roleRepository.findOne({ where: { name: 'Actor' } })
+        const show = await this.tvShowRepository.find({
+            where: { id: id }
+        })
+
+        const actor = await this.castRepository.find({
+            where: { roles: role }
+        });
+
+        return await this.castTvShowRepository.find({
+            where:
+            {
+                cast: actor,
+                tvShow: show
+            },
+            relations: ['cast', 'tvShow', 'cast.roles']
+        })
+    }
+
+    async findCrew(id: number) {
+        // const actors = this.findActorsByShow(id)
+        const role = await this.roleRepository.findOneBy({name: 'Director'})
+        console.log(role);
+        
+        const show = await this.tvShowRepository.find({
+            where: { id: id }
+        })
+        // console.log(role);
+        // const roleObj = role[0]
+        
+
+        const actor = await this.castRepository.find({
+            where: { roles: role }
+        });
+
+        // const actor = await this.castRepository
+        // .createQueryBuilder("cast")
+        // .where("cast.roles = ANY(:role)", {role: role})
+        // .getMany()
+
+        return await this.castTvShowRepository.find({
+            where:
+            {
+                cast: actor,
+                tvShow: show
+            },
+            relations: ['cast', 'tvShow', 'cast.roles']
+        })
     }
 
     async findCastById(id: number) {
@@ -78,7 +129,7 @@ export class CastService {
         const newCharacter = new CastTvShow();
         newCharacter.tvShow = await this.tvShowRepository.findOne({ where: { id: tvShow } })
         newCharacter.cast = await this.castRepository.findOne({ where: { id: cast } })
-        newCharacter.character = character;  
+        newCharacter.character = character;
 
         return await this.castTvShowRepository.save(newCharacter);
     }

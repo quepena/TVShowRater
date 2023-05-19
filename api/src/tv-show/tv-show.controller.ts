@@ -53,7 +53,7 @@ export class TvShowController {
 
     @Get('faker/shows')
     async fakeShows() {
-        const rounds = 500;
+        const rounds = 20;
         // function getRandomInt(min, max) {
         //     min = Math.ceil(min);
         //     max = Math.floor(max);
@@ -88,6 +88,9 @@ export class TvShowController {
                     genreList.push(genre.id);
                 }
             }
+
+            console.log(genreList);
+            
 
             // allGenre.genres.forEach(async element => {
             //     const genre = await this.genreService.findGenreByName(element.name)

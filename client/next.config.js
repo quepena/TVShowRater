@@ -6,9 +6,9 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'static.episodate.com',
+        hostname: 'image.tmdb.org',
         port: '',
-        pathname: '/images/tv-show/thumbnail/**',
+        pathname: '/t/p/w500/**',
       },
     ],
   },

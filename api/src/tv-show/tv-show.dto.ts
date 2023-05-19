@@ -8,7 +8,7 @@ export class CreateTvShowDto {
     addId: string;
 
     @IsNotEmpty()
-    genres: string[];
+    genres: number[];
 
     @IsNotEmpty()
     description: string;

@@ -29,8 +29,9 @@ export class TvShowService {
         tvShow.addId = addId;
         for (let i = 0; i < genres.length; i++) {
             const genre = await this.genreRepository.findOne({
-                where: { name: genres[i] }
+                where: { id: genres[i] }
             });
+            
             tvShow.genres.push(genre);
         }
 
@@ -82,7 +83,7 @@ export class TvShowService {
         tvShow.addId = addId;
         for (let i = 0; i < genres.length; i++) {
             const genre = await this.genreRepository.findOne({
-                where: { name: genres[i] }
+                where: { id: genres[i] }
             });
             tvShow.genres.push(genre);
         }

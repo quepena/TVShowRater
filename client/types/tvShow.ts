@@ -1,3 +1,5 @@
+import { Genre } from "./genre"
+
 export type TvShow = {
     id: number,
     name: string,
@@ -7,5 +9,5 @@ export type TvShow = {
     length: number,
     trailer: string,
     country: string,
-    genres: number[]
+    genres: Genre[]
 }

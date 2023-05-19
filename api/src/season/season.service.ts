@@ -72,4 +72,8 @@ export class SeasonService {
     async findSeasonsByTVShows(id: number) {
         return await this.seasonRepository.findBy({ tvShow: { id: id } })
     }
+
+    async findNumSeasonsByTVShows(id: number) {
+        return await this.seasonRepository.findAndCount({ where: { tvShow: { id: id } } })
+    }
 }
