@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cast, CastTvShow, TvShow, Role } from 'src/entities';
-import { Any, In, Not, Repository } from 'typeorm';
+import { Any, In, IsNull, Not, Repository } from 'typeorm';
 import { CreateCastDto, CreateCastTvShowDto } from './cast.dto';
 
 @Injectable()
@@ -46,20 +46,30 @@ export class CastService {
             where: { roles: role }
         });
 
-        return await this.castTvShowRepository.find({
+        return await this.castTvShowRepository
+        .find({
             where:
             {
                 cast: actor,
                 tvShow: show
             },
-            relations: ['cast', 'tvShow', 'cast.roles']
+            relations: ['cast', 'tvShow', 'cast.roles'],
+            take: 6,
+            skip: 0,
         })
+        // .createQueryBuilder()
+        //     .select()
+        //     .take(6)
+        //     .skip(0)
+        //     .where({ cast: actor }, { tvShow: show })
+        //     .relation('cast', 'tvShow', 'cast.roles')
+        //     .getMany()
     }
 
     async findCrew(id: number) {
         // const actors = this.findActorsByShow(id)
-        const role = await this.roleRepository.findOneBy({name: 'Director'})
-        console.log(role);
+        // const role = await this.roleRepository.findOneBy({name: 'Director'})
+        // console.log(role);
         
         const show = await this.tvShowRepository.find({
             where: { id: id }
@@ -67,10 +77,6 @@ export class CastService {
         // console.log(role);
         // const roleObj = role[0]
         
-
-        const actor = await this.castRepository.find({
-            where: { roles: role }
-        });
 
         // const actor = await this.castRepository
         // .createQueryBuilder("cast")
@@ -80,10 +86,12 @@ export class CastService {
         return await this.castTvShowRepository.find({
             where:
             {
-                cast: actor,
+                character: IsNull(),
                 tvShow: show
             },
-            relations: ['cast', 'tvShow', 'cast.roles']
+            relations: ['cast', 'tvShow', 'cast.roles'],
+            take: 6,
+            skip: 0,
         })
     }
 

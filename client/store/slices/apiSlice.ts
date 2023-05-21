@@ -147,6 +147,36 @@ export const apiSlice = createApi({
                 }
             }
         }),
+        getCastByShow: builder.query<Array<Object>, number>({
+            query(id: number) {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
+                }
+
+                return {
+                    url: '/cast/show/actors/'+id,
+                    method: "get",
+                    headers: headers
+                }
+            }
+        }),
+        getCrewByShow: builder.query<Array<Object>, number>({
+            query(id: number) {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
+                }
+
+                return {
+                    url: '/cast/show/crew/'+id,
+                    method: "get",
+                    headers: headers
+                }
+            }
+        }),
         // login: builder.mutation<
         //     { access_token: string; status: string },
         //     LoginInput
@@ -199,4 +229,6 @@ export const {
     useGetMeanRatingByShowQuery,
     useGetRatingOfShowByUserQuery,
     useGetNumSeasonsByShowQuery,
+    useGetCastByShowQuery,
+    useGetCrewByShowQuery,
 } = apiSlice

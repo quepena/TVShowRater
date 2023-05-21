@@ -35,7 +35,7 @@ export class CastTvShow {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   character: string;
 
   @ManyToOne(() => TvShow, tvShowId => tvShowId.castTvShow)

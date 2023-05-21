@@ -112,7 +112,7 @@ export class CastController {
             // console.log(allGenre.tvShow.start_date)
 
             // const castList = []
-         if (allCast.cast.length > 0) {
+            if (allCast.cast.length > 0) {
                 for (const element of allCast.cast) {
                     // const genre = await this.castService.findGenreByName(element.name)
                     const cast = await fetch(`https://api.themoviedb.org/3/person/${element.id}?language=en-US`, options)
@@ -139,7 +139,8 @@ export class CastController {
                     // console.log(await elNew);
                     // console.log(await elTv)
 
-                    await this.castService.createCharacter({ character: element.roles[0].character, cast: elNew.id, tvShow: elTv.id })
+                    for (const el of element.roles)
+                        await this.castService.createCharacter({ character: el.character, cast: elNew.id, tvShow: elTv.id })
                     // }
                     // else continue
 
@@ -164,10 +165,10 @@ export class CastController {
                         // console.log(elEx);
 
                         if (!elEx) {
-                            this.roleService.createRole({ name: el.job })
+                            await this.roleService.createRole({ name: el.job })
                             elEx = await this.roleService.findRoleByName(el.job)
                             console.log("stmh");
-                            
+
                         }
 
                         console.log(elEx);
@@ -182,9 +183,15 @@ export class CastController {
 
 
                     // if (!exists)
-                    this.castService.createCast({ name: castRes.name, photo: `https://image.tmdb.org/t/p/w500/${castRes.profile_path}`, biography: castRes.biography, roles: allJobs })
+                    const newCast = await this.castService.createCast({ name: castRes.name, photo: `https://image.tmdb.org/t/p/w500/${castRes.profile_path}`, biography: castRes.biography, roles: allJobs })
                     // else continue
                     // genreList.push(genre.id);
+                    const addId = await fetch(`https://api.themoviedb.org/3/tv/${round}/external_ids`, options)
+                    const addIdRes = await addId.json()
+                    const elTv = await this.tvShowService.findTVShowByAddId(addIdRes.imdb_id)
+                    console.log(elTv.addId);
+                    await this.castService.createCharacter({ character: null, cast: newCast.id, tvShow: elTv.id })
+
                 }
             }
 
