@@ -1,19 +1,38 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React from 'react'
-import { useGetMeanRatingByShowQuery, useGetRatingOfShowByUserQuery, useGetShowByIdQuery } from '../../store/slices/apiSlice'
+import React, { useEffect, useState } from 'react'
+import { useGetMeMutation, useGetMeanRatingByShowQuery, useGetRatingOfShowByUserQuery, useGetShowByIdQuery } from '../../store/slices/apiSlice'
 import { TvShow } from '../../types/tvShow'
 import Image from 'next/image'
-import { Rating } from '../../types/rating'
+// import { Rating } from '../../types/rating'
 import Info from '../../components/Info'
 import Tracker from '../../components/Tracker'
+import Toggle from '../../components/Toggle'
+import { Rating } from 'react-simple-star-rating'
 
 const Show = (props: TvShow) => {
     const router = useRouter()
 
     const { data: showData, error, isLoading } = useGetShowByIdQuery(props.id)
     const { data: meanData } = useGetMeanRatingByShowQuery(props.id)
-    const { data: userRatingData } = useGetRatingOfShowByUserQuery({ user: 50, show: 109 })
+    const [toggle, setToggle] = useState(true)
+    const [win, setWin] = useState(false)
+    const [getMe, { data: me }] = useGetMeMutation()
+    const [rating, setRating] = useState(0)
+    useEffect(() => {
+        const local = JSON.parse(localStorage.getItem('userInfo'));
+        const details = {
+            token: local
+        }
+        getMe(details)
+    }, [])
+    
+
+    const { data: userRatingData } = useGetRatingOfShowByUserQuery({ user: me?.id, show: props.id })
+    const [createRating, { data: ratingData }] = useGetMeMutation()
+
+    console.log(ratingData);
+    
 
     return (
         <div className='my-0 mx-auto max-w-xl'>
@@ -25,6 +44,17 @@ const Show = (props: TvShow) => {
                         : <></>
                 }
             </div>
+            <div>
+                <Rating onClick={(rate) => {
+                    setRating(rate);
+                    const details = {
+                        user: me?.id,
+                        tvShow: props.id,
+                        rating: rate,
+                    };
+                    createRating(details);
+                }} ratingValue={rating} />
+            </div>
             <p>{meanData}</p>
             <div>{userRatingData ? userRatingData.map((el: Rating) => <p key={el.userId}> {el.rating}</p>) : <></>}</div>
 
@@ -33,8 +63,7 @@ const Show = (props: TvShow) => {
                     showData ? <div>
                         <h1>{showData.name}</h1>
                         <h3>{showData.year}</h3>
-                        <Info show={props.id} />
-                        <Tracker />
+                        <Toggle show={props.id} />
                     </div>
                         : <></>
                 }

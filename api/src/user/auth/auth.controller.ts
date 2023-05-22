@@ -28,8 +28,10 @@ export class AuthController {
     //     return this.service.refresh(<User>user);
     // }
 
-    @Get('profile')
+    @Post('profile')
     getProfile(@Body() token: TokenDto) {
+        console.log(token);
+        
         return this.service.getProfile(token);
     }
 

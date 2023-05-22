@@ -60,14 +60,39 @@ export const apiSlice = createApi({
                 };
             }
         }),
-        getMe: builder.query<User, null>({
-            query(details) {
+        getMe: builder.mutation<User, Object>({
+            query: (details) => {   
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
+                }
+
                 return {
                     url: '/auth/profile',
                     //   credentials: 'include',
-                    body: details
+                    body: details,
+                    headers: headers,
+                    method: "post",
                 };
             },
+        }),
+        rate: builder.mutation<Object, Object>({
+            query: (details) => {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST,PATCH,OPTIONS'
+                }
+
+                return {
+                    url: '/ratings',
+                    method: "post",
+                    statusCode: 200,
+                    headers: headers,
+                    body: details,
+                };
+            }
         }),
         getAdminLists: builder.query<TvShow, string>({
             query(name: string) {
@@ -177,6 +202,36 @@ export const apiSlice = createApi({
                 }
             }
         }),
+        getSeasonsByShow: builder.query<Array<Object>, number>({
+            query(id: number) {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
+                }
+
+                return {
+                    url: '/seasons/tvshow/'+id,
+                    method: "get",
+                    headers: headers
+                }
+            }
+        }),
+        getEpsBySeason: builder.query<Array<Object>, number>({
+            query(id: number) {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
+                }
+
+                return {
+                    url: '/episodes/season/'+id,
+                    method: "get",
+                    headers: headers
+                }
+            }
+        }),
         // login: builder.mutation<
         //     { access_token: string; status: string },
         //     LoginInput
@@ -223,7 +278,7 @@ export const {
     useLoginMutation,
     useRegisterMutation,
     useGoogleMutation,
-    useGetMeQuery,
+    useGetMeMutation,
     useGetAdminListsQuery,
     useGetShowByIdQuery,
     useGetMeanRatingByShowQuery,
@@ -231,4 +286,7 @@ export const {
     useGetNumSeasonsByShowQuery,
     useGetCastByShowQuery,
     useGetCrewByShowQuery,
+    useGetSeasonsByShowQuery,
+    useGetEpsBySeasonQuery,
+    useRateMutation,
 } = apiSlice
