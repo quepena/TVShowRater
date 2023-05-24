@@ -20,7 +20,7 @@ const Hero = () => {
       <div className='my-0 mx-auto max-w-7xl'>
         <div>
           <button onClick={() => localStorage.removeItem("userInfo")}>
-            find
+            {/* find */}
           </button>
           <div className='text-3xl mt-12 mb-6'>Popular Shows</div>
           <div>

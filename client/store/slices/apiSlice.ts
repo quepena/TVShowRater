@@ -4,6 +4,7 @@ import { List } from "../../types/list"
 import { Rating } from "../../types/rating"
 import { TvShow } from "../../types/tvShow"
 import { User } from "../../types/user"
+import { Review } from "../../types/review"
 
 export const apiSlice = createApi({
     reducerPath: 'api',
@@ -94,6 +95,43 @@ export const apiSlice = createApi({
                 };
             }
         }),
+        changeRate: builder.mutation<Object, {details: Object, id: number}>({
+            query: (args) => {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST,PATCH,OPTIONS'
+                }
+
+                const { details, id } = args;
+
+                return {
+                    url: '/ratings/'+id,
+                    method: "put",
+                    statusCode: 200,
+                    headers: headers,
+                    body: details,
+                };
+            }
+        }),
+        ratingOfShowByUser: builder.mutation<Object, { user: number, show: number }>({
+            query: (args) => {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST,PATCH,OPTIONS'
+                }
+
+                const { user, show } = args;
+
+                return {
+                    url: '/ratings/user/'+user+'/show/'+show,
+                    method: "get",
+                    headers: headers,
+                    params: { user, show }
+                };
+            }
+        }),
         getAdminLists: builder.query<TvShow, string>({
             query(name: string) {
                 const headers = {
@@ -154,6 +192,21 @@ export const apiSlice = createApi({
                     method: "get",
                     headers: headers,
                     params: { user, show }
+                }
+            }
+        }),
+        getReviewsOfShow: builder.query<Review, number>({
+            query(id: number) {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
+                }
+
+                return {
+                    url: '/reviews/tv-show/'+id,
+                    method: "get",
+                    headers: headers,
                 }
             }
         }),
@@ -289,4 +342,7 @@ export const {
     useGetSeasonsByShowQuery,
     useGetEpsBySeasonQuery,
     useRateMutation,
+    useChangeRateMutation,
+    useGetReviewsOfShowQuery,
+    useRatingOfShowByUserMutation,
 } = apiSlice
