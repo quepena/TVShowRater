@@ -1,8 +1,9 @@
+import { TvShow } from "./tvShow";
+import { User } from "./user";
+
 export type List = {
-    email: string;
+    id: number;
     name: string;
-    last_name: string;
-    photo: string;
-    password: string;
-    isAdmin: boolean;
+    user: User;
+    tvShows: TvShow[];
 }

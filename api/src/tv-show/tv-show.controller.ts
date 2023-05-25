@@ -43,12 +43,15 @@ export class TvShowController {
     }
 
     // @Get('/search/:name?/:country?')
-    @Get('search/name/')
+    @Get('search/query?')
     // search(@Param('name') name: string, @Param('country') country?: string) {
     // search(@Body() body: { name?: string, country?: string }) {
     //     return this.tvShowService.search(body?.name, body?.country);
-    search(@Query('name') name: string, @Query('country') country: string, @Query('genre') genre: string[]) {
-        return this.tvShowService.search(name, country);
+    search(
+        @Query('name') name: string,
+        @Query('cast') cast: string,
+    ) {
+        return this.tvShowService.search(name, cast);
     }
 
     @Get('faker/shows')
@@ -90,7 +93,7 @@ export class TvShowController {
             }
 
             console.log(genreList);
-            
+
 
             // allGenre.genres.forEach(async element => {
             //     const genre = await this.genreService.findGenreByName(element.name)
@@ -103,8 +106,8 @@ export class TvShowController {
             const youtubeRes = await youtube.json()
             console.log(youtubeRes.status_code == "34" ? "hey" : youtubeRes.results[0]?.key);
             // console.log(youtubeRes);
-            
-            
+
+
 
             const addId = await fetch(`https://api.themoviedb.org/3/tv/${round}/external_ids`, options)
             const addIdRes = await addId.json()
@@ -112,16 +115,16 @@ export class TvShowController {
             // console.log(allGenre.episode_run_time[0]);
 
             const lenghtNew = allGenre.status_code == "34" ? null : allGenre.episode_run_time[0]
-            
-            
-            
+
+
+
             // console.log(addIdRes.imdb_id);
 
 
 
             // const genre = this.genreService.findGenreByName()
-            if(allGenre.status_code != "34")
-                this.tvShowService.createTvShow({ name: allGenre.name, genres: genreList, description: allGenre.overview, country: allGenre.origin_country, photo: `https://image.tmdb.org/t/p/w500/${allGenre.poster_path}`, length: lenghtNew, trailer: `https://www.youtube.com/watch?v=${youtubeRes.status_code == "34" ? null : youtubeRes.results[0]?.key }`, year: allGenre.first_air_date, addId: addIdRes.imdb_id })
+            if (allGenre.status_code != "34")
+                this.tvShowService.createTvShow({ name: allGenre.name, genres: genreList, description: allGenre.overview, country: allGenre.origin_country, photo: `https://image.tmdb.org/t/p/w500/${allGenre.poster_path}`, length: lenghtNew, trailer: `https://www.youtube.com/watch?v=${youtubeRes.status_code == "34" ? null : youtubeRes.results[0]?.key}`, year: allGenre.first_air_date, addId: addIdRes.imdb_id })
         }
 
         return 0;

@@ -47,7 +47,7 @@ export class ListController {
 
     @Get('faker/lists')
     async fakeLists() {
-        const rounds = 100;
+        const rounds = 10;
         function getRandomInt(min, max) {
             min = Math.ceil(min);
             max = Math.floor(max);
@@ -55,21 +55,23 @@ export class ListController {
         }
 
         for (let index = 0; index < rounds; index++) {
-        const tvShowsNum = getRandomInt(1, 50)
-        let shows = []
-        for(let i = 0; i < tvShowsNum; i++) {
-            const showId = getRandomInt(1, 80000)
-            const show = await this.tvShowService.findTVShowById(showId);
+            const tvShowsNum = getRandomInt(1, 3)
+            let shows = []
+            for (let i = 0; i < tvShowsNum; i++) {
+                const showId = getRandomInt(1, 20)
+                const show = await this.tvShowService.findTVShowById(showId);
                 if (show) shows.push(show.id)
-        }
-        const name = faker.random.words()
-        let user = null
-        let userId = 0
-        while(!user) {
-            userId = getRandomInt(1, 200)
-            user = await this.userService.findUserById(userId);
-        }
-            this.listService.createList({ name: name, tvShows: shows, user: userId } as CreateListDto)
+            }
+            const name = faker.random.words()
+            // let user = null
+            // let userId = 0
+            // while (!user) {
+            //     userId = getRandomInt(1, 20)
+            //     user = await this.userService.findUserById(userId);
+            // }
+            console.log(shows);
+            
+            this.listService.createList({ name: name, tvShows: shows, user: 118 } as CreateListDto)
         }
 
         return 0;

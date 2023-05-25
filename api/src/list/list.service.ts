@@ -22,10 +22,12 @@ export class ListService {
         else list.user = null
         list.tvShows = [];
         for (let i = 0; i < tvShows.length; i++) {
+            console.log(tvShows[i]);
+            
             const tvShow = await this.tvShowRepository.findOne({
                 where: { id: tvShows[i] }
             });
-            list.tvShows.push(tvShow);
+            tvShow ? list.tvShows.push(tvShow) : list.tvShows.push(null)
         }
 
         return await this.listRepository.save(list);
@@ -41,7 +43,7 @@ export class ListService {
     }
 
     async findListById(id: number) {
-        return await this.listRepository.findOneBy({ id: id })
+        return await this.listRepository.findOne({where: { id: id }, relations: { user: true, tvShows: true }})
     }
 
     async findAdminListByName(name: string): Promise<TvShow[]> {
@@ -148,6 +150,6 @@ export class ListService {
     }
 
     async findListsByUser(id: number) {
-        return await this.listRepository.find({ where: { user: { id: id } } })
+        return await this.listRepository.find({ where: { user: { id: id } }, relations: ['tvShows', 'user']})
     }
 }

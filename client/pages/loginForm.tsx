@@ -54,9 +54,7 @@ const loginForm = () => {
   useEffect(() => {
     if (isSuccess) {
       console.log("token sucessfully generated");
-      if (data) {
-        localStorage.setItem('userInfo', JSON.stringify(data['token' as keyof Object]));
-      }
+      localStorage.setItem('userInfo', JSON.stringify(data['token' as keyof Object]));
 
       router.push('/')
     } else if (error) {

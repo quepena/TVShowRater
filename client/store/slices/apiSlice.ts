@@ -95,6 +95,23 @@ export const apiSlice = createApi({
                 };
             }
         }),
+        review: builder.mutation<Object, Object>({
+            query: (details) => {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST,PATCH,OPTIONS'
+                }
+
+                return {
+                    url: '/reviews',
+                    method: "post",
+                    statusCode: 200,
+                    headers: headers,
+                    body: details,
+                };
+            }
+        }),
         changeRate: builder.mutation<Object, {details: Object, id: number}>({
             query: (args) => {
                 const headers = {
@@ -225,6 +242,21 @@ export const apiSlice = createApi({
                 }
             }
         }),
+        getListById: builder.query<List, number>({
+            query(id: number) {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
+                }
+
+                return {
+                    url: '/lists/'+id,
+                    method: "get",
+                    headers: headers,
+                }
+            }
+        }),
         getCastByShow: builder.query<Array<Object>, number>({
             query(id: number) {
                 const headers = {
@@ -265,6 +297,21 @@ export const apiSlice = createApi({
 
                 return {
                     url: '/seasons/tvshow/'+id,
+                    method: "get",
+                    headers: headers
+                }
+            }
+        }),
+        getListsByUser: builder.query<Array<Object>, number>({
+            query(id: number) {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
+                }
+
+                return {
+                    url: '/lists/user/'+id,
                     method: "get",
                     headers: headers
                 }
@@ -345,4 +392,7 @@ export const {
     useChangeRateMutation,
     useGetReviewsOfShowQuery,
     useRatingOfShowByUserMutation,
+    useReviewMutation,
+    useGetListsByUserQuery,
+    useGetListByIdQuery,
 } = apiSlice

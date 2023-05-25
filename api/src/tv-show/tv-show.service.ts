@@ -107,21 +107,21 @@ export class TvShowService {
         return await this.tvShowRepository.find({ where: { genres: { id: id } } })
     }
 
-    async search(name?: string, country?: string) {
-        console.log(country.split('-'), typeof country);
-        let countryArr = country.split('-');
-        console.log(typeof countryArr);
+    async search(name: string, cast: string) {
+        // console.log(country.split('-'), typeof country);
+        // let countryArr = country.split('-');
+        // console.log(typeof countryArr);
         
-        // let countries: string[] = []
-        // countryArr.forEach((country) => countries.push(country))
-        // console.log(name, countries);
-        if (countryArr.length === 0) {
+        // // let countries: string[] = []
+        // // countryArr.forEach((country) => countries.push(country))
+        // // console.log(name, countries);
+        // if (countryArr.length === 0) {
             const show = await this.tvShowRepository.createQueryBuilder("tvshow")
                 .select()
                 .where("LOWER(REPLACE(tvshow.name, ' ', '')) like LOWER(REPLACE(:name, ' ', ''))", { name: `%${name}%` })
                 .getMany()
 
-            const cast = await this.castRepository.createQueryBuilder("cast")
+            const castSearch = await this.castRepository.createQueryBuilder("cast")
                 .select()
                 .where("LOWER(REPLACE(cast.name, ' ', '')) like LOWER(REPLACE(:name, ' ', ''))", { name: `%${name}%` })
                 .getMany()
@@ -131,23 +131,26 @@ export class TvShowService {
             //     .where("LOWER(REPLACE(crew.name, ' ', '')) like LOWER(REPLACE(:name, ' ', ''))", { name: `%${name}%` })
             //     .getMany()
 
-            if (show.length > 0) return show
-            else if (cast.length > 0) return cast
-            // else if (crew.length > 0) return crew
-            // else if (cast.length > 0 && crew.length > 0) return cast
-        } else {
-            //LOWER(REPLACE(tvshow.name, ' ', '')) like LOWER(REPLACE(:name, ' ', '')) and 
-            const countryQuery = await this.tvShowRepository.createQueryBuilder("tvshow")
-                .select()
-                .where("LOWER(tvshow.country) like LOWER(:country)", { country: `%${name}%` })
-                .getMany()
+            if (show) 
+            return show
+            else if(cast)
+            return castSearch
+        //     else if (cast.length > 0) return cast
+        //     // else if (crew.length > 0) return crew
+        //     // else if (cast.length > 0 && crew.length > 0) return cast
+        // } else {
+        //     //LOWER(REPLACE(tvshow.name, ' ', '')) like LOWER(REPLACE(:name, ' ', '')) and 
+        //     const countryQuery = await this.tvShowRepository.createQueryBuilder("tvshow")
+        //         .select()
+        //         .where("LOWER(tvshow.country) like LOWER(:country)", { country: `%${name}%` })
+        //         .getMany()
 
-            const genre = await this.genreRepository.createQueryBuilder("genre")
-                .select()
-                .where("LOWER(REPLACE(crew.name, ' ', '')) like LOWER(REPLACE(:name, ' ', '')) and tvshow.country like :country", { name: `%${name}%` })
-                .getMany()
+        //     const genre = await this.genreRepository.createQueryBuilder("genre")
+        //         .select()
+        //         .where("LOWER(REPLACE(crew.name, ' ', '')) like LOWER(REPLACE(:name, ' ', '')) and tvshow.country like :country", { name: `%${name}%` })
+        //         .getMany()
 
-            return countryQuery
-        }
+        //     return countryQuery
+        // }
     }
 }
