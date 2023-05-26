@@ -48,10 +48,9 @@ export class TvShowController {
     // search(@Body() body: { name?: string, country?: string }) {
     //     return this.tvShowService.search(body?.name, body?.country);
     search(
-        @Query('name') name: string,
-        @Query('cast') cast: string,
+        @Query('name') name: string
     ) {
-        return this.tvShowService.search(name, cast);
+        return this.tvShowService.search(name);
     }
 
     @Get('faker/shows')

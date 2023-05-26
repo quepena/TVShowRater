@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { useChangeRateMutation, useGetMeMutation, useGetMeanRatingByShowQuery, useGetRatingOfShowByUserQuery, useGetShowByIdQuery, useReviewMutation } from '../../store/slices/apiSlice'
+import { useChangeRateMutation, useDeleteRateMutation, useGetMeMutation, useGetMeanRatingByShowQuery, useGetRatingOfShowByUserMutation, useGetRatingOfShowByUserQuery, useGetShowByIdQuery, useReviewMutation } from '../../store/slices/apiSlice'
 import { TvShow } from '../../types/tvShow'
 import Image from 'next/image'
 // import { Rating } from '../../types/rating'
@@ -24,17 +24,22 @@ const Show = (props: TvShow) => {
     const { data: userRatingData } = useGetRatingOfShowByUserQuery({ user: me?.id, show: props.id })
     const [createRating, { data: ratingData }] = useRateMutation()
     const [changeRating, { data: changeRatingData }] = useChangeRateMutation();
+    const [deleteRating, { data: deleteRatingData }] = useDeleteRateMutation();
     const [createReview, { data: reviewData }] = useReviewMutation();
     const [review, setReview] = useState("")
+    let create = 0;
     useEffect(() => {
         const local = JSON.parse(localStorage.getItem('userInfo'));
         const details = {
             token: local
         }
         getMe(details)
-        userRatingData?.length > 0 ? setRating(userRatingData[0].rating) : 0
         // userRatingData?.length == 1 ? null : null
-    }, [userRatingData, reviewData])
+    }, [rating, reviewData])
+
+    useEffect(() => {
+        userRatingData?.length > 0 && setRating(userRatingData[0].rating)
+    }, [userRatingData])
 
     const handleReview = (e) => {
         reviewData ? setReview({}) : setReview(e.target.value)
@@ -53,16 +58,34 @@ const Show = (props: TvShow) => {
             </div>
             <div>
                 <Rating onClick={(rate) => {
-                    setRating(rate);
+                    setRating(rate)
+
                     const details = {
                         user: me?.id,
                         tvShow: props.id,
                         rating: rate,
                     };
-                    userRatingData?.length < 1 ?
-                        (createRating(details)) :
-                        (changeRating({ details: details, id: userRatingData[0].id }))
+                    console.log(userRatingData);
+                    console.log(rating)
+                    console.log(create);
 
+                    if (create == 0) {
+                        createRating(details)
+                        setRating(rate)
+                        ++create
+                        console.log("create")
+                    } else if (create == 1 && userRatingData && userRatingData[0]) {
+                        console.log(create)
+                        changeRating({ details: details, id: userRatingData[0].id })
+                        setRating(rate)
+                        console.log("change")
+                    } else if (create == 1 && rate && userRatingData && userRatingData[0] &&
+                        rate == rating) {
+                        deleteRating(userRatingData[0].id)
+                        setRating(0)
+                        --create
+                        console.log("delete")
+                    }
 
                 }} ratingValue={rating} />
             </div>
@@ -82,7 +105,7 @@ const Show = (props: TvShow) => {
             <form onSubmit={((e) => {
                 e.preventDefault();
                 console.log(review);
-                
+
                 const details = {
                     user: me?.id,
                     tvShow: props.id,

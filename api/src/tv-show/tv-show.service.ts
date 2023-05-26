@@ -107,7 +107,7 @@ export class TvShowService {
         return await this.tvShowRepository.find({ where: { genres: { id: id } } })
     }
 
-    async search(name: string, cast: string) {
+    async search(name: string) {
         // console.log(country.split('-'), typeof country);
         // let countryArr = country.split('-');
         // console.log(typeof countryArr);
@@ -119,11 +119,13 @@ export class TvShowService {
             const show = await this.tvShowRepository.createQueryBuilder("tvshow")
                 .select()
                 .where("LOWER(REPLACE(tvshow.name, ' ', '')) like LOWER(REPLACE(:name, ' ', ''))", { name: `%${name}%` })
+                .take(6)
                 .getMany()
 
             const castSearch = await this.castRepository.createQueryBuilder("cast")
                 .select()
                 .where("LOWER(REPLACE(cast.name, ' ', '')) like LOWER(REPLACE(:name, ' ', ''))", { name: `%${name}%` })
+                .take(6)
                 .getMany()
 
             // const crew = await this.crewRepository.createQueryBuilder("crew")
@@ -131,10 +133,7 @@ export class TvShowService {
             //     .where("LOWER(REPLACE(crew.name, ' ', '')) like LOWER(REPLACE(:name, ' ', ''))", { name: `%${name}%` })
             //     .getMany()
 
-            if (show) 
-            return show
-            else if(cast)
-            return castSearch
+            return [...show, ...castSearch]
         //     else if (cast.length > 0) return cast
         //     // else if (crew.length > 0) return crew
         //     // else if (cast.length > 0 && crew.length > 0) return cast

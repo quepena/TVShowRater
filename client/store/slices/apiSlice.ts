@@ -131,6 +131,21 @@ export const apiSlice = createApi({
                 };
             }
         }),
+        deleteRate: builder.mutation<Object, number>({
+            query: (id: number) => {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST,PATCH,OPTIONS'
+                }
+                return {
+                    url: '/ratings/'+id,
+                    method: "delete",
+                    statusCode: 200,
+                    headers: headers,
+                };
+            }
+        }),
         ratingOfShowByUser: builder.mutation<Object, { user: number, show: number }>({
             query: (args) => {
                 const headers = {
@@ -332,6 +347,21 @@ export const apiSlice = createApi({
                 }
             }
         }),
+        search: builder.mutation<Array<Object>, string>({
+            query: (name: string) => {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
+                }
+
+                return {
+                    url: '/tv-shows/search/query?name='+name,
+                    method: "get",
+                    headers: headers
+                }
+            }
+        }),
         // login: builder.mutation<
         //     { access_token: string; status: string },
         //     LoginInput
@@ -395,4 +425,6 @@ export const {
     useReviewMutation,
     useGetListsByUserQuery,
     useGetListByIdQuery,
+    useSearchMutation,
+    useDeleteRateMutation,
 } = apiSlice
