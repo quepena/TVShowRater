@@ -5,6 +5,7 @@ import { Rating } from "../../types/rating"
 import { TvShow } from "../../types/tvShow"
 import { User } from "../../types/user"
 import { Review } from "../../types/review"
+import { Progress } from "../../types/progress"
 
 export const apiSlice = createApi({
     reducerPath: 'api',
@@ -21,7 +22,7 @@ export const apiSlice = createApi({
             return headers
         }
     }),
-    tagTypes: ['api'],
+    tagTypes: ['api', 'Rating'],
     endpoints: (builder) => ({
         getLists: builder.query<List, number>({
             query: (id: number) => '/lists/user/' + id,
@@ -225,6 +226,25 @@ export const apiSlice = createApi({
                     headers: headers,
                     params: { user, show }
                 }
+            },
+            providesTags: ['Rating'],
+        }),
+        getRatingOfShowByUserMut: builder.mutation<Rating, { user: number, show: number }>({
+            query(args) {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
+                }
+
+                const { user, show } = args
+
+                return {
+                    url: '/ratings/user/'+user+'/show/'+show,
+                    method: "get",
+                    headers: headers,
+                    params: { user, show }
+                }
             }
         }),
         getReviewsOfShow: builder.query<Review, number>({
@@ -362,6 +382,25 @@ export const apiSlice = createApi({
                 }
             }
         }),
+        createProgress: builder.mutation<Progress, Object>({
+            query(details) {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
+                }
+
+                console.log(details);
+                
+
+                return {
+                    url: '/progress',
+                    method: "post",
+                    headers: headers,
+                    body: details
+                }
+            }
+        }),
         // login: builder.mutation<
         //     { access_token: string; status: string },
         //     LoginInput
@@ -427,4 +466,6 @@ export const {
     useGetListByIdQuery,
     useSearchMutation,
     useDeleteRateMutation,
+    useGetRatingOfShowByUserMutMutation,
+    useCreateProgressMutation,
 } = apiSlice

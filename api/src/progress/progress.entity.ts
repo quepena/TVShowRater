@@ -9,8 +9,8 @@ export class Progress {
     @ManyToOne(type => User, user => user.progress)
     user: User;
 
-    @ManyToOne(type => TvShow, tvShow => tvShow.progress)
-    tvShow: TvShow;
+    // @ManyToOne(type => TvShow, tvShow => tvShow.progress)
+    // tvShow: TvShow;
     
     @ManyToOne(type => Episode, episode => episode.progress)
     episode: Episode;

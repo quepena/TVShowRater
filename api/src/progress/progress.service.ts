@@ -10,15 +10,15 @@ export class ProgressService {
     constructor(
         @InjectRepository(Progress) private readonly progressRepository: Repository<Progress>,
         @InjectRepository(User) private readonly userRepository: Repository<User>,
-        @InjectRepository(TvShow) private readonly tvShowRepository: Repository<TvShow>,
+        // @InjectRepository(TvShow) private readonly tvShowRepository: Repository<TvShow>,
         @InjectRepository(Episode) private readonly episodeRepository: Repository<Episode>,
     ) { }
 
     async createProgress(progressDetails: CreateProgressDto): Promise<Progress> {
-        const { user, tvShow, episode } = progressDetails;
+        const { user, episode } = progressDetails;
         const progress = new Progress();
         progress.user = await this.userRepository.findOne({ where: { id: user } })
-        progress.tvShow = await this.tvShowRepository.findOne({ where: { id: tvShow } })
+        // progress.tvShow = await this.tvShowRepository.findOne({ where: { id: tvShow } })
         progress.episode = await this.episodeRepository.findOne({ where: { id: episode } })
 
         return await this.progressRepository.save(progress);
@@ -28,7 +28,7 @@ export class ProgressService {
         return await this.progressRepository.find({
             relations: {
                 user: true,
-                tvShow: true,
+                // tvShow: true,
                 episode: true,
             }
         });
@@ -39,7 +39,7 @@ export class ProgressService {
             where: { id: id },
             relations: {
                 user: true,
-                tvShow: true,
+                // tvShow: true,
                 episode: true,
             }
         })
@@ -50,14 +50,14 @@ export class ProgressService {
     }
 
     async updateProgress(id: number, progressDetails: CreateProgressDto): Promise<Progress> {
-        const { user, tvShow, episode } = progressDetails;
+        const { user, episode } = progressDetails;
         const progress = new Progress();
         progress.user = await this.userRepository.findOne({ where: { id: user } })
-        progress.tvShow = await this.tvShowRepository.findOne({ where: { id: tvShow } })
+        // progress.tvShow = await this.tvShowRepository.findOne({ where: { id: tvShow } })
         progress.episode = await this.episodeRepository.findOne({ where: { id: episode } })
 
         const newProgress = await this.progressRepository.save(
-            { id: Number(id), user: progress.user, tvShow: progress.tvShow, episode: progress.episode }
+            { id: Number(id), user: progress.user, episode: progress.episode }
         )
 
         return newProgress
@@ -68,7 +68,7 @@ export class ProgressService {
             where: { user: { id: id } },
             relations: {
                 user: true,
-                tvShow: true,
+                // tvShow: true,
                 episode: true,
             }
         })

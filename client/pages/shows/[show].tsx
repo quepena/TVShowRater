@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { useChangeRateMutation, useDeleteRateMutation, useGetMeMutation, useGetMeanRatingByShowQuery, useGetRatingOfShowByUserMutation, useGetRatingOfShowByUserQuery, useGetShowByIdQuery, useReviewMutation } from '../../store/slices/apiSlice'
+import { useChangeRateMutation, useDeleteRateMutation, useGetMeMutation, useGetMeanRatingByShowQuery, useGetRatingOfShowByUserMutMutation, useGetRatingOfShowByUserQuery, useGetShowByIdQuery, useReviewMutation } from '../../store/slices/apiSlice'
 import { TvShow } from '../../types/tvShow'
 import Image from 'next/image'
 // import { Rating } from '../../types/rating'
@@ -21,13 +21,14 @@ const Show = (props: TvShow) => {
     const [win, setWin] = useState(false)
     const [getMe, { data: me }] = useGetMeMutation()
     const [rating, setRating] = useState(0)
-    const { data: userRatingData } = useGetRatingOfShowByUserQuery({ user: me?.id, show: props.id })
+    const { data: userRatingData, refetch } = useGetRatingOfShowByUserQuery({ user: me?.id, show: props.id })
+    const [getRate, { data: userRateData }] = useGetRatingOfShowByUserMutMutation()
     const [createRating, { data: ratingData }] = useRateMutation()
     const [changeRating, { data: changeRatingData }] = useChangeRateMutation();
     const [deleteRating, { data: deleteRatingData }] = useDeleteRateMutation();
     const [createReview, { data: reviewData }] = useReviewMutation();
     const [review, setReview] = useState("")
-    let create = 0;
+    const [create, setCreate] = useState(0)
     useEffect(() => {
         const local = JSON.parse(localStorage.getItem('userInfo'));
         const details = {
@@ -35,16 +36,22 @@ const Show = (props: TvShow) => {
         }
         getMe(details)
         // userRatingData?.length == 1 ? null : null
-    }, [rating, reviewData])
+        getRate({ user: me?.id, show: props.id })
+    }, [reviewData])
 
     useEffect(() => {
+        refetch()
+        setCreate(create)
+        // console.log(userRatingData);
+        // console.log(rating);
+        
+        
         userRatingData?.length > 0 && setRating(userRatingData[0].rating)
-    }, [userRatingData])
+    }, [rating, create])
 
     const handleReview = (e) => {
         reviewData ? setReview({}) : setReview(e.target.value)
     }
-
 
     return (
         <div className='my-0 mx-auto max-w-xl'>
@@ -65,29 +72,40 @@ const Show = (props: TvShow) => {
                         tvShow: props.id,
                         rating: rate,
                     };
-                    console.log(userRatingData);
-                    console.log(rating)
+                    // getRate({ user: me?.id, show: props.id })
+                    // refetch()
                     console.log(create);
+                    
+
 
                     if (create == 0) {
                         createRating(details)
-                        setRating(rate)
-                        ++create
+                        // setRating(rate)
+                        if(rate && rate == rating) setCreate(2)
+                        setCreate(1)
                         console.log("create")
-                    } else if (create == 1 && userRatingData && userRatingData[0]) {
-                        console.log(create)
+                        // getRate({ user: me?.id, show: props.id })
+                        // refetch()
+                    }
+                    if (create == 1 && userRatingData[0]) {
+                        // refetch()
                         changeRating({ details: details, id: userRatingData[0].id })
-                        setRating(rate)
+                        // setRating(rate)   
                         console.log("change")
-                    } else if (create == 1 && rate && userRatingData && userRatingData[0] &&
-                        rate == rating) {
+                        setCreate(2)
+                    }
+                    if (create == 2 && rate && rate == rating && userRatingData[0]) {
                         deleteRating(userRatingData[0].id)
-                        setRating(0)
-                        --create
+                        // setRating(0)
+                        setCreate(0)
                         console.log("delete")
                     }
 
-                }} ratingValue={rating} />
+                    // router.reload()
+
+                    // refetch()
+
+                }} ratingValue={userRatingData && userRatingData[0] ? userRatingData[0].rating : rating} />
             </div>
             <p>{meanData}</p>
             <div>{userRatingData ? userRatingData.map((el: Rating) => <p key={el.userId}> {el.rating}</p>) : <></>}</div>

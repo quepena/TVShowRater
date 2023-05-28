@@ -46,8 +46,8 @@ export class TvShow {
     @JoinTable()
     lists: List[]
 
-    @OneToMany(type => Progress, progress => progress.tvShow)
-    progress: Progress[];
+    // @OneToMany(type => Progress, progress => progress.tvShow)
+    // progress: Progress[];
 
     @OneToMany(type => Rating, rating => rating.tvShow)
     ratings: Rating[];
