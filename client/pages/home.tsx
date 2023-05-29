@@ -53,7 +53,9 @@ const Hero = () => {
                         trailer: el.trailer,
                       }
                     }}>
-                      <Image src={el.photo} width={180} height={240} alt="" />
+                      <div className="w-[180px] h-[280px] relative">
+                        <Image src={el.photo} alt={el?.cast?.name} fill />
+                      </div>
                     </Link>
                   )
                   : <></>

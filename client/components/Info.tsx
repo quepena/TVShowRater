@@ -21,55 +21,93 @@ const Info = (props) => {
 
     return (
         <div>
-            <div>
+            <hr className="mb-7 h-0.5 border-t-0 bg-gray-300" />
+            <div className='text-2xl mb-2'>
                 {
                     numSeasons ? (numSeasons[1] > 1 ? numSeasons[1] + " seasons" : (numSeasons[1] < 1 ? "" : numSeasons[1] + " season")) : ""
                 }
             </div>
-            <div>
+            <div className='mb-6 text-xl text-gray-800'>
                 {
                     genres.join(', ')
                 }
             </div>
-            <div>{showData?.description}</div>
-            <div>Cast
-                <div className='flex justify-center'>
+            <div className='mb-12 text-lg'>{showData?.description}</div>
+            <div className='mb-7'>
                 {
-                    castInfo?.map((el: castTvShow) =>
-                        <div key={el?.id}>
-                            <Image src={el?.cast?.photo} width={180} height={240} alt="photo" />
-                            <div>{el?.cast?.name}</div>
-                            <div className='text-gray-400'>{el?.character}</div>
+                    castInfo && castInfo.length > 0
+                        ?
+                        <div>
+                            <div className='text-3xl font-semibold mb-3'>Cast</div>
+                            <div className='flex justify-left'>
+                                {
+                                    castInfo?.map((el: castTvShow) =>
+                                        <div key={el?.id} className='mr-2'>
+                                            {
+                                                el?.cast?.photo == "https://image.tmdb.org/t/p/w500/null"
+                                                    ?
+                                                    <div className='mr-2'>
+                                                        <div className="w-[140px] h-[200px] relative">
+                                                            <Image src="/placeholder.png" alt={el?.cast?.name} fill />
+                                                        </div>
+                                                        <div>{el?.cast?.name}</div>
+                                                        <div className='text-gray-400'>{el?.cast?.roles[0].name}</div>
+                                                    </div>
+                                                    :
+                                                    <div className='mr-2'>
+                                                        <div className="w-[140px] h-[200px] relative">
+                                                            <Image src={el?.cast?.photo} alt={el?.cast?.name} fill />
+                                                        </div>
+                                                        <div>{el?.cast?.name}</div>
+                                                        <div className='text-gray-400'>{el?.character}</div>
+                                                    </div>
+                                            }
+                                        </div>
+                                    )
+                                }
+                            </div>
                         </div>
-                    )
+                        :
+                        <></>
                 }
-                </div>
             </div>
-            <div>Crew
-            <div className='flex justify-center'>
+            <div>
                 {
-                    crewInfo?.map((el: castTvShow) =>
-                        // console.log(el);
+                    crewInfo && crewInfo.length > 0
+                        ?
+                        <div>
+                            <div className='text-3xl font-semibold'>Crew</div>
+                            <div className='flex justify-left'>
+                                {
+                                    crewInfo?.map((el: castTvShow) =>
+                                        // console.log(el);
 
-                        <div key={el?.id}>
-                            {
-                                el?.cast?.photo == "https://image.tmdb.org/t/p/w500/null"
-                                    ?
-                                    <div>
-                                        <Image src="/placeholder.png" width={180} height={240} alt="" />
-                                        <div>{el?.cast?.name}</div>
-                                        <div className='text-gray-400'>{el?.cast?.roles[0].name}</div>
-                                    </div>
-                                    :
-                                    <div>
-                                        <Image src={el?.cast?.photo} width={180} height={240} alt="" />
-                                        <div>{el?.cast?.name}</div>
-                                        <div className='text-gray-400'>{el?.cast?.roles[0].name}</div>
-                                    </div>
-                            }
+                                        <div key={el?.id} className='mr-2'>
+                                            {
+                                                el?.cast?.photo == "https://image.tmdb.org/t/p/w500/null"
+                                                    ?
+                                                    <div className='mr-2'>
+                                                        <div className="w-[140px] h-[200px] relative">
+                                                            <Image src="/placeholder.png" alt={el?.cast?.name} fill />
+                                                        </div>
+                                                        <div>{el?.cast?.name}</div>
+                                                        <div className='text-gray-400'>{el?.cast?.roles[0].name}</div>
+                                                    </div>
+                                                    :
+                                                    <div className='mr-2'>
+                                                        <div className="w-[140px] h-[200px] relative">
+                                                            <Image src={el?.cast?.photo} alt={el?.cast?.name} fill />
+                                                        </div>
+                                                        <div>{el?.cast?.name}</div>
+                                                        <div className='text-gray-400'>{el?.cast?.roles[0].name}</div>
+                                                    </div>
+                                            }
+                                        </div>
+                                    )}
+                            </div>
                         </div>
-                    )}
-            </div>
+                        : <></>
+                }
             </div>
         </div >
     )
