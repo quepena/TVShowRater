@@ -97,8 +97,6 @@ const MyShows = () => {
                                         pathname: `/lists/${el.name}`, query: {
                                             id: el.id,
                                             name: el.name,
-                                            tvShows: el.tvShows,
-                                            user: el.user,
                                         }
                                     }}>
                                         <div className='bg-gray-300 p-5 flex mb-5 w-full h-[350px]'>

@@ -174,12 +174,6 @@ export const getServerSideProps = (context) => {
         props: {
             id: context.query.id,
             name: context.query.name,
-            photo: context.query.photo,
-            country: context.query.country,
-            length: context.query.length,
-            trailer: context.query.trailer,
-            genres: context.query.genres,
-            description: context.query.description
         }
     }
 }

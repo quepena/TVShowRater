@@ -152,4 +152,14 @@ export class TvShowService {
         //     return countryQuery
         // }
     }
+
+    async searchShows(name: string) {
+            const show = await this.tvShowRepository.createQueryBuilder("tvshow")
+                .select()
+                .where("LOWER(REPLACE(tvshow.name, ' ', '')) like LOWER(REPLACE(:name, ' ', ''))", { name: `%${name}%` })
+                .take(6)
+                .getMany()
+
+            return show
+    }
 }

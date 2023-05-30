@@ -53,6 +53,13 @@ export class TvShowController {
         return this.tvShowService.search(name);
     }
 
+    @Get('search-shows/query?')
+    searchShows(
+        @Query('name') name: string
+    ) {
+        return this.tvShowService.searchShows(name);
+    }
+
     @Get('faker/shows')
     async fakeShows() {
         const rounds = 20;

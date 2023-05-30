@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { useGetListByIdQuery, useGetListsByUserQuery, useGetMeMutation } from '../../store/slices/apiSlice';
+import React, { useEffect, useState } from 'react'
+import { useGetListByIdQuery, useGetListsByUserQuery, useGetMeMutation, useGetShowByIdQuery } from '../../store/slices/apiSlice';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -9,6 +9,10 @@ import { useRouter } from 'next/router';
 const List = (props) => {
   const router = useRouter();
   const { data } = useGetListByIdQuery(props.id)
+  const [id, setId] = useState()
+  const { data: showData } = useGetShowByIdQuery(id)
+  console.log(showData);
+  
 
   console.log(data);
 
@@ -24,7 +28,7 @@ const List = (props) => {
         {
           data?.tvShows.map((el) =>
             <div className='mr-2 w-full'>
-              <Link key={el.id} href={{
+              <Link onClick={() => setId(el.id)} key={el.id} href={{
                 pathname: `/shows/${el.name}`, query: {
                   id: el.id,
                   name: el.name,
@@ -52,8 +56,6 @@ export const getServerSideProps = (context) => {
     props: {
       id: context.query.id,
       name: context.query.name,
-      tvShows: context.query.tvShows,
-      user: context.query.user
     }
   }
 }

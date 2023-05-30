@@ -382,6 +382,21 @@ export const apiSlice = createApi({
                 }
             }
         }),
+        searchShows: builder.mutation<Array<Object>, string>({
+            query: (name: string) => {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
+                }
+
+                return {
+                    url: '/tv-shows/search-shows/query?name='+name,
+                    method: "get",
+                    headers: headers
+                }
+            }
+        }),
         createProgress: builder.mutation<Progress, Object>({
             query(details) {
                 const headers = {
@@ -395,6 +410,25 @@ export const apiSlice = createApi({
 
                 return {
                     url: '/progress',
+                    method: "post",
+                    headers: headers,
+                    body: details
+                }
+            }
+        }),
+        createList: builder.mutation<List, Object>({
+            query(details) {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
+                }
+
+                console.log(details);
+                
+
+                return {
+                    url: '/lists',
                     method: "post",
                     headers: headers,
                     body: details
@@ -468,4 +502,6 @@ export const {
     useDeleteRateMutation,
     useGetRatingOfShowByUserMutMutation,
     useCreateProgressMutation,
+    useSearchShowsMutation,
+    useCreateListMutation,
 } = apiSlice

@@ -45,12 +45,6 @@ const Hero = () => {
                       pathname: `/shows/${el.name}`, query: {
                         id: el.id,
                         name: el.name,
-                        photo: el.photo,
-                        country: el.country,
-                        description: el.description,
-                        length: el.length,
-                        genres: el.genres,
-                        trailer: el.trailer,
                       }
                     }}>
                       <div className="w-[180px] h-[280px] relative">
