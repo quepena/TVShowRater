@@ -71,7 +71,7 @@ export class TvShowService {
     }
 
     async updateTvShow(id: number, tvShowDetails: CreateTvShowDto): Promise<TvShow> {
-        const { name, photo, description, length, genres, trailer, country, addId } = tvShowDetails;
+        const { name, photo, description, length, genres, trailer, country, addId, year } = tvShowDetails;
         const tvShow = new TvShow();
         tvShow.name = name;
         tvShow.photo = photo;
@@ -81,6 +81,7 @@ export class TvShowService {
         tvShow.country = country;
         tvShow.genres = [];
         tvShow.addId = addId;
+        tvShow.year = year;
         for (let i = 0; i < genres.length; i++) {
             const genre = await this.genreRepository.findOne({
                 where: { id: genres[i] }
@@ -97,7 +98,7 @@ export class TvShowService {
         // }
 
         const newShow = await this.tvShowRepository.save(
-            { id: Number(id), name: tvShow.name, photo: tvShow.description, description: tvShow.description, length: tvShow.length, trailer: tvShow.trailer, country: tvShow.trailer, genres: tvShow.genres, addId: tvShow.addId }
+            { id: Number(id), name: tvShow.name, photo: tvShow.photo, description: tvShow.description, length: tvShow.length, trailer: tvShow.trailer, country: tvShow.trailer, genres: tvShow.genres, addId: tvShow.addId, year: tvShow.year }
         )
 
         return newShow

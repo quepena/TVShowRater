@@ -32,21 +32,23 @@ const Nav = () => {
             <NavBar navButtons={navButtons} />
           </div>
           <div className='flex justify-center text-xl'>
-            <button onClick={() => setIsOpen((prev) => !prev)}>
+            <button className='' onClick={() => setIsOpen((prev) => !prev)}>
               {
                 !isOpen ? (
-                  <AiOutlineCaretDown className="mt-1" />
+                  <AiOutlineCaretDown className="" />
                 ) : (
-                  <AiOutlineCaretUp className="mt-1" />
+                  <AiOutlineCaretUp className="" />
                 )
               }
+            </button>
+            <div>
               {
-                isOpen && 
+                isOpen &&
                 <div>
-                  <Link href="/admin">Click</Link>
+                  <Link onClick={() => setIsOpen(false)} href="/admin">Admin panel</Link>
                 </div>
               }
-            </button>
+            </div>
             <div className='p-8'>Hello, {me?.name}</div>
             <div style={{ display: 'inline-block', position: 'relative', width: '70px', height: '70px', overflow: 'hidden', borderRadius: '50%', margin: 'auto' }}>
               <img style={{ width: 'auto', height: '100%' }} src={me?.photo} alt="" />

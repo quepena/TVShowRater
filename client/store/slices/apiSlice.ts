@@ -6,6 +6,7 @@ import { TvShow } from "../../types/tvShow"
 import { User } from "../../types/user"
 import { Review } from "../../types/review"
 import { Progress } from "../../types/progress"
+import { Genre } from "../../types/genre"
 
 export const apiSlice = createApi({
     reducerPath: 'api',
@@ -435,6 +436,24 @@ export const apiSlice = createApi({
                 }
             }
         }),
+        deleteShow: builder.mutation<Object, number>({
+            query: (id: number) => {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST,PATCH,OPTIONS'
+                }
+                return {
+                    url: '/tv-shows/'+id,
+                    method: "delete",
+                    statusCode: 200,
+                    headers: headers,
+                };
+            }
+        }),
+        getGenres: builder.query({
+            query: () => '/genres',
+        }),
         // login: builder.mutation<
         //     { access_token: string; status: string },
         //     LoginInput
@@ -504,4 +523,6 @@ export const {
     useCreateProgressMutation,
     useSearchShowsMutation,
     useCreateListMutation,
+    useDeleteShowMutation,
+    useGetGenresQuery,
 } = apiSlice
