@@ -454,6 +454,24 @@ export const apiSlice = createApi({
         getGenres: builder.query({
             query: () => '/genres',
         }),
+        editShow: builder.mutation<Object, { id: number, details: Object }>({
+            query: (args) => {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST,PATCH,OPTIONS'
+                }
+                const { id, details } = args
+
+                return {
+                    url: '/tv-shows/'+id,
+                    method: "put",
+                    statusCode: 200,
+                    headers: headers,
+                    body: details
+                };
+            }
+        }),
         // login: builder.mutation<
         //     { access_token: string; status: string },
         //     LoginInput
@@ -525,4 +543,5 @@ export const {
     useCreateListMutation,
     useDeleteShowMutation,
     useGetGenresQuery,
+    useEditShowMutation,
 } = apiSlice
