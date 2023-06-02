@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useEditShowMutation, useGetGenresQuery, useGetShowByIdQuery } from '../../store/slices/apiSlice'
-import { TvShow } from '../../types/tvShow';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
@@ -10,7 +9,10 @@ const Edit = () => {
 
     const { data: showData, isSuccess, error, isLoading } = useGetShowByIdQuery(router.query.id)
 
-    const [editShow, { isSuccess: editSuccess, error: editError }] = useEditShowMutation()
+    const [editShow, { isSuccess: editShowSuccess }] = useEditShowMutation()
+
+    const [editError, setEditError] = useState(false)
+    const [editSuccess, setEditSuccess] = useState(false)
 
     const [name, setName] = useState(showData?.name)
     const [desc, setDesc] = useState(showData?.description)
@@ -19,7 +21,9 @@ const Edit = () => {
     const [year, setYear] = useState(showData?.year)
     const [trailer, setTrailer] = useState(showData?.trailer)
 
-    const { data: genresData } = useGetGenresQuery({})
+    const [button, setButton] = useState(false)
+
+    const { data: genresData, isSuccess: genreSuccess } = useGetGenresQuery({})
 
     const initialGenres = [...new Array(genresData?.length)].map(() => false);
 
@@ -45,11 +49,11 @@ const Edit = () => {
         setCheckedState([...updatedCheckedState]);
     }
 
-    // let newItems = [...emptyErrors]
+    let newItems = [...emptyErrors]
 
     useEffect(() => {
-
-    }, [checkedState])
+        genreSuccess && checkErrors(parseInt(router.query.id), { name, year, desc, length, trailer, photo, genresData })
+    }, [checkedState, emptyErrors])
 
     const handleEdit = (e, details) => {
         e.preventDefault()
@@ -60,56 +64,64 @@ const Edit = () => {
             year: details.year,
             description: details.desc,
             photo: details.photo,
-            length: details.length,
+            length: JSON.stringify(details.length),
             trailer: details.trailer,
             genres: arr.map((el) => el.id)
         }
-        
-        let newItems = [...emptyErrors]
-        Object.entries(show).map((obj, index) => {
+
+        Object.entries(show).map((obj, i) => {
             const key = obj[0];
             const value = obj[1];
 
-
-            // value?.length == 0 && setEmptyErrors([...emptyErrors, true])
-            value?.length == 0 && !Array.isArray(value) && emptyErrors.map((el, i) => i == index && (newItems[i] = true
-            )
-            )
-
-            // console.log(emptyErrors);
-
-
-            // JSON.stringify(value)?.length == 0 &&
-            //     // setEmptyErrors([...emptyErrors, false])
-            //     console.log(value?.length);
-
-            console.log(newItems);
-            
+            !Array.isArray(value) &&
+                value == "" ? (newItems[i] = true) : (newItems[i] = false)
         });
-        console.log(newItems);
-        
+
         setEmptyErrors([...newItems])
-
-
-
-        // values.forEach((value, key) => {
-        //     JSON.stringify(value)?.length == 0 &&
-        //     setEmptyErrors([...emptyErrors, false])
-        // });
-
-        console.log(emptyErrors);
-
-
-        editShow({ id: parseInt(router.query.id), details: show })
-
     }
 
-    // console.log(emptyErrors);
+    const checkErrors = (id, details) => {
+        const arr = details.genresData.filter((el, i) => checkedState[i]);
 
+        const show = {
+            name: details.name,
+            year: details.year,
+            description: details.desc,
+            photo: details.photo,
+            length: parseInt(details.length),
+            trailer: details.trailer,
+            genres: arr.map((el) => el.id)
+        }
+
+        console.log(editShowSuccess);
+        console.log(button);
+        
+
+        if (emptyErrors.filter((el) => el == true).length == 0 && button && !editShowSuccess) {
+            editShow({ id: id, details: show })
+            console.log("1");
+
+        }
+
+        if (emptyErrors.filter((el) => el == true).length == 0 && button) {
+            setEditError(false)
+            setEditSuccess(true)
+            console.log("2");
+
+        }
+        else if (!editShowSuccess && button) {
+            setEditError(true)
+            setEditSuccess(false)
+            console.log("3");
+
+        }
+    }
+
+    console.log(editSuccess, editError);
 
 
     return (
-        <div className='max-w-2xl mx-auto'>
+        <div className='max-w-2xl mx-auto mb-12'>
             <div className='flex'>
                 <button className='text-3xl mb-1 mr-5' onClick={() => router.back()}>
                     <FontAwesomeIcon icon={faArrowLeft} />
@@ -118,19 +130,19 @@ const Edit = () => {
             </div>
             <form className='flex flex-col' action="">
                 <label className='text-xl mb-1' htmlFor="">Name</label>
-                <input onChange={(e) => setName(e.target.value)} className='border-2 border-black rounded p-3 mb-5' value={name} type="text" />
+                <input onChange={(e) => setName(e.target.value)} className={emptyErrors[0] == true ? `border-2 border-red-600 drop-shadow-xl rounded p-3 mb-5` : `border-2 border-black rounded p-3 mb-5`} value={name} type="text" />
                 <label className='text-xl mb-1' htmlFor="">Year</label>
-                <input onChange={(e) => setYear(e.target.value)} className='border-2 border-black rounded p-3 mb-5' value={year} type="text" />
+                <input onChange={(e) => setYear(e.target.value)} className={emptyErrors[1] == true ? `border-2 border-red-600 drop-shadow-xl rounded p-3 mb-5` : `border-2 border-black rounded p-3 mb-5`} value={year} type="text" />
                 <label className='text-xl mb-1' htmlFor="">Description</label>
-                <textarea onChange={(e) => setDesc(e.target.value)} className='border-2 border-black rounded p-3 mb-5' rows={8} value={desc} type="text" />
+                <textarea onChange={(e) => setDesc(e.target.value)} className={emptyErrors[2] == true ? `border-2 border-red-600 drop-shadow-xl rounded p-3 mb-5` : `border-2 border-black rounded p-3 mb-5`} rows={8} value={desc} type="text" />
                 <label className='text-xl mb-1' htmlFor="">Photo</label>
-                <input onChange={(e) => setPhoto(e.target.value)} className='border-2 border-black rounded p-3 mb-5' value={photo} type="text" />
+                <input onChange={(e) => setPhoto(e.target.value)} className={emptyErrors[3] == true ? `border-2 border-red-600 drop-shadow-xl rounded p-3 mb-5` : `border-2 border-black rounded p-3 mb-5`} value={photo} type="text" />
                 <label className='text-xl mb-1' htmlFor="">Length</label>
-                <input onChange={(e) => setLength(e.target.value)} className='border-2 border-black rounded p-3 mb-5' value={length} type="text" />
+                <input onChange={(e) => setLength(e.target.value)} className={emptyErrors[4] == true ? `border-2 border-red-600 drop-shadow-xl rounded p-3 mb-5` : `border-2 border-black rounded p-3 mb-5`} value={length} type="text" />
                 <label className='text-xl mb-1' htmlFor="">Trailer</label>
-                <input onChange={(e) => setTrailer(e.target.value)} className='border-2 border-black rounded p-3 mb-5' value={trailer} type="text" />
+                <input onChange={(e) => setTrailer(e.target.value)} className={emptyErrors[5] == true ? `border-2 border-red-600 drop-shadow-xl rounded p-3 mb-5` : `border-2 border-black rounded p-3 mb-5`} value={trailer} type="text" />
                 <div>
-                    <label className='text-xl mb-1' htmlFor="">Genres</label>
+                    <label className='text-xl mb-1' htmlFor="">Genres:</label>
                     {
                         showData?.genres?.map((el) =>
                             <div className='border-2 border-black rounded p-3 mb-2'>{el.name}</div>
@@ -159,12 +171,15 @@ const Edit = () => {
                     }
                 </div>
             </form >
-            <button onClick={(e) => handleEdit(e, { name, year, desc, length, trailer, photo, genresData })} className='text-xl text-white hover:bg-green-600 bg-green-500 p-4 font-semibold w-[45%] text-center rounded mt-5 mb-2 ml-auto'>Edit</button>
+            <button onClick={(e) => {
+                handleEdit(e, { name, year, desc, length, trailer, photo, genresData });
+                setButton(true)
+            }} className='text-xl text-white hover:bg-green-600 bg-green-500 p-4 font-semibold w-[45%] text-center rounded mt-5 mb-2 ml-auto'>Edit</button>
             {
-                editSuccess && <div className='text-green-600 text-xl mb-5'>Edit successful</div>
+                editSuccess ? <div className='text-green-600 text-xl'>Edit successful</div> : <></>
             }
             {
-                editError && <div className='text-red-500 text-xl mb-5'>Edit failed</div>
+                editError ? <div className='text-red-500 text-xl'>Edit failed</div> : <></>
             }
         </div >
     )

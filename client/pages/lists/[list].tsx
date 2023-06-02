@@ -3,7 +3,7 @@ import { useGetListByIdQuery, useGetListsByUserQuery, useGetMeMutation, useGetSh
 import Image from 'next/image';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router';
 
 const List = (props) => {
@@ -12,9 +12,17 @@ const List = (props) => {
   const [id, setId] = useState()
   const { data: showData } = useGetShowByIdQuery(id)
   console.log(showData);
-  
+
 
   console.log(data);
+
+  const handleDeleteShow = () => {
+    
+  }
+
+  const handleDeleteList = () => {
+
+  }
 
   return (
     <div className='mx-auto max-w-5xl'>
@@ -39,9 +47,16 @@ const List = (props) => {
                 </div>
                 <div className='text-xl'>{el.name}</div>
               </Link>
+              <button onClick={() => handleDeleteShow()}>
+                <FontAwesomeIcon className='text-red-600 text-2xl' icon={faTrash} />
+              </button>
             </div>
           )
         }
+      </div>
+      <div className='flex flex-col'>
+        <button className='bg-green-500 p-5 w-[30%] text-2xl hover:bg-green-600'>+ Add shows</button>
+        <button onClick={() => handleDeleteList()} className='bg-red-500 p-5 w-[30%] text-white text-2xl hover:bg-red-600'>Delete list</button>
       </div>
     </div>
   )

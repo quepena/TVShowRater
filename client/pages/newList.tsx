@@ -3,7 +3,7 @@ import { useCreateListMutation, useGetMeMutation, useSearchShowsMutation } from 
 import Image from 'next/image'
 import SearchShows from '../components/SearchShows'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router';
 
 const NewList = () => {
@@ -15,11 +15,23 @@ const NewList = () => {
   }
 
   const [shows, setShow] = useState([{}])
+  const [added, setAdded] = useState(false)
 
   const addShow = (el, e) => {
     e.preventDefault()
     setShow([...shows, el])
+    setAdded(true)
   }
+
+  const deleteShow = (el, e) => {
+    e.preventDefault()
+    let allShows = [...shows]
+    const newShows = allShows.filter((element) => element != el)
+    setShow([...newShows])
+  }
+
+  console.log(shows);
+
 
   useEffect(() => {
     search(query)
@@ -33,6 +45,7 @@ const NewList = () => {
   const [createList, { data: listData, isSuccess }] = useCreateListMutation()
   const [name, setName] = useState("")
   const [error, setError] = useState(false)
+  const [toggle, setToggle] = useState(false)
 
   useEffect(() => {
     const local = JSON.parse(localStorage.getItem('userInfo'));
@@ -85,13 +98,19 @@ const NewList = () => {
           {
             query && searchData?.map((el) =>
               <div className='mr-2 w-full'>
-                <button onClick={(e) => addShow(el, e)} disabled={shows.some(element => element.photo === el.photo) ? true : false}>
-                  <div className={`w-[180px] h-[280px] relative`}>
-                    <Image src={el.photo != "https://image.tmdb.org/t/p/w500/null" ? el.photo : '/placeholder.png'} className={`${shows.some(element => element.photo === el.photo) ? `filter blur-sm` : ``}`}
-                      alt={el.name} fill />
-                  </div>
-                </button>
-                <div className={`text-xl ${shows.some(element => element.photo === el.photo) ? `filter blur-sm` : ``}`}>{el.name}</div>
+                {
+                  <button onClick={(e) => {
+                    console.log(shows.some(element => element.photo == el.photo));
+                    !shows.some(element => element.photo == el.photo) ?
+                      addShow(el, e) : deleteShow(el, e)
+                  }}>
+                    <div className={`w-[180px] h-[280px] relative`}>
+                      <Image src={el.photo != "https://image.tmdb.org/t/p/w500/null" ? el.photo : '/placeholder.png'} className={`${shows.some(element => element.photo === el.photo) ? `filter blur-sm` : ``}`}
+                        alt={el.name} fill />
+                    </div>
+                  </button>
+                }
+                <div className='text-xl'>{el.name}</div>
               </div>
             )
           }
