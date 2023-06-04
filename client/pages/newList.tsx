@@ -70,6 +70,7 @@ const NewList = () => {
       createList(details)
       setName("")
       setShow([{}])
+      setQuery("")
       setError(false)
     } else {
       setError(true)

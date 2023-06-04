@@ -23,7 +23,7 @@ export class ListService {
         list.tvShows = [];
         for (let i = 0; i < tvShows.length; i++) {
             console.log(tvShows[i]);
-            
+
             const tvShow = await this.tvShowRepository.findOne({
                 where: { id: tvShows[i] }
             });
@@ -43,7 +43,7 @@ export class ListService {
     }
 
     async findListById(id: number) {
-        return await this.listRepository.findOne({where: { id: id }, relations: { user: true, tvShows: true }})
+        return await this.listRepository.findOne({ where: { id: id }, relations: { user: true, tvShows: true } })
     }
 
     async findAdminListByName(name: string): Promise<TvShow[]> {
@@ -73,46 +73,46 @@ export class ListService {
         (await tv).forEach((TvShow) => {
             showsWGenres.push(TvShow.id)
             // console.log(show);
-            
+
             // showsWGenres.push(show)
             // console.log(TvShow.id);
-            
+
         })
 
         const showFunc = (el: number) => {
             const show = this.tvShowRepository
-            .findOne({
-                where:
-                {
-                    id: el,
-                },
-                relations: ['genres'],
-            })
+                .findOne({
+                    where:
+                    {
+                        id: el,
+                    },
+                    relations: ['genres'],
+                })
             return show
 
         }
-        
+
         const showG = []
         showsWGenres.forEach(async (el) => {
             const g = showFunc(el)
             const gr = await g
 
             // console.log(el, gr);
-            
-            
+
+
             showG.push(gr)
 
-            if(gr.id == showsWGenres[showsWGenres.length-1]) return showG
+            if (gr.id == showsWGenres[showsWGenres.length - 1]) return showG
         })
 
         // console.log(showG);
-        
-        
-        
+
+
+
 
         // console.log(shows);
-        
-        
+
+
         // for i in range(tv.length) {
         //     const tvGenre = this.tvShowRepository.findOne({
         //         where: {
@@ -150,6 +150,11 @@ export class ListService {
     }
 
     async findListsByUser(id: number) {
-        return await this.listRepository.find({ where: { user: { id: id } }, relations: ['tvShows', 'user']})
+        return await this.listRepository.find({
+            where: { user: { id: id } }, relations: ['tvShows', 'user'],
+            order: {
+                name: 'ASC'
+            }
+        })
     }
 }

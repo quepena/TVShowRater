@@ -278,7 +278,7 @@ export const apiSlice = createApi({
                 }
             }
         }),
-        getListById: builder.query<List, number>({
+        getListById: builder.mutation<List, number>({
             query(id: number) {
                 const headers = {
                     'Content-Type': 'application/json',
@@ -338,7 +338,7 @@ export const apiSlice = createApi({
                 }
             }
         }),
-        getListsByUser: builder.query<Array<Object>, number>({
+        getListsByUser: builder.mutation<Array<Object>, number>({
             query(id: number) {
                 const headers = {
                     'Content-Type': 'application/json',
@@ -472,6 +472,41 @@ export const apiSlice = createApi({
                 };
             }
         }),
+        editList: builder.mutation<Object, { id: number, details: Object }>({
+            query: (args) => {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST,PATCH,OPTIONS'
+                }
+                const { id, details } = args
+                console.log(typeof id);
+                
+
+                return {
+                    url: '/lists/'+id,
+                    method: "put",
+                    statusCode: 200,
+                    headers: headers,
+                    body: details
+                };
+            }
+        }),
+        deleteList: builder.mutation<Object, number>({
+            query: (id: number) => {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST,PATCH,OPTIONS'
+                }
+                return {
+                    url: '/lists/'+id,
+                    method: "delete",
+                    statusCode: 200,
+                    headers: headers,
+                };
+            }
+        }),
         // login: builder.mutation<
         //     { access_token: string; status: string },
         //     LoginInput
@@ -533,8 +568,8 @@ export const {
     useGetReviewsOfShowQuery,
     useRatingOfShowByUserMutation,
     useReviewMutation,
-    useGetListsByUserQuery,
-    useGetListByIdQuery,
+    useGetListsByUserMutation,
+    useGetListByIdMutation,
     useSearchMutation,
     useDeleteRateMutation,
     useGetRatingOfShowByUserMutMutation,
@@ -544,4 +579,6 @@ export const {
     useDeleteShowMutation,
     useGetGenresQuery,
     useEditShowMutation,
+    useEditListMutation,
+    useDeleteListMutation,
 } = apiSlice

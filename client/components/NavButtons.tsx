@@ -5,7 +5,7 @@ const NavButtons = [
     },
     {
         label: "My Shows",
-        path: "/shows",
+        path: "/lists",
     },
 ];
 
