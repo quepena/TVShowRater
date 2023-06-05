@@ -29,9 +29,9 @@ const Show = (props: TvShow) => {
     const [createRating, { data: ratingData }] = useRateMutation()
     const [changeRating, { data: changeRatingData }] = useChangeRateMutation();
     const [deleteRating, { data: deleteRatingData }] = useDeleteRateMutation();
-    const [createReview, { data: reviewData }] = useReviewMutation();
-    const [review, setReview] = useState("")
-    const [create, setCreate] = useState(0)
+    // const [createReview, { data: reviewData }] = useReviewMutation();
+    // const [review, setReview] = useState("")
+    const [create, setCreate] = useState(true)
     useEffect(() => {
         const local = JSON.parse(localStorage.getItem('userInfo'));
         const details = {
@@ -39,22 +39,132 @@ const Show = (props: TvShow) => {
         }
         getMe(details)
         // userRatingData?.length == 1 ? null : null
-        getRate({ user: me?.id, show: props.id })
-    }, [reviewData])
+        // getRate({ user: me?.id, show: props.id })
+    }, [])
+
+    useEffect(() => {
+        userRatingData && userRatingData[0] ? setRating(userRatingData[0].rating) : setRating(0)
+        if (userRatingData && userRatingData[0]) setCreate(false)
+    }, [userRatingData])
+
+    // useEffect(() => {
+    //     setRating(rating)
+    // }, [])
 
     useEffect(() => {
         refetch()
-        setCreate(create)
-        // console.log(userRatingData);
         // console.log(rating);
+    }, [])
+
+    // console.log(ratingData);
+    console.log(ratingData);
+    console.log(rating);
+    console.log(userRatingData);
+    console.log(create);
 
 
-        userRatingData?.length > 0 && setRating(userRatingData[0].rating)
-    }, [rating, create])
+    const ratingHandler = (rate) => {
+        setRating(rate)
+        const details = {
+            user: me?.id,
+            tvShow: props.id,
+            rating: rate,
+        };
+        // createRating(details)
+        // refetch()
+        console.log(ratingData);
+        console.log(rating);
+        console.log(rate);
+        console.log(userRatingData);
+        console.log(create);
 
-    const handleReview = (e) => {
-        reviewData ? setReview({}) : setReview(e.target.value)
+        if ((ratingData && rating != rate && !create) || (userRatingData && userRatingData[0] && rating != rate && !create)) {
+            changeRating({ details: details, id: ratingData ? ratingData.id : userRatingData[0].id })
+            // createRating(details);
+            // deleteRating(userRatingData[0].id)
+            console.log("change");
+            // refetch()
+        } else if ((ratingData && rating == rate && !create) || (userRatingData && userRatingData[0] && rating == rate && !create)) {
+            console.log(rating);
+            console.log("delete");
+
+            deleteRating(ratingData ? ratingData.id : userRatingData[0].id)
+            setRating(0)
+            setCreate(true)
+        } else if (rating == 0 && create) {
+            createRating(details)
+            console.log("create");
+            setCreate(false)
+            // refetch()
+        }
+        // refetch()
+        console.log("what is going on");
+
     }
+
+    // const ratingHandler = (rate) => {
+    //     setRating(rate)
+    //     const details = {
+    //         user: me?.id,
+    //         tvShow: props.id,
+    //         rating: rate,
+    //     };
+    //     createRating(details)
+    //     console.log("create");
+
+    //     refetch()
+    //     // if (userRatingData[0]) {
+    //     //     changeRating({ details: details, id: userRatingData[0].id })
+    //     //     console.log("change");
+    //     //     refetch()
+    //     // } else {
+    //     //     createRating(details)
+    //     //     console.log("create");
+
+    //     //     refetch()
+    //     // }
+
+    // }
+
+
+    // useEffect(() => {
+    //     //     // refetch()
+    //     //     // setCreate(create)
+    //     //     // console.log(userRatingData);
+    //     //     // console.log(rating);
+
+
+    //     //     // userRatingData?.length > 0 && setRating(userRatingData[0].rating)
+    //     //     rating ? setRating(rating) : (userRatingData?.length > 0 && setRating(userRatingData[0].rating))
+    //     //     userRatingData && userRatingData[0] && rating != userRatingData[0].rating && setRating(rating)
+    //     if(userRatingData && userRatingData[0] && userRatingData[0].rating != rating) setRating(rating)
+
+    // }, [rating])
+
+    // useEffect(() => {
+    //     userRatingData && userRatingData[0] && setRating(userRatingData[0].rating)
+    // }, [userRatingData])
+
+    // useEffect(() => {
+    //     // rating && router.reload()
+    //     getRate({ user: me?.id, show: props.id })
+    // }, [])
+
+    // useEffect(() => {
+    //     refetch
+    // }, [])
+
+
+    // console.log(rating);
+    console.log(userRatingData);
+
+    // console.log(userRateData);
+
+
+
+    // const handleReview = (e) => {
+    //     reviewData ? setReview({}) : setReview(e.target.value)
+    // }
 
     return (
         <div className='my-0 mx-auto max-w-5xl flex'>
@@ -73,51 +183,75 @@ const Show = (props: TvShow) => {
                     }
                 </div>
                 <div className='mt-5 mb-2'>
-                    <Rating size={40} onClick={(rate) => {
-                        setRating(rate)
+                    <Rating size={40} onClick={(rate) => ratingHandler(rate)}
+                        // {
+                        // setRating(rate)
 
-                        const details = {
-                            user: me?.id,
-                            tvShow: props.id,
-                            rating: rate,
-                        };
+                        // refetch()
+
+                        // const details = {
+                        //     user: me?.id,
+                        //     tvShow: props.id,
+                        //     rating: rate,
+                        // };
+                        // console.log(create);
+
+                        // if (create != true) {
+                        //     createRating(details)
+                        //     setCreate(true)
+                        //     console.log("create");
+                        // } else if (create == true && userRatingData && userRatingData[0]) {
+                        //     changeRating({ details: details, id: userRatingData[0].id })
+                        //     console.log("change");
+
+                        // } else if (create == true && userRatingData && userRatingData[0] && userRatingData[0].rating != rating) {
+                        //     deleteRating(userRatingData[0].id)
+                        //     setCreate(false)
+                        //     console.log("delete");
+
+                        // }
+                        // router.reload()
+
+
                         // getRate({ user: me?.id, show: props.id })
                         // refetch()
-                        console.log(create);
+                        // console.log(create);
 
 
 
-                        if (create == 0) {
-                            createRating(details)
-                            // setRating(rate)
-                            if (rate && rate == rating) setCreate(2)
-                            setCreate(1)
-                            console.log("create")
-                            // getRate({ user: me?.id, show: props.id })
-                            // refetch()
-                        }
-                        if (create == 1 && userRatingData[0]) {
-                            // refetch()
-                            changeRating({ details: details, id: userRatingData[0].id })
-                            // setRating(rate)   
-                            console.log("change")
-                            setCreate(2)
-                        }
-                        if (create == 2 && rate && rate == rating && userRatingData[0]) {
-                            deleteRating(userRatingData[0].id)
-                            // setRating(0)
-                            setCreate(0)
-                            console.log("delete")
-                        }
+                        // if (create == 0) {
+                        //     createRating(details)
+                        //     // setRating(rate)
+                        //     if (rate && rate == rating) setCreate(2)
+                        //     setCreate(1)
+                        //     console.log("create")
+                        //     // getRate({ user: me?.id, show: props.id })
+                        //     // refetch()
+                        // }
+                        // if (create == 1 && userRatingData[0]) {
+                        //     // refetch()
+                        //     changeRating({ details: details, id: userRatingData[0].id })
+                        //     // setRating(rate)   
+                        //     console.log("change")
+                        //     setCreate(2)
+                        // }
+                        // if (create == 2 && rate && rate == rating && userRatingData[0]) {
+                        //     deleteRating(userRatingData[0].id)
+                        //     // setRating(0)
+                        //     setCreate(0)
+                        //     console.log("delete")
+                        // }
 
                         // router.reload()
 
                         // refetch()
 
-                    }} ratingValue={userRatingData && userRatingData[0] ? userRatingData[0].rating : rating} />
+                        // }
+                        // } 
+                        ratingValue={rating} />
                 </div>
                 <p className='text-lg'>Average Rating: {meanData}</p>
-                <div>{userRatingData ? userRatingData.map((el: Rating) => <p key={el.userId}> {el.rating}</p>) : <></>}</div>
+                <div>{rating}</div>
             </div>
 
             <div>
@@ -134,7 +268,7 @@ const Show = (props: TvShow) => {
                             : <div></div>
                     }
                 </div>
-                <form className='mt-12' onSubmit={((e) => {
+                {/* <form className='mt-12' onSubmit={((e) => {
                     e.preventDefault();
                     console.log(review);
 
@@ -160,7 +294,7 @@ const Show = (props: TvShow) => {
                 </form>
                 <div>
                     <Review show={props.id} />
-                </div>
+                </div> */}
             </div >
         </div>
         // </Link>

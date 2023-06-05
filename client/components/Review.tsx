@@ -1,18 +1,32 @@
 import React, { useEffect, useState } from 'react'
-import { useGetRatingOfShowByUserQuery, useGetReviewsOfShowQuery, useRatingOfShowByUserMutation } from '../store/slices/apiSlice'
+import { useGetRatingOfShowByUserQuery, useGetReviewsOfShowQuery, useGetShowByIdQuery, useRatingOfShowByUserMutation } from '../store/slices/apiSlice'
 import Image from 'next/image'
+import Stars from './Stars'
 
 const Review = (props) => {
     const { data: reviewData, error, isLoading } = useGetReviewsOfShowQuery(props.show)
-    // console.log(reviewData);
+    const { data: showData } = useGetShowByIdQuery(props.show)
     const [findRating, { data: userRatingData }] = useRatingOfShowByUserMutation()
+
     const [rate, setRate] = useState(0)
+    let user = 0
+    let show = 0
+
+    // useEffect(() => {
+
+    // }, [user, show])
+
 
     const arr = []
 
     const findRatings = (el) => {
-        findRating({ user: el.user.id, show: props.show })
+        console.log('====================================');
+        console.log(typeof el.user.id);
+        console.log('====================================');
+        findRating({ user: el.user.id, show: parseInt(props.show) })
     }
+
+    console.log(arr);
 
     // useEffect(() => {
     //     reviewData?.map((el) => {
@@ -33,16 +47,17 @@ const Review = (props) => {
         <div>
             {
                 reviewData?.map((el) =>
-                    <div>
-                        <Image src={el.user.photo} width={140} height={100} />
-                        {
-                            // findRatings(el)
-                        // <div>{userRatingData?.rating}</div>
-                        }
-                        {/* <div>{userRatingData?.rating}</div> */}
-                        <div>{el.user.name}</div>
-                        <div>{el.review}</div>
+                    <div className='flex border-2 border-black rounded-xl py-2 my-12'>
+                        <div className='ml-5' style={{ display: 'inline-block', position: 'relative', width: '70px', height: '70px', overflow: 'hidden', borderRadius: '50%' }}>
+                            <img style={{ width: 'auto', height: '100%' }} src={el.user.photo} alt="" />
+                        </div>
+                        <Stars props={el} />
+                        <div className='flex flex-col ml-8'>
+                            <div className='text-xl'>{el.user.name} {el.user.last_name}</div>
+                            <div>{el.review}</div>
+                        </div>
                     </div>
+
                 )
             }
         </div >

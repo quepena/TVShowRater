@@ -1,8 +1,9 @@
 import { log } from 'console';
-import { useGetShowByIdQuery, useGetNumSeasonsByShowQuery, useGetCastByShowQuery, useGetCrewByShowQuery } from '../store/slices/apiSlice'
+import { useGetShowByIdQuery, useGetNumSeasonsByShowQuery, useGetCastByShowQuery, useGetCrewByShowQuery, useReviewMutation, useGetMeMutation } from '../store/slices/apiSlice'
 import Image from 'next/image'
 import { castTvShow } from '../types/castTvShow';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import Review from './Review';
 
 const Info = (props) => {
     const { data: showData, error, isLoading } = useGetShowByIdQuery(props.show)
@@ -11,6 +12,27 @@ const Info = (props) => {
     const { data: crewInfo } = useGetCrewByShowQuery(props.show)
     const genres = []
     showData?.genres.map((genre) => genres.push(genre.name))
+    const [createReview, { data: reviewData }] = useReviewMutation();
+    const [review, setReview] = useState("")
+
+    const [getMe, { data: me }] = useGetMeMutation()
+
+    useEffect(() => {
+        const local = JSON.parse(localStorage.getItem('userInfo'));
+        const details = {
+            token: local
+        }
+        getMe(details)
+        // userRatingData?.length == 1 ? null : null
+        // getRate({ user: me?.id, show: props.id })
+    }, [review])
+
+    console.log(reviewData);
+    
+
+    const handleReview = (e) => {
+        reviewData ? setReview("") : setReview(e.target.value)
+    }
     // const cast: Array = []
     // console.log(castInfo);
     // castInfo?.map((el) => {
@@ -108,6 +130,36 @@ const Info = (props) => {
                         </div>
                         : <></>
                 }
+            </div>
+            <div>
+                <form className='mt-12' onSubmit={((e) => {
+                    e.preventDefault();
+                    console.log(review);
+
+                    const details = {
+                        user: me?.id,
+                        tvShow: props.show,
+                        review: review,
+                    };
+                    console.log(details);
+                    
+                    createReview(details)
+                    setReview("")
+                })}>
+                    <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                        <div className="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
+                            <textarea rows={7} onChange={(e) => setReview(e.target.value)} id="comment" className="text-lg w-full px-0 text-gray-900 bg-white border-0 dark:bg-gray-800" placeholder="Write a comment..." required></textarea>
+                        </div>
+                        <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
+                            <button type="submit" className="inline-flex items-center py-2.5 px-8 text-xl font-medium text-center text-gray-200 bg-blue-700 rounded-lg hover:bg-blue-800 hover:text-white">
+                                Post comment
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div>
+                    <Review show={props.show} />
+                </div>
             </div>
         </div >
     )

@@ -4,17 +4,23 @@ import NavBar from './NavBar'
 import navButtons from './NavButtons'
 import { AiOutlineCaretDown, AiOutlineCaretUp } from 'react-icons/ai'
 import { useGetMeMutation } from '../store/slices/apiSlice'
+import { useRouter } from 'next/router'
 
 const Nav = () => {
+  const router = useRouter()
   const [getMe, { data: me }] = useGetMeMutation()
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    const local = JSON.parse(localStorage.getItem('userInfo'));
-    const details = {
-      token: local
+    if (localStorage.getItem('userInfo') == null || localStorage.getItem('userInfo') == "" || !localStorage.getItem('userInfo'))
+      router.push("/login")
+    else {
+      const local = JSON.parse(localStorage.getItem('userInfo'));
+      const details = {
+        token: local
+      }
+      getMe(details)
     }
-    getMe(details)
   }, [])
 
   return (
@@ -29,31 +35,41 @@ const Nav = () => {
               {/* <img className='logo' src="https://see.fontimg.com/api/renderfont4/GO3ED/eyJyIjoiZnMiLCJoIjo1MiwidyI6MTAwMCwiZnMiOjUyLCJmZ2MiOiIjRkZGRkZGIiwiYmdjIjoiIzAwMDAwMCIsInQiOjF9/Qi5T/creattion-demo.png" alt="" /> */}
               TVShowRater
             </Link>
-            <NavBar navButtons={navButtons} />
+            {
+              me ?
+                <NavBar navButtons={navButtons} />
+                : <></>
+            }
           </div>
-          <div className='flex justify-center text-xl'>
-            <button className='' onClick={() => setIsOpen((prev) => !prev)}>
-              {
-                !isOpen ? (
-                  <AiOutlineCaretDown className="" />
-                ) : (
-                  <AiOutlineCaretUp className="" />
-                )
-              }
-            </button>
-            <div>
-              {
-                isOpen &&
-                <div>
-                  <Link onClick={() => setIsOpen(false)} href="/admin">Admin panel</Link>
+          {
+            me ?
+              (
+                <div className='flex justify-center text-xl'>
+                  <button className='' onClick={() => setIsOpen((prev) => !prev)}>
+                    {
+                      !isOpen ? (
+                        <AiOutlineCaretDown className="" />
+                      ) : (
+                        <AiOutlineCaretUp className="" />
+                      )
+                    }
+                  </button>
+                  <div>
+                    {
+                      isOpen &&
+                      <div>
+                        <Link onClick={() => setIsOpen(false)} href="/admin">Admin panel</Link>
+                      </div>
+                    }
+                  </div>
+                  <div className='p-8'>Hello, {me?.name}</div>
+                  <div style={{ display: 'inline-block', position: 'relative', width: '70px', height: '70px', overflow: 'hidden', borderRadius: '50%', margin: 'auto' }}>
+                    <img style={{ width: 'auto', height: '100%' }} src={me?.photo} alt="" />
+                  </div>
                 </div>
-              }
-            </div>
-            <div className='p-8'>Hello, {me?.name}</div>
-            <div style={{ display: 'inline-block', position: 'relative', width: '70px', height: '70px', overflow: 'hidden', borderRadius: '50%', margin: 'auto' }}>
-              <img style={{ width: 'auto', height: '100%' }} src={me?.photo} alt="" />
-            </div>
-          </div>
+              )
+              : <div className='flex justify-center text-xl p-8'></div>
+          }
         </div>
       </main>
     </nav>
