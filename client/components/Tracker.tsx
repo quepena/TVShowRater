@@ -21,32 +21,54 @@ const Tracker = (props) => {
         getMe(details)
     }, [])
 
-    const { data: epsData } = useGetEpsBySeasonQuery(seasonId)
+    const { data: epsData, isSuccess } = useGetEpsBySeasonQuery(seasonId)
 
     const [createProgress, { data: progressData }] = useCreateProgressMutation()
     const [checked, setChecked] = useState(false)
-    const [checkedState, setCheckedState] = useState(
-        new Array(epsData?.length).fill(false)
-    );
+
+    const initialGenres = [...new Array(epsData?.length)].map(() => false);
+
+    const [checkedState, setCheckedState] = useState([...initialGenres]);
+
+    console.log(checkedState);
+    
+
+    useEffect(() => {
+        // if (isSuccess) {
+            // setName(showData?.name);
+            // setDesc(showData?.description);
+            // setPhoto(showData?.photo);
+            // setLength(showData?.length);
+            // setYear(showData?.year);
+            // setTrailer(showData?.trailer);
+            setCheckedState([...initialGenres]);
+        // }
+    }, [])
+
+    console.log(checkedState);
 
     const handleOnChange = (position, e) => {
-        const updatedCheckedState = checkedState.map((item, index) =>
-            index === position ? !item : item
-        );
+        setCheckedState([...initialGenres]);
+        console.log(checkedState);
+        
+        const updatedCheckedState = checkedState.map((item, index) => index === position ? !item : item);
 
-        setCheckedState(updatedCheckedState);
+        setCheckedState([...updatedCheckedState]);
+
         e.preventDefault()
         console.log("check");
         console.log(e.target);
 
-        if (e?.target?.checked === true) {
+        // if (e?.target?.checked === true) {
             const details = {
                 user: me?.id,
                 episode: e.target.value
             }
-            createProgress(details)
-            setChecked(true)
-        }
+            console.log(details);
+            
+            // createProgress(details)
+            // setChecked(true)
+        // }
 
     }
 
@@ -110,7 +132,7 @@ const Tracker = (props) => {
                 <div>
                     {
                         epsData?.map((el, index) =>
-                            <div className="bg-gray-200 flex justify-between w-[500px] h-[40px] my-2 align-center p-2 rounded">
+                            <div className="bg-gray-200 flex justify-between w-[500px] my-2 align-center p-2 rounded">
                                 <div className="">{el.name}</div>
                                 <div className="">
                                     <input onChange={(e) => handleOnChange(index, e)} checked={checkedState[index]} id="default-checkbox" type="checkbox" value={el.id} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />

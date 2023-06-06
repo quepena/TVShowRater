@@ -123,7 +123,7 @@ const Edit = () => {
     return (
         <div className='max-w-2xl mx-auto mb-12'>
             <div className='flex'>
-                <button className='text-3xl mb-1 mr-5' onClick={() => router.back()}>
+                <button className='text-3xl mb-1 mr-5' onClick={() => { router.back(); }}>
                     <FontAwesomeIcon icon={faArrowLeft} />
                 </button>
                 <div className='text-3xl my-8'>Edit Show: {showData?.name}</div>
@@ -176,7 +176,7 @@ const Edit = () => {
                 setButton(true)
             }} className='text-xl text-white hover:bg-green-600 bg-green-500 p-4 font-semibold w-[45%] text-center rounded mt-5 mb-2 ml-auto'>Edit</button>
             {
-                editSuccess ? <div className='text-green-600 text-xl'>Edit successful</div> : <></>
+                editSuccess ? <div className='text-green-600 text-xl'>Edit successful</div> && router.reload()  : <></>
             }
             {
                 editError ? <div className='text-red-500 text-xl'>Edit failed</div> : <></>

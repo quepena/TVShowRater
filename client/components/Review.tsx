@@ -7,26 +7,9 @@ const Review = (props) => {
     const { data: reviewData, error, isLoading } = useGetReviewsOfShowQuery(props.show)
     const { data: showData } = useGetShowByIdQuery(props.show)
     const [findRating, { data: userRatingData }] = useRatingOfShowByUserMutation()
+    const [reviews, setReviews] = useState(reviewData)
+    console.log(props.review);
 
-    const [rate, setRate] = useState(0)
-    let user = 0
-    let show = 0
-
-    // useEffect(() => {
-
-    // }, [user, show])
-
-
-    const arr = []
-
-    const findRatings = (el) => {
-        console.log('====================================');
-        console.log(typeof el.user.id);
-        console.log('====================================');
-        findRating({ user: el.user.id, show: parseInt(props.show) })
-    }
-
-    console.log(arr);
 
     // useEffect(() => {
     //     reviewData?.map((el) => {
@@ -42,11 +25,21 @@ const Review = (props) => {
     // console.log(arr);
 
 
+    useEffect(() => {
+        if (props.review != "" && reviewData)
+            setReviews([props.review, ...reviewData])
+        else if (reviewData) {
+            setReviews([...reviewData])
+        }
+    }, [props])
+
+    console.log(reviews);
+    
 
     return (
         <div>
             {
-                reviewData?.map((el) =>
+                reviews?.map((el) =>
                     <div className='flex border-2 border-black rounded-xl py-2 my-12'>
                         <div className='ml-5' style={{ display: 'inline-block', position: 'relative', width: '70px', height: '70px', overflow: 'hidden', borderRadius: '50%' }}>
                             <img style={{ width: 'auto', height: '100%' }} src={el.user.photo} alt="" />
