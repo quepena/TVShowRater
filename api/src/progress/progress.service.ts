@@ -73,4 +73,11 @@ export class ProgressService {
             }
         })
     }
+
+    async findProgressByUserByShow(user: number, show: number) {
+        return await this.progressRepository.find({
+            where: { user: { id: user }, episode: { season: { tvShow: { id: show } } } },
+            relations: ['user', 'episode', 'episode.season', 'episode.season.tvShow']
+        })
+    }
 }

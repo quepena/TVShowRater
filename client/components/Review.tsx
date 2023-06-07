@@ -8,7 +8,6 @@ const Review = (props) => {
     const { data: showData } = useGetShowByIdQuery(props.show)
     const [findRating, { data: userRatingData }] = useRatingOfShowByUserMutation()
     const [reviews, setReviews] = useState(reviewData)
-    console.log(props.review);
 
 
     // useEffect(() => {
@@ -31,10 +30,7 @@ const Review = (props) => {
         else if (reviewData) {
             setReviews([...reviewData])
         }
-    }, [props])
-
-    console.log(reviews);
-    
+    }, [props])    
 
     return (
         <div>

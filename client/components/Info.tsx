@@ -1,4 +1,3 @@
-import { log } from 'console';
 import { useGetShowByIdQuery, useGetNumSeasonsByShowQuery, useGetCastByShowQuery, useGetCrewByShowQuery, useReviewMutation, useGetMeMutation } from '../store/slices/apiSlice'
 import Image from 'next/image'
 import { castTvShow } from '../types/castTvShow';
@@ -25,21 +24,7 @@ const Info = (props) => {
         getMe(details)
         // userRatingData?.length == 1 ? null : null
         // getRate({ user: me?.id, show: props.id })
-    }, [])
-
-    console.log(review);
-    
-
-    const handleReview = (e) => {
-        reviewData ? setReview("") : setReview(e.target.value)
-    }
-    // const cast: Array = []
-    // console.log(castInfo);
-    // castInfo?.map((el) => {
-    //     cast.push(el)
-    // })
-    // console.log(cast);
-
+    }, [])    
 
     return (
         <div>
@@ -102,8 +87,6 @@ const Info = (props) => {
                             <div className='flex justify-left'>
                                 {
                                     crewInfo?.map((el: castTvShow) =>
-                                        // console.log(el);
-
                                         <div key={el?.id} className='mr-2'>
                                             {
                                                 el?.cast?.photo == "https://image.tmdb.org/t/p/w500/null"
@@ -134,15 +117,12 @@ const Info = (props) => {
             <div>
                 <form className='mt-12' onSubmit={((e) => {
                     e.preventDefault();
-                    console.log(review);
-
                     const details = {
                         user: me?.id,
                         tvShow: props.show,
                         review: review,
                     };
-                    console.log(details);
-                    
+
                     createReview(details)
                     setReview("")
                 })}>

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Episode, Genre, Season, Cast, Crew } from 'src/entities';
+import { Episode, Genre, Season, Cast } from 'src/entities';
 import { Rating } from 'src/rating/rating.entity';
 import { TvShowController } from './tv-show.controller';
 import { TvShow } from './tv-show.entity';

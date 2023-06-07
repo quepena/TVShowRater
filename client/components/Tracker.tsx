@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useCreateProgressMutation, useGetEpsBySeasonQuery, useGetSeasonsByShowQuery, useGetMeMutation } from "../store/slices/apiSlice";
+import { useCreateProgressMutation, useGetEpsBySeasonQuery, useGetSeasonsByShowQuery, useGetMeMutation, useFindShowProgressByUserByShowMutation, useGetListsByUserMutation } from "../store/slices/apiSlice";
 import { Season } from "../types/season";
 import { AiOutlineCaretUp, AiOutlineCaretDown } from 'react-icons/ai'
 
@@ -26,71 +26,109 @@ const Tracker = (props) => {
     const [createProgress, { data: progressData }] = useCreateProgressMutation()
     const [checked, setChecked] = useState(false)
 
-    const initialGenres = [...new Array(epsData?.length)].map(() => false);
+    const initialGenres = epsData && [...new Array(epsData.length)].map(() => false);
 
-    const [checkedState, setCheckedState] = useState([...initialGenres]);
+    const [checkedState, setCheckedState] = useState([]);
+
+    console.log(new Array(epsData?.length).map(() => false));
 
     console.log(checkedState);
-    
+
+    const [findShows, { data: progressByShowData }] = useFindShowProgressByUserByShowMutation()
+
+    const [findLists, { data: listsData }] = useGetListsByUserMutation()
+
+    const [shows, setShows] = useState([])
+
 
     useEffect(() => {
-        // if (isSuccess) {
+        findShows({ user: me?.id, show: props.show });
+        findLists(me?.id)
+    }, [me])
+
+
+    useEffect(() => {
+        if (isSuccess) {
+            // console.log([...new Array(epsData.length)].map(() => false));
+
             // setName(showData?.name);
             // setDesc(showData?.description);
             // setPhoto(showData?.photo);
             // setLength(showData?.length);
             // setYear(showData?.year);
             // setTrailer(showData?.trailer);
+            // initialGenres[index] = true
             setCheckedState([...initialGenres]);
-        // }
-    }, [])
+        }
+    }, [isSuccess])
+
 
     console.log(checkedState);
+    console.log(progressByShowData);
 
-    const handleOnChange = (position, e) => {
-        setCheckedState([...initialGenres]);
-        console.log(checkedState);
-        
+
+
+    const [newEps, setNewEps] = useState([])
+
+    useEffect(() => {
+        // progressByShowData && progressByShowData.map((el) => el.episode.numEp-1 && checkedState.map((item, index) => index === position ? !item : item))
+        const eps = progressByShowData && progressByShowData.map((el) => el.episode.numEp)
+        console.log(eps);
+
+        setNewEps(checkedState.map((item, index) => eps?.includes(index + 1) ? !item : item))
+        console.log(newEps);
+
+    }, [progressByShowData, checkedState])
+
+    console.log(initialGenres);
+    console.log(checkedState);
+
+    console.log(newEps);
+
+    console.log(progressByShowData && progressByShowData.length);
+
+    useEffect(() => {
+        listsData && listsData.tvShows && setShows([...listsData.tvShows])
+    }, [listsData])
+
+    console.log(shows);
+    
+
+
+    const handleOnChange = (el, position) => {
+        // setCheckedState([...initialGenres]);
+        console.log(el);
+
         const updatedCheckedState = checkedState.map((item, index) => index === position ? !item : item);
 
         setCheckedState([...updatedCheckedState]);
 
-        e.preventDefault()
+        if (progressByShowData && progressByShowData.length == 0) {
+            const list = listsData?.filter((el) => el.name == "Currently Watching")
+            console.log(list && list[0].id);
+            const details = {
+                user: me?.id,
+                name: list[0].name,
+                tvShows: [...newShowsIds]
+            }
+            editList({ id: list[0].id, details: details })
+        }
+
+
+        // e.preventDefault()
         console.log("check");
-        console.log(e.target);
+        // console.log(e.target);
 
         // if (e?.target?.checked === true) {
-            const details = {
-                user: me?.id,
-                episode: e.target.value
-            }
-            console.log(details);
-            
-            // createProgress(details)
-            // setChecked(true)
+        const details = {
+            user: me?.id,
+            episode: el.id
+        }
+
+        createProgress(details)
+        // setChecked(true)
         // }
 
-    }
-
-    const handleCheck = (e, index) => {
-        e.preventDefault()
-        console.log("check");
-        console.log(e.target);
-
-        console.log(index);
-
-        if (e?.target?.checked === true) {
-            const details = {
-                user: me?.id,
-                episode: e.target.value
-            }
-            createProgress(details)
-            setChecked(true)
-        }
-        if (checked && e?.target?.checked === true) {
-            console.log("unchecked");
-
-        }
     }
 
     console.log(progressData);
@@ -135,7 +173,7 @@ const Tracker = (props) => {
                             <div className="bg-gray-200 flex justify-between w-[500px] my-2 align-center p-2 rounded">
                                 <div className="">{el.name}</div>
                                 <div className="">
-                                    <input onChange={(e) => handleOnChange(index, e)} checked={checkedState[index]} id="default-checkbox" type="checkbox" value={el.id} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                    <input onChange={() => handleOnChange(el, index)} disabled={newEps[index]} checked={newEps[index]} id="default-checkbox" type="checkbox" value={el.id} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                 </div>
                             </div>)
                     }

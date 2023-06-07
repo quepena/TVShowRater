@@ -51,6 +51,6 @@ export class EpisodeService {
     }
 
     async findEpisodesBySeasons(id: number) {
-        return await this.episodeRepository.find({ where: { season: { id: id } }, relations: ['season', 'season.tvShow'] })
+        return await this.episodeRepository.find({ where: { season: { id: id } }, relations: ['season', 'season.tvShow'], order: { numEp: 'ASC' } })
     }
 }

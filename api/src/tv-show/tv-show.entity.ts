@@ -1,4 +1,3 @@
-import { CrewTvShow } from 'src/crew/crew.entity';
 import { Genre, Season, Cast, CastTvShow } from 'src/entities';
 import { List } from 'src/list/list.entity';
 import { Progress } from 'src/progress/progress.entity';
@@ -61,7 +60,4 @@ export class TvShow {
 
     @OneToMany(() => CastTvShow, castTvShow => castTvShow.tvShow)
     castTvShow: CastTvShow[];
-
-    @OneToMany(() => CrewTvShow, crewTvShow => crewTvShow.tvShow)
-    crewTvShow: CrewTvShow[];
 }

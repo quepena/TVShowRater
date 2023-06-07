@@ -7,7 +7,6 @@ import entities from './entities';
 import { GenreModule } from './genre/genre.module';
 import { CastModule } from './cast/cast.module';
 import { RoleModule } from './role/role.module';
-import { CrewModule } from './crew/crew.module';
 import { UserModule } from './user/user.module';
 import { TvShowModule } from './tv-show/tv-show.module';
 import { SeasonModule } from './season/season.module';
@@ -38,7 +37,6 @@ import { ProgressModule } from './progress/progress.module';
     GenreModule,
     CastModule,
     RoleModule,
-    CrewModule,
     UserModule,
     TvShowModule,
     SeasonModule,

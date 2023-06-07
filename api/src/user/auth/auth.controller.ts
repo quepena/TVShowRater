@@ -30,8 +30,6 @@ export class AuthController {
 
     @Post('profile')
     getProfile(@Body() token: TokenDto) {
-        console.log(token);
-        
         return this.service.getProfile(token);
     }
 

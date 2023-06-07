@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Genre, Season, Cast, Crew } from 'src/entities';
+import { Genre, Season, Cast } from 'src/entities';
 import { TvShow } from 'src/entities';
 import { Repository } from 'typeorm';
 import { CreateTvShowDto } from './tv-show.dto';

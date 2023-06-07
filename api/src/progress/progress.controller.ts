@@ -36,4 +36,9 @@ export class ProgressController {
     getProgressByUser(@Param('id') id: number) {
         return this.progressService.findProgressByUser(id);
     }
+
+    @Get('/user/:user/show/:show')
+    getProgressByUserByShow(@Param('user') user: number, @Param('show') show: number) {
+        return this.progressService.findProgressByUserByShow(user, show);
+    }
 }

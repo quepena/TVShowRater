@@ -507,6 +507,23 @@ export const apiSlice = createApi({
                 };
             }
         }),
+        findShowProgressByUserByShow: builder.mutation<Array<Object>, { user: number, show: number }>({
+            query: (args) => {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
+                }
+
+                const { user, show } = args
+
+                return {
+                    url: '/progress/user/'+user+"/show/"+show,
+                    method: "get",
+                    headers: headers
+                }
+            }
+        }),
         // login: builder.mutation<
         //     { access_token: string; status: string },
         //     LoginInput
@@ -581,4 +598,5 @@ export const {
     useEditShowMutation,
     useEditListMutation,
     useDeleteListMutation,
+    useFindShowProgressByUserByShowMutation,
 } = apiSlice

@@ -56,13 +56,6 @@ const Show = (props: TvShow) => {
         // console.log(rating);
     }, [])
 
-    // console.log(ratingData);
-    console.log(ratingData);
-    console.log(rating);
-    console.log(userRatingData);
-    console.log(create);
-
-
     const ratingHandler = (rate) => {
         setRating(rate)
         const details = {
@@ -72,33 +65,27 @@ const Show = (props: TvShow) => {
         };
         // createRating(details)
         // refetch()
-        console.log(ratingData);
-        console.log(rating);
-        console.log(rate);
-        console.log(userRatingData);
-        console.log(create);
 
         if ((ratingData && rating != rate && !create) || (userRatingData && userRatingData[0] && rating != rate && !create)) {
             changeRating({ details: details, id: ratingData ? ratingData.id : userRatingData[0].id })
             // createRating(details);
             // deleteRating(userRatingData[0].id)
-            console.log("change");
+            // console.log("change");
             // refetch()
         } else if ((ratingData && rating == rate && !create) || (userRatingData && userRatingData[0] && rating == rate && !create)) {
-            console.log(rating);
-            console.log("delete");
+            // console.log(rating);
+            // console.log("delete");
 
             deleteRating(ratingData ? ratingData.id : userRatingData[0].id)
             setRating(0)
             setCreate(true)
         } else if (rating == 0 && create) {
             createRating(details)
-            console.log("create");
+            // console.log("create");
             setCreate(false)
             // refetch()
         }
         // refetch()
-        console.log("what is going on");
 
     }
 
@@ -156,7 +143,6 @@ const Show = (props: TvShow) => {
 
 
     // console.log(rating);
-    console.log(userRatingData);
 
     // console.log(userRateData);
 
@@ -250,7 +236,7 @@ const Show = (props: TvShow) => {
                         // } 
                         ratingValue={rating} />
                 </div>
-                <p className='text-lg'>Average Rating: {meanData}</p>
+                <p className='text-lg'>Average Rating: {meanData && meanData.toFixed(2)}</p>
                 <div>{rating}</div>
             </div>
 
