@@ -46,6 +46,11 @@ export class EpisodeController {
         return this.episodeService.findEpisodesBySeasons(id);
     }
 
+    @Get('/show/:id')
+    getCountEpisodesByShow(@Param('id') id: number) {
+        return this.episodeService.countAllEpisodes(id);
+    }
+
     @Get('faker/episodes')
     async fakeSeasons() {
         const rounds = 50;

@@ -368,6 +368,21 @@ export const apiSlice = createApi({
                 }
             }
         }),
+        getCountEpsByShow: builder.query<Array<Object>, number>({
+            query(id: number) {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
+                }
+
+                return {
+                    url: '/episodes/show/'+id,
+                    method: "get",
+                    headers: headers
+                }
+            }
+        }),
         search: builder.mutation<Array<Object>, string>({
             query: (name: string) => {
                 const headers = {
@@ -599,4 +614,6 @@ export const {
     useEditListMutation,
     useDeleteListMutation,
     useFindShowProgressByUserByShowMutation,
+    useGetCountEpsByShowQuery,
+
 } = apiSlice
