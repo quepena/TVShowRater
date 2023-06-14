@@ -1,4 +1,4 @@
-import { TvShow, User } from "src/entities";
+import { TvShow, User } from "../entities";
 import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()

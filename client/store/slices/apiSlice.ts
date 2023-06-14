@@ -539,6 +539,21 @@ export const apiSlice = createApi({
                 }
             }
         }),
+        getCastById: builder.query<Cast, number>({
+            query(id: number) {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
+                }
+
+                return {
+                    url: '/cast/'+id,
+                    method: "get",
+                    headers: headers,
+                }
+            }
+        }),
         // login: builder.mutation<
         //     { access_token: string; status: string },
         //     LoginInput
@@ -615,5 +630,5 @@ export const {
     useDeleteListMutation,
     useFindShowProgressByUserByShowMutation,
     useGetCountEpsByShowQuery,
-
+    useGetCastByIdQuery,
 } = apiSlice

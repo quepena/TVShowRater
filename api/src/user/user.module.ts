@@ -5,10 +5,10 @@ import { AuthModule } from './auth/auth.module';
 import { User } from './user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GoogleModule } from './google/google.module';
-import { List } from 'src/list/list.entity';
-import { TvShow } from 'src/entities';
-import { Rating } from 'src/rating/rating.entity';
-import { Review } from 'src/review/review.entity';
+import { List } from '../list/list.entity';
+import { TvShow } from '../entities';
+import { Rating } from '../rating/rating.entity';
+import { Review } from '../review/review.entity';
 
 @Module({
   controllers: [UserController],

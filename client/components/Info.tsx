@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { castTvShow } from '../types/castTvShow';
 import { useEffect, useRef, useState } from 'react';
 import Review from './Review';
+import Link from 'next/link';
 
 const Info = (props) => {
     const { data: showData, error, isLoading } = useGetShowByIdQuery(props.show)
@@ -24,7 +25,7 @@ const Info = (props) => {
         getMe(details)
         // userRatingData?.length == 1 ? null : null
         // getRate({ user: me?.id, show: props.id })
-    }, [])    
+    }, [])
 
     return (
         <div>
@@ -53,21 +54,35 @@ const Info = (props) => {
                                             {
                                                 el?.cast?.photo == "https://image.tmdb.org/t/p/w500/null"
                                                     ?
-                                                    <div className='mr-2'>
-                                                        <div className="w-[140px] h-[200px] relative">
-                                                            <Image src="/placeholder.png" alt={el?.cast?.name} fill />
+                                                    <Link href={{
+                                                        pathname: `/cast/${el?.cast?.name}`, query: {
+                                                            id: el?.cast?.id,
+                                                            name: el?.cast?.name,
+                                                        }
+                                                    }}>
+                                                        <div className='mr-2'>
+                                                            <div className="w-[140px] h-[200px] relative">
+                                                                <Image src="/placeholder.png" alt={el?.cast?.name} fill />
+                                                            </div>
+                                                            <div>{el?.cast?.name}</div>
+                                                            <div className='text-gray-400'>{el?.cast?.roles[0].name}</div>
                                                         </div>
-                                                        <div>{el?.cast?.name}</div>
-                                                        <div className='text-gray-400'>{el?.cast?.roles[0].name}</div>
-                                                    </div>
+                                                    </Link>
                                                     :
-                                                    <div className='mr-2'>
-                                                        <div className="w-[140px] h-[200px] relative">
-                                                            <Image src={el?.cast?.photo} alt={el?.cast?.name} fill />
+                                                    <Link href={{
+                                                        pathname: `/cast/${el?.cast?.name}`, query: {
+                                                            id: el?.cast?.id,
+                                                            name: el?.cast?.name,
+                                                        }
+                                                    }}>
+                                                        <div className='mr-2'>
+                                                            <div className="w-[140px] h-[200px] relative">
+                                                                <Image src={el?.cast?.photo} alt={el?.cast?.name} fill />
+                                                            </div>
+                                                            <div>{el?.cast?.name}</div>
+                                                            <div className='text-gray-400'>{el?.character}</div>
                                                         </div>
-                                                        <div>{el?.cast?.name}</div>
-                                                        <div className='text-gray-400'>{el?.character}</div>
-                                                    </div>
+                                                    </Link>
                                             }
                                         </div>
                                     )

@@ -29,12 +29,14 @@ describe('AuthController', () => {
 
   describe('createUser', () => {
     it('create a new user with', async () => {
-      // expect(await controller.register({ name: 'Que', last_name: 'Pena', password: '12345' })).toEqual({
-      //   id: expect.any(Number),
-      //   name: 'Que',
-      //   last_name: 'Pena',
-      //   password: '12345'
-      // });
+      expect(await controller.register(
+        {
+          name: 'Que', last_name: 'Pena', password: '12345',
+          email: 'quepena@gmail.com', photo: '/profile.png', isAdmin: false
+        })).toEqual({
+          id: expect.any(Number), name: 'Que', last_name: 'Pena', password: '12345',
+          email: 'quepena@gmail.com', photo: '/profile.png', isAdmin: false
+        });
     });
   });
 });
