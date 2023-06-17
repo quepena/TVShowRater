@@ -98,7 +98,7 @@ const Info = (props) => {
                     crewInfo && crewInfo.length > 0
                         ?
                         <div>
-                            <div className='text-3xl font-semibold'>Crew</div>
+                            <div className='text-3xl font-semibold mb-3'>Crew</div>
                             <div className='flex justify-left'>
                                 {
                                     crewInfo?.map((el: castTvShow) =>
@@ -106,21 +106,35 @@ const Info = (props) => {
                                             {
                                                 el?.cast?.photo == "https://image.tmdb.org/t/p/w500/null"
                                                     ?
-                                                    <div className='mr-2'>
-                                                        <div className="w-[140px] h-[200px] relative">
-                                                            <Image src="/placeholder.png" alt={el?.cast?.name} fill />
+                                                    <Link href={{
+                                                        pathname: `/cast/${el?.cast?.name}`, query: {
+                                                            id: el?.cast?.id,
+                                                            name: el?.cast?.name,
+                                                        }
+                                                    }}>
+                                                        <div className='mr-2'>
+                                                            <div className="w-[140px] h-[200px] relative">
+                                                                <Image src="/placeholder.png" alt={el?.cast?.name} fill />
+                                                            </div>
+                                                            <div>{el?.cast?.name}</div>
+                                                            <div className='text-gray-400'>{el?.cast?.roles[0].name}</div>
                                                         </div>
-                                                        <div>{el?.cast?.name}</div>
-                                                        <div className='text-gray-400'>{el?.cast?.roles[0].name}</div>
-                                                    </div>
+                                                    </Link>
                                                     :
-                                                    <div className='mr-2'>
-                                                        <div className="w-[140px] h-[200px] relative">
-                                                            <Image src={el?.cast?.photo} alt={el?.cast?.name} fill />
+                                                    <Link href={{
+                                                        pathname: `/cast/${el?.cast?.name}`, query: {
+                                                            id: el?.cast?.id,
+                                                            name: el?.cast?.name,
+                                                        }
+                                                    }}>
+                                                        <div className='mr-2'>
+                                                            <div className="w-[140px] h-[200px] relative">
+                                                                <Image src={el?.cast?.photo} alt={el?.cast?.name} fill />
+                                                            </div>
+                                                            <div>{el?.cast?.name}</div>
+                                                            <div className='text-gray-400'>{el?.cast?.roles[0].name}</div>
                                                         </div>
-                                                        <div>{el?.cast?.name}</div>
-                                                        <div className='text-gray-400'>{el?.cast?.roles[0].name}</div>
-                                                    </div>
+                                                    </Link>
                                             }
                                         </div>
                                     )}

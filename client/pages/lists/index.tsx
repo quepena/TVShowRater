@@ -19,8 +19,7 @@ const MyShows = () => {
         setQuery(name);
     }
     console.log(searchData);
-    searchData?.map((el) => el.addId ? shows.push(el) : castCrew.push(el))
-    console.log(data);
+    searchData?.map((el) => el.hasOwnProperty('addId') ? shows.push(el) : castCrew.push(el))
 
     useEffect(() => {
         const local = JSON.parse(localStorage.getItem('userInfo'));
@@ -37,13 +36,7 @@ const MyShows = () => {
     useEffect(() => {
         search(query)
     }, [query])
-
-
-    // console.log(query);
-
-    // console.log(searchData);
-
-
+    
     return (
         <div className='mx-auto max-w-5xl'>
             {
@@ -84,7 +77,7 @@ const MyShows = () => {
                                                         {
                                                             castCrew.map((el) =>
                                                                 <div className='mr-2 w-full'>
-                                                                    <div className="w-[180px] h-[280px] relative mr-5">
+                                                                    <div className="w-[180px] h-[280px] relative">
                                                                         <Image src={el.photo != "https://image.tmdb.org/t/p/w500/null" ? el.photo : '/placeholder.png'} alt={el.name} fill />
                                                                     </div>
                                                                     <div className='text-xl'>{el.name}</div>

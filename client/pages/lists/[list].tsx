@@ -92,21 +92,12 @@ const List = (props) => {
     setShows([...newShows])
     const newShowsIds = newShows.map((el) => parseInt(el.id))
 
-    console.log(newShowsIds);
-
-
     const details = {
       user: me?.id,
       name: data?.name,
       tvShows: [...newShowsIds]
     }
-
-    console.log(details);
-
-    console.log(details.user);
-
-
-
+    
     editList({ id: parseInt(props.id), details: details })
   }
 

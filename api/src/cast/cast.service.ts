@@ -98,7 +98,7 @@ export class CastService {
     async findCastById(id: number) {
         return await this.castRepository.findOne({
             where: { id: id },
-            relations: ['castTvShow', 'castTvShow.tvShow']
+            relations: ['castTvShow', 'castTvShow.tvShow', 'roles']
         });
     }
 

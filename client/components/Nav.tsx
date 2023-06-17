@@ -24,14 +24,14 @@ const Nav = () => {
   }, [])
 
   return (
-    <nav className='bg-sky-400 mb-7 sticky top-0 z-50'>
+    <nav className='bg-sky-400 mb-12 sticky top-0 z-50'>
       <main className='my-0 mx-auto max-w-7xl text-center'>
         <div className='flex justify-between items-center'>
           <div className='flex justify-center text-xl'>
             {/* <div className='pt-3 mr-2 my-5 font-semibold text-2xl'>TVShowRater</div>
               <div className='bg-sky-600 p-8'>Home</div>
               <div className='hover:bg-sky-600 p-8'>My Shows</div> */}
-            <Link href="/" className='font-semibold text-2xl'>
+            <Link href="/" className='font-semibold text-2xl mr-4'>
               {/* <img className='logo' src="https://see.fontimg.com/api/renderfont4/GO3ED/eyJyIjoiZnMiLCJoIjo1MiwidyI6MTAwMCwiZnMiOjUyLCJmZ2MiOiIjRkZGRkZGIiwiYmdjIjoiIzAwMDAwMCIsInQiOjF9/Qi5T/creattion-demo.png" alt="" /> */}
               TVShowRater
             </Link>
@@ -50,18 +50,20 @@ const Nav = () => {
                       !isOpen ? (
                         <AiOutlineCaretDown className="" />
                       ) : (
-                        <AiOutlineCaretUp className="" />
+                        <div className='static right-[545px] top-[35px]'>
+                          <AiOutlineCaretUp className="" />
+                        </div>
                       )
                     }
                   </button>
-                  <div>
-                    {
-                      isOpen &&
-                      <div>
-                        <Link onClick={() => setIsOpen(false)} href="/admin">Admin panel</Link>
-                      </div>
-                    }
-                  </div>
+                  {
+                    isOpen &&
+                    <div>
+                      <Link onClick={() => setIsOpen(false)} href="/admin">
+                        <div className='absolute top-[70px] right-[520px] bg-gray-100 p-2 border-2 border-black rounded-lg'>Admin panel</div>
+                      </Link>
+                    </div>
+                  }
                   <div className='p-8'>Hello, {me?.name}</div>
                   <div style={{ display: 'inline-block', position: 'relative', width: '70px', height: '70px', overflow: 'hidden', borderRadius: '50%', margin: 'auto' }}>
                     <img style={{ width: 'auto', height: '100%' }} src={me?.photo} alt="" />
