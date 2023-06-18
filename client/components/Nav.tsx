@@ -10,6 +10,7 @@ const Nav = () => {
   const router = useRouter()
   const [getMe, { data: me }] = useGetMeMutation()
   const [isOpen, setIsOpen] = useState(false)
+  const [loc, setLoc] = useState({})
 
   useEffect(() => {
     if (localStorage.getItem('userInfo') == null || localStorage.getItem('userInfo') == "" || !localStorage.getItem('userInfo'))
@@ -22,6 +23,14 @@ const Nav = () => {
       getMe(details)
     }
   }, [])
+
+  useEffect(() => {
+    if(me && me.hasOwnProperty("id"))
+      setLoc(me)
+  }, [me])
+
+  console.log(loc);
+  
 
   return (
     <nav className='bg-sky-400 mb-12 sticky top-0 z-50'>
@@ -36,7 +45,8 @@ const Nav = () => {
               TVShowRater
             </Link>
             {
-              me ?
+              // localStorage.getItem('userInfo') && (localStorage.getItem('userInfo') != null || localStorage.getItem('userInfo') != "" || !localStorage.getItem('userInfo')) 
+              loc && loc.hasOwnProperty("id") ?
                 <NavBar navButtons={navButtons} />
                 : <></>
             }
@@ -59,9 +69,14 @@ const Nav = () => {
                   {
                     isOpen &&
                     <div>
-                      <Link onClick={() => setIsOpen(false)} href="/admin">
-                        <div className='absolute top-[70px] right-[520px] bg-gray-100 p-2 border-2 border-black rounded-lg'>Admin panel</div>
+                      <Link className='absolute top-[70px] right-[520px] w-52 bg-gray-100 p-2 border-2 border-black' onClick={() => setIsOpen(false)} href="/admin">
+                        <div>Admin panel</div>
                       </Link>
+                      <button onClick={() => {
+                        localStorage.removeItem("userInfo");
+                        setIsOpen(false)
+                        router.push("/login");
+                      }} className='absolute top-[115px] right-[520px] w-52 bg-gray-100 p-2 border-2 border-black'><div>Logout</div></button>
                     </div>
                   }
                   <div className='p-8'>Hello, {me?.name}</div>
