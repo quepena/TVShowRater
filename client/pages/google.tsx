@@ -52,7 +52,7 @@ const loginForm = () => {
     };
 
     useEffect(() => {
-        if (isSuccess) {
+        if (data) {
             console.log("token sucessfully generated");
             if (data) {
                 localStorage.setItem('userInfo', JSON.stringify(data['token' as keyof Object]));

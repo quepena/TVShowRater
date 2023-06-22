@@ -69,13 +69,13 @@ export class TvShowController {
         //     return Math.floor(Math.random() * (max - min) + min);
         // }
 
-        for (let index = 1; index <= rounds; index++) {
-            // for (let index = 0; index < rounds; index++) {
-            const round = index;
+        // for (let index = 1; index <= rounds; index++) {
+        //     // for (let index = 0; index < rounds; index++) {
+        //     const round = index;
 
             const options = {
                 method: 'GET',
-                url: `https://api.themoviedb.org/3/tv/${round}?language=en-US`,
+                url: `https://api.themoviedb.org/3/tv/popular?language=en-US&page=3`,
                 headers: {
                     accept: 'application/json',
                     Authorization: process.env.TMDB_AUTH
@@ -90,7 +90,7 @@ export class TvShowController {
             // console.log(allGenre.tvShow.start_date)
 
             const genreList = []
-            if (allGenre.genres) {
+            if (allGenre.results.genre_ids) {
                 for (const element of allGenre.genres) {
                     const genre = await this.genreService.findGenreByName(element.name)
 
@@ -107,20 +107,25 @@ export class TvShowController {
 
             //     genreList.push(genreAsync);
             // });
+            
+            for (let index = 0; index <= allGenre.results.length; index++) {
 
-            const youtube = await fetch(`https://api.themoviedb.org/3/tv/${round}/videos?language=en-US`, options)
+            const youtube = await fetch(`https://api.themoviedb.org/3/tv/${allGenre.results[index].id}/videos?language=en-US`, options)
             const youtubeRes = await youtube.json()
             console.log(youtubeRes.status_code == "34" ? "hey" : youtubeRes.results[0]?.key);
             // console.log(youtubeRes);
 
 
 
-            const addId = await fetch(`https://api.themoviedb.org/3/tv/${round}/external_ids`, options)
+            const addId = await fetch(`https://api.themoviedb.org/3/tv/${allGenre.results[index].id}/external_ids`, options)
             const addIdRes = await addId.json()
             console.log(allGenre);
             // console.log(allGenre.episode_run_time[0]);
 
-            const lenghtNew = allGenre.status_code == "34" ? null : allGenre.episode_run_time[0]
+            const allGenre2 = await fetch(`https://api.themoviedb.org/3/tv/${allGenre.results[index].id}?language=en-US`, options)
+            const allGenre2Res = await allGenre2.json()
+
+            const lenghtNew = allGenre2Res.status_code == "34" ? null : allGenre2Res.episode_run_time[0]
 
 
 
@@ -129,10 +134,12 @@ export class TvShowController {
 
 
             // const genre = this.genreService.findGenreByName()
-            if (allGenre.status_code != "34")
-                this.tvShowService.createTvShow({ name: allGenre.name, genres: genreList, description: allGenre.overview, country: allGenre.origin_country, photo: `https://image.tmdb.org/t/p/w500/${allGenre.poster_path}`, length: lenghtNew, trailer: `https://www.youtube.com/watch?v=${youtubeRes.status_code == "34" ? null : youtubeRes.results[0]?.key}`, year: allGenre.first_air_date, addId: addIdRes.imdb_id })
+            console.log(allGenre2Res);
+            
+            if (allGenre2Res.status_code != "34")
+                this.tvShowService.createTvShow({ name: allGenre2Res.name, genres: genreList, description: allGenre2Res.overview, country: allGenre2Res.origin_country, photo: `https://image.tmdb.org/t/p/w500/${allGenre2Res.poster_path}`, length: lenghtNew, trailer: `https://www.youtube.com/watch?v=${youtubeRes.status_code == "34" ? null : youtubeRes.results[0]?.key}`, year: allGenre2Res.first_air_date, addId: addIdRes.imdb_id })
         }
 
-        return 0;
+        // return 0;
     }
 }

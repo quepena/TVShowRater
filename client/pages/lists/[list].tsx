@@ -160,7 +160,7 @@ const List = (props) => {
                 )
               }
             </div>
-            <div className='flex flex-col'>
+            <div className='flex flex-col mt-5'>
               <div>
                 <SearchShows handleSearch={handleSearch} />
               </div>

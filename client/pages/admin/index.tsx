@@ -37,19 +37,21 @@ const Admin = () => {
                 {
                     query && show?.map((el) =>
                         <div className='mr-2 w-full'>
-                            <button>
-                                <div className={`w-[180px] h-[280px] relative`}>
-                                    <Image src={el.photo != "https://image.tmdb.org/t/p/w500/null" ? el.photo : '/placeholder.png'}
-                                        alt={el.name} fill />
-                                </div>
-                            </button>
-                            <div className="">{el.name}</div>
+                            <div>
+                                <button>
+                                    <div className={`w-[180px] h-[280px] relative`}>
+                                        <Image src={el.photo != "https://image.tmdb.org/t/p/w500/null" ? el.photo : '/placeholder.png'}
+                                            alt={el.name} fill />
+                                    </div>
+                                </button>
+                                <div className="">{el.name}</div>
+                            </div>
                             <Link href={{
                                 pathname: `/admin/edit`, query: {
                                     id: el.id,
                                 }
                             }}>
-                                <FontAwesomeIcon className='text-blue-500 text-2xl' icon={faPenToSquare} />
+                                <FontAwesomeIcon className='text-blue-500 text-2xl mr-2' icon={faPenToSquare} />
                             </Link>
                             <button onClick={() => handleDelete(el.id)}>
                                 <FontAwesomeIcon className='text-red-600 text-2xl' icon={faTrash} />

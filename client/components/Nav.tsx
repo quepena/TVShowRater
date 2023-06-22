@@ -46,7 +46,7 @@ const Nav = () => {
             </Link>
             {
               // localStorage.getItem('userInfo') && (localStorage.getItem('userInfo') != null || localStorage.getItem('userInfo') != "" || !localStorage.getItem('userInfo')) 
-              loc && loc.hasOwnProperty("id") ?
+              me ?
                 <NavBar navButtons={navButtons} />
                 : <></>
             }
@@ -69,14 +69,14 @@ const Nav = () => {
                   {
                     isOpen &&
                     <div>
-                      <Link className='absolute top-[70px] right-[520px] w-52 bg-gray-100 p-2 border-2 border-black' onClick={() => setIsOpen(false)} href="/admin">
+                      <Link className='absolute top-[70px] right-[620px] w-52 bg-gray-100 p-2 border-2 border-black' onClick={() => setIsOpen(false)} href="/admin">
                         <div>Admin panel</div>
                       </Link>
-                      <button onClick={() => {
+                      {/* <button onClick={() => {
                         localStorage.removeItem("userInfo");
                         setIsOpen(false)
                         router.push("/login");
-                      }} className='absolute top-[115px] right-[520px] w-52 bg-gray-100 p-2 border-2 border-black'><div>Logout</div></button>
+                      }} className='absolute top-[115px] right-[520px] w-52 bg-gray-100 p-2 border-2 border-black'><div>Logout</div></button> */}
                     </div>
                   }
                   <div className='p-8'>Hello, {me?.name}</div>

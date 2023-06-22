@@ -105,96 +105,111 @@ export class SeasonController {
 
     @Get('faker/seasons')
     async fakeSeasons() {
-        const rounds = 15;
+        // const rounds = 15;
         // function getRandomInt(min, max) {
         //     min = Math.ceil(min);
         //     max = Math.floor(max);
         //     return Math.floor(Math.random() * (max - min) + min);
-        // }
+        const options = {
+            method: 'GET',
+            url: `https://api.themoviedb.org/3/tv/popular?language=en-US&page=2`,
+            headers: {
+                accept: 'application/json',
+                Authorization: process.env.TMDB_AUTH
+            }
+        };
 
-        for (let index = 1; index <= rounds; index++) {
-            for (let ix = 1; ix <= rounds; ix++) {
-                const round = index;
+        const res = await fetch(options.url, options)
+        const allGenre = await res.json();
 
-                const options = {
-                    method: 'GET',
-                    url: `https://api.themoviedb.org/3/tv/${round}/season/${ix}?language=en-US`,
-                    headers: {
-                        accept: 'application/json',
-                        Authorization: process.env.TMDB_AUTH
-                    }
-                };
+        for (let index = 0; index <= allGenre.results.length; index++) {
+            const addId = await fetch(`https://api.themoviedb.org/3/tv/${allGenre.results[index].id}/external_ids`, options)
+            const addIdRes = await addId.json()
+            // }
 
-                const res = await fetch(options.url, options)
-                const allCast = await res.json();
-                // console.log(round);
-                // console.log(ix);
+            const show = await this.tvShowService.findTVShowByAddId(addIdRes.imdb_id)
+            console.log(addIdRes.imdb_id);
+                for (let ix = 1; ix <= allGenre.results.length; ix++) {
 
-                // console.log(allCast);
+                    const options = {
+                        method: 'GET',
+                        url: `https://api.themoviedb.org/3/tv/${allGenre.results[index].id}/season/${ix}?language=en-US`,
+                        headers: {
+                            accept: 'application/json',
+                            Authorization: process.env.TMDB_AUTH
+                        }
+                    };
 
+                    const res = await fetch(options.url, options)
+                    const allCast = await res.json();
+                    // console.log(round);
+                    // console.log(ix);
 
-                if (allCast.success == false) {
                     // console.log(allCast);
-                    break;
-                }
-                else {
-                    const addId = await fetch(`https://api.themoviedb.org/3/tv/${round}/external_ids`, options)
-                    const addIdRes = await addId.json()
-                    const show = await this.tvShowService.findTVShowByAddId(addIdRes.imdb_id)
-                    console.log(addIdRes.imdb_id);
 
-                    if (addIdRes.imdb_id != null) {
-                        const season = await this.seasonService.createSeason({ tvShow: show.id, numSeason: ix })
+
+                    if (allCast.success == false) {
                         // console.log(allCast);
+                        break;
+                    }
+                    else {
+                        const addId = await fetch(`https://api.themoviedb.org/3/tv/${allGenre.results[index].id}/external_ids`, options)
+                        const addIdRes = await addId.json()
+                        const show = await this.tvShowService.findTVShowByAddId(addIdRes.imdb_id)
+                    
 
-                        // console.log(allGenre);
+                        if (addIdRes.imdb_id != null && show) {
+                            const season = await this.seasonService.createSeason({ tvShow: show.id, numSeason: ix })
+                            // console.log(allCast);
 
-                        // const show = await this.tvShowService.findShowByName(allGenre.tvShow.name);
-                        // console.log(allGenre.tvShow.start_date)
+                            // console.log(allGenre);
 
-                        // const castList = []
-                        // if (allCast.cast.length > 0) {
-                        console.log(allCast.success);
+                            // const show = await this.tvShowService.findShowByName(allGenre.tvShow.name);
+                            // console.log(allGenre.tvShow.start_date)
 
-                        // console.log("hey "+allCast.episodes[0].id);
+                            // const castList = []
+                            // if (allCast.cast.length > 0) {
 
-                        for (const element of allCast.episodes) {
-                            // console.log(element.name);
+                            // console.log("hey "+allCast.episodes[0].id);
 
-                            // const genre = await this.castService.findGenreByName(element.name)
-                            // const cast = await fetch(`https://api.themoviedb.org/3/person/${element.id}?language=en-US`, options)
-                            // const castRes = await cast.json()
-                            // console.log(castRes);
-                            this.episodeService.createEpisode({ name: element.name, season: season.id, numEp: element.episode_number })
+                            for (const element of allCast.episodes) {
+                                console.log(element.name);
 
-                            // const exists = await this.castService.findCastByName(castRes.name)
-                            // // if (!exists) {
-                            // await this.castService.createCast({ name: castRes.name, photo: `https://image.tmdb.org/t/p/w500/${castRes.profile_path}`, biography: castRes.biography, roles: [1] })
-                            // const elNew = await this.castService.findCastByName(castRes.name)
-                            // const addId = await fetch(`https://api.themoviedb.org/3/tv/${round}/external_ids`, options)
-                            // const addIdRes = await addId.json()
-                            // console.log(round);
+                                // const genre = await this.castService.findGenreByName(element.name)
+                                // const cast = await fetch(`https://api.themoviedb.org/3/person/${element.id}?language=en-US`, options)
+                                // const castRes = await cast.json()
+                                // console.log(castRes);
+                                this.episodeService.createEpisode({ name: element.name, season: season.id, numEp: element.episode_number })
+
+                                // const exists = await this.castService.findCastByName(castRes.name)
+                                // // if (!exists) {
+                                // await this.castService.createCast({ name: castRes.name, photo: `https://image.tmdb.org/t/p/w500/${castRes.profile_path}`, biography: castRes.biography, roles: [1] })
+                                // const elNew = await this.castService.findCastByName(castRes.name)
+                                // const addId = await fetch(`https://api.themoviedb.org/3/tv/${round}/external_ids`, options)
+                                // const addIdRes = await addId.json()
+                                // console.log(round);
 
 
-                            // // console.log(element.id);
+                                // // console.log(element.id);
 
-                            // // console.log(castResult.id);
+                                // // console.log(castResult.id);
 
-                            // const elTv = await this.tvShowService.findTVShowByAddId(addIdRes.imdb_id)
-                            // console.log(elTv.addId);
+                                // const elTv = await this.tvShowService.findTVShowByAddId(addIdRes.imdb_id)
+                                // console.log(elTv.addId);
 
-                            // // console.log(await elNew);
-                            // // console.log(await elTv)
+                                // // console.log(await elNew);
+                                // // console.log(await elTv)
 
-                            // await this.castService.createCharacter({ character: element.roles[0].character, cast: elNew.id, tvShow: elTv.id })
-                            // // }
-                            // // else continue
+                                // await this.castService.createCharacter({ character: element.roles[0].character, cast: elNew.id, tvShow: elTv.id })
+                                // // }
+                                // // else continue
 
-                            // // genreList.push(genre.id);
+                                // // genreList.push(genre.id);
+                            }
                         }
                     }
                 }
-            }
+            
         }
 
         return 0;

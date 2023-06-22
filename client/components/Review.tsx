@@ -30,7 +30,7 @@ const Review = (props) => {
         else if (reviewData) {
             setReviews([...reviewData])
         }
-    }, [props])    
+    }, [props])
 
     return (
         <div>
@@ -40,9 +40,11 @@ const Review = (props) => {
                         <div className='ml-5' style={{ display: 'inline-block', position: 'relative', width: '70px', height: '70px', overflow: 'hidden', borderRadius: '50%' }}>
                             <img style={{ width: 'auto', height: '100%' }} src={el.user.photo} alt="" />
                         </div>
-                        <Stars props={el} />
                         <div className='flex flex-col ml-8'>
-                            <div className='text-xl'>{el.user.name} {el.user.last_name}</div>
+                            <div className='flex'>
+                                <div className='text-xl'>{el.user.name} {el.user.last_name}</div>
+                                <div className='mt-[5px] ml-3'><Stars props={el} /></div>
+                            </div>
                             <div>{el.review}</div>
                         </div>
                     </div>
