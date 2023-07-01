@@ -33,6 +33,9 @@ const loginForm = () => {
       email: values.email
     }
 
+    console.log(details);
+    
+
     loginUser(details);
   };
   const handleChange = (
