@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User, TvShow, Episode } from 'src/entities';
+import { User, Episode } from 'src/entities';
 import { Repository } from 'typeorm';
 import { CreateProgressDto } from './progress.dto';
 import { Progress } from './progress.entity';
@@ -10,7 +10,6 @@ export class ProgressService {
     constructor(
         @InjectRepository(Progress) private readonly progressRepository: Repository<Progress>,
         @InjectRepository(User) private readonly userRepository: Repository<User>,
-        // @InjectRepository(TvShow) private readonly tvShowRepository: Repository<TvShow>,
         @InjectRepository(Episode) private readonly episodeRepository: Repository<Episode>,
     ) { }
 
@@ -18,7 +17,6 @@ export class ProgressService {
         const { user, episode } = progressDetails;
         const progress = new Progress();
         progress.user = await this.userRepository.findOne({ where: { id: user } })
-        // progress.tvShow = await this.tvShowRepository.findOne({ where: { id: tvShow } })
         progress.episode = await this.episodeRepository.findOne({ where: { id: episode } })
 
         return await this.progressRepository.save(progress);
@@ -28,7 +26,6 @@ export class ProgressService {
         return await this.progressRepository.find({
             relations: {
                 user: true,
-                // tvShow: true,
                 episode: true,
             }
         });
@@ -39,7 +36,6 @@ export class ProgressService {
             where: { id: id },
             relations: {
                 user: true,
-                // tvShow: true,
                 episode: true,
             }
         })
@@ -53,7 +49,6 @@ export class ProgressService {
         const { user, episode } = progressDetails;
         const progress = new Progress();
         progress.user = await this.userRepository.findOne({ where: { id: user } })
-        // progress.tvShow = await this.tvShowRepository.findOne({ where: { id: tvShow } })
         progress.episode = await this.episodeRepository.findOne({ where: { id: episode } })
 
         const newProgress = await this.progressRepository.save(
@@ -68,7 +63,6 @@ export class ProgressService {
             where: { user: { id: id } },
             relations: {
                 user: true,
-                // tvShow: true,
                 episode: true,
             }
         })

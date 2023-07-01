@@ -1,12 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import { Auth } from "../../types/auth"
 import { List } from "../../types/list"
 import { Rating } from "../../types/rating"
 import { TvShow } from "../../types/tvShow"
 import { User } from "../../types/user"
 import { Review } from "../../types/review"
 import { Progress } from "../../types/progress"
-import { Genre } from "../../types/genre"
 
 export const apiSlice = createApi({
     reducerPath: 'api',
@@ -73,7 +71,6 @@ export const apiSlice = createApi({
 
                 return {
                     url: '/auth/profile',
-                    //   credentials: 'include',
                     body: details,
                     headers: headers,
                     method: "post",
@@ -421,9 +418,6 @@ export const apiSlice = createApi({
                     'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
                 }
 
-                console.log(details);
-                
-
                 return {
                     url: '/progress',
                     method: "post",
@@ -439,10 +433,7 @@ export const apiSlice = createApi({
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS'
                 }
-
-                console.log(details);
                 
-
                 return {
                     url: '/lists',
                     method: "post",

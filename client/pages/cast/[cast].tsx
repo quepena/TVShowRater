@@ -11,9 +11,6 @@ const Cast = (props) => {
 
     const { data: castData, isSuccess } = useGetCastByIdQuery(props.id)
 
-    console.log(castData);
-
-
     return (
         <div>
             {

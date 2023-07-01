@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { useDeleteListMutation, useEditListMutation, useGetListByIdMutation, useGetMeMutation, useGetShowByIdQuery, useSearchShowsMutation } from '../../store/slices/apiSlice';
+import {
+  useDeleteListMutation, useEditListMutation,
+  useGetListByIdMutation, useGetMeMutation,
+  useGetShowByIdQuery, useSearchShowsMutation
+} from '../../store/slices/apiSlice';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -13,32 +17,20 @@ const List = (props) => {
   const [getListsById, { data, isSuccess }] = useGetListByIdMutation()
   const [id, setId] = useState()
   const { data: showData } = useGetShowByIdQuery(id)
-  console.log(showData);
-  console.log(props.id);
 
   useEffect(() => {
     getListsById(props.id)
   }, [])
-  
 
-  console.log(data);
-
-  const [editList, { data: editData }] = useEditListMutation()
-  const [deleteList, { isSuccess: isDeleteSuccess }] = useDeleteListMutation()
+  const [editList] = useEditListMutation()
+  const [deleteList] = useDeleteListMutation()
 
   const [shows, setShows] = useState([])
 
-  console.log(shows);
-
-
   useEffect(() => {
-    console.log(data);
-
     if (data)
       setShows([...data.tvShows])
   }, [data])
-
-  console.log(shows);
 
   const [getMe, { data: me }] = useGetMeMutation()
 
@@ -57,7 +49,7 @@ const List = (props) => {
   }
 
   const [showsObj, setShowsObj] = useState([{}])
-  const [added, setAdded] = useState(false)
+  const [setAdded] = useState(false)
 
   const addShow = (el, e) => {
     e.preventDefault()
@@ -72,9 +64,6 @@ const List = (props) => {
     setShowsObj([...newShows])
   }
 
-  console.log(shows);
-
-
   useEffect(() => {
     search(query)
   }, [query])
@@ -85,8 +74,6 @@ const List = (props) => {
 
   const handleDeleteShow = (e, el) => {
     e.preventDefault()
-    console.log(el);
-    console.log(shows);
     let allShows = [...shows]
     const newShows = allShows.filter((element) => element != el)
     setShows([...newShows])
@@ -97,7 +84,7 @@ const List = (props) => {
       name: data?.name,
       tvShows: [...newShowsIds]
     }
-    
+
     editList({ id: parseInt(props.id), details: details })
   }
 
@@ -170,7 +157,6 @@ const List = (props) => {
                     <div className='mr-2 w-full'>
                       {
                         <button disabled={shows.some(element => element.photo == el.photo) ? true : false} onClick={(e) => {
-                          console.log(showsObj.some(element => element.photo == el.photo));
                           !showsObj.some(element => element.photo == el.photo) ?
                             addShow(el, e) : deleteShow(el, e)
                         }}>
@@ -205,7 +191,6 @@ const List = (props) => {
 export default List
 
 export const getServerSideProps = (context) => {
-  console.log(context);
   return {
 
     props: {

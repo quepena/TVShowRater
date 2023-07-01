@@ -1,8 +1,5 @@
-import { MutationDefinition } from "@reduxjs/toolkit/dist/query";
-import axios from "axios";
 import router from "next/router";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import Input from "../components/Input";
 import { validate } from "../components/Validation";
 import { useRegisterMutation } from "../store/slices/apiSlice";
@@ -25,7 +22,6 @@ const registerForm = () => {
 
   const [registerUser, { isLoading, isSuccess, error, isError, data }] = useRegisterMutation();
 
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const errors = validate(values);
@@ -43,10 +39,8 @@ const registerForm = () => {
       photo: "",
       isAdmin: false,
     }
-    console.log(details);
 
     registerUser(details);
-    console.log(isLoading, isSuccess, error, isError);
   };
   const handleChange = (
     e:
@@ -61,15 +55,12 @@ const registerForm = () => {
 
   useEffect(() => {
     if (data) {
-      console.log("token sucessfully generated");
       if (data) {
         localStorage.setItem('userInfo', JSON.stringify(data['token' as keyof Object]));
       }
 
       router.push('/')
     } else if (error) {
-      console.log(error['data' as keyof Object]['message' as keyof Object]);
-
       const message: string = JSON.stringify(error['data' as keyof Object]['message' as keyof Object]).replace(/['"]+/g, '')
 
       setValues({ password: "", email: "", name: "", last_name: "", photo: "", isAdmin: false });

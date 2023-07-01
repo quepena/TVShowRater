@@ -10,9 +10,7 @@ export class TvShowService {
     constructor(
         @InjectRepository(TvShow) private readonly tvShowRepository: Repository<TvShow>,
         @InjectRepository(Genre) private readonly genreRepository: Repository<Genre>,
-        @InjectRepository(Season) private readonly seasonRepository: Repository<Season>,
         @InjectRepository(Cast) private readonly castRepository: Repository<Cast>,
-        // @InjectRepository(Crew) private readonly crewRepository: Repository<Crew>,
     ) { }
 
     async createTvShow(tvShowDetails: CreateTvShowDto): Promise<TvShow> {
@@ -31,7 +29,7 @@ export class TvShowService {
             const genre = await this.genreRepository.findOne({
                 where: { id: genres[i] }
             });
-            
+
             tvShow.genres.push(genre);
         }
 
@@ -49,8 +47,9 @@ export class TvShowService {
     async findTVShowById(id: number) {
         return this.tvShowRepository.findOne({
             where: { id: id }, relations: {
-            genres: true
-        }})
+                genres: true
+            }
+        })
     }
 
     async findTVShowByAddId(addId: string) {
@@ -63,8 +62,8 @@ export class TvShowService {
     }
 
     async findShowByName(name: string) {
-    return this.tvShowRepository.findOneBy({ name: name })
-  }
+        return this.tvShowRepository.findOneBy({ name: name })
+    }
 
     async deleteTVShow(id: number) {
         return await this.tvShowRepository.delete(id);
@@ -89,14 +88,6 @@ export class TvShowService {
             tvShow.genres.push(genre);
         }
 
-        // tvShow.seasons = [];
-        // for (let i = 0; i < seasons.length; i++) {
-        //     const season = await this.seasonRepository.findOne({
-        //         where: { id: seasons[i] }
-        //     });
-        //     tvShow.seasons.push(season);
-        // }
-
         const newShow = await this.tvShowRepository.save(
             { id: Number(id), name: tvShow.name, photo: tvShow.photo, description: tvShow.description, length: tvShow.length, trailer: tvShow.trailer, country: tvShow.trailer, genres: tvShow.genres, addId: tvShow.addId, year: tvShow.year }
         )
@@ -109,58 +100,28 @@ export class TvShowService {
     }
 
     async search(name: string) {
-        // console.log(country.split('-'), typeof country);
-        // let countryArr = country.split('-');
-        // console.log(typeof countryArr);
-        
-        // // let countries: string[] = []
-        // // countryArr.forEach((country) => countries.push(country))
-        // // console.log(name, countries);
-        // if (countryArr.length === 0) {
-            const show = await this.tvShowRepository.createQueryBuilder("tvshow")
-                .select()
-                .where("LOWER(REPLACE(tvshow.name, ' ', '')) like LOWER(REPLACE(:name, ' ', ''))", { name: `%${name}%` })
-                .take(6)
-                .getMany()
+        const show = await this.tvShowRepository.createQueryBuilder("tvshow")
+            .select()
+            .where("LOWER(REPLACE(tvshow.name, ' ', '')) like LOWER(REPLACE(:name, ' ', ''))", { name: `%${name}%` })
+            .take(6)
+            .getMany()
 
-            const castSearch = await this.castRepository.createQueryBuilder("cast")
-                .select()
-                .where("LOWER(REPLACE(cast.name, ' ', '')) like LOWER(REPLACE(:name, ' ', ''))", { name: `%${name}%` })
-                .take(6)
-                .getMany()
+        const castSearch = await this.castRepository.createQueryBuilder("cast")
+            .select()
+            .where("LOWER(REPLACE(cast.name, ' ', '')) like LOWER(REPLACE(:name, ' ', ''))", { name: `%${name}%` })
+            .take(6)
+            .getMany()
 
-            // const crew = await this.crewRepository.createQueryBuilder("crew")
-            //     .select()
-            //     .where("LOWER(REPLACE(crew.name, ' ', '')) like LOWER(REPLACE(:name, ' ', ''))", { name: `%${name}%` })
-            //     .getMany()
-
-            return [...show, ...castSearch]
-        //     else if (cast.length > 0) return cast
-        //     // else if (crew.length > 0) return crew
-        //     // else if (cast.length > 0 && crew.length > 0) return cast
-        // } else {
-        //     //LOWER(REPLACE(tvshow.name, ' ', '')) like LOWER(REPLACE(:name, ' ', '')) and 
-        //     const countryQuery = await this.tvShowRepository.createQueryBuilder("tvshow")
-        //         .select()
-        //         .where("LOWER(tvshow.country) like LOWER(:country)", { country: `%${name}%` })
-        //         .getMany()
-
-        //     const genre = await this.genreRepository.createQueryBuilder("genre")
-        //         .select()
-        //         .where("LOWER(REPLACE(crew.name, ' ', '')) like LOWER(REPLACE(:name, ' ', '')) and tvshow.country like :country", { name: `%${name}%` })
-        //         .getMany()
-
-        //     return countryQuery
-        // }
+        return [...show, ...castSearch]
     }
 
     async searchShows(name: string) {
-            const show = await this.tvShowRepository.createQueryBuilder("tvshow")
-                .select()
-                .where("LOWER(REPLACE(tvshow.name, ' ', '')) like LOWER(REPLACE(:name, ' ', ''))", { name: `%${name}%` })
-                .take(6)
-                .getMany()
+        const show = await this.tvShowRepository.createQueryBuilder("tvshow")
+            .select()
+            .where("LOWER(REPLACE(tvshow.name, ' ', '')) like LOWER(REPLACE(:name, ' ', ''))", { name: `%${name}%` })
+            .take(6)
+            .getMany()
 
-            return show
+        return show
     }
 }

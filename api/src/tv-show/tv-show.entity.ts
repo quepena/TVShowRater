@@ -1,6 +1,5 @@
-import { Genre, Season, Cast, CastTvShow } from 'src/entities';
+import { Genre, Season, CastTvShow } from 'src/entities';
 import { List } from 'src/list/list.entity';
-import { Progress } from 'src/progress/progress.entity';
 import { Rating } from 'src/rating/rating.entity';
 import { Review } from 'src/review/review.entity';
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
@@ -45,18 +44,11 @@ export class TvShow {
     @JoinTable()
     lists: List[]
 
-    // @OneToMany(type => Progress, progress => progress.tvShow)
-    // progress: Progress[];
-
     @OneToMany(type => Rating, rating => rating.tvShow)
     ratings: Rating[];
 
     @OneToMany(type => Review, review => review.tvShow)
     reviews: Review[];
-
-    // @ManyToMany(type => Cast, cast => cast.tvShows)
-    // @JoinTable()
-    // cast: Cast[]
 
     @OneToMany(() => CastTvShow, castTvShow => castTvShow.tvShow)
     castTvShow: CastTvShow[];

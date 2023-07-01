@@ -15,9 +15,6 @@ export class Cast {
   @Column({ nullable: true })
   biography: string;
 
-  // @ManyToMany(type => TvShow, tvShow => tvShow.cast)
-  // tvShows: TvShow[];
-
   @ManyToMany(type => Role, {
     cascade: true,
     onDelete: 'CASCADE',

@@ -1,8 +1,5 @@
-import { MutationDefinition } from "@reduxjs/toolkit/dist/query";
-import axios from "axios";
 import router from "next/router";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import Input from "../components/Input";
 import { validate } from "../components/Validation";
 import { useLoginMutation } from "../store/slices/apiSlice";
@@ -35,10 +32,8 @@ const loginForm = () => {
       password: values.password,
       email: values.email
     }
-    console.log({ password: values.password, email: values.email });
 
     loginUser(details);
-    console.log(isLoading, isSuccess, error, isError);
   };
   const handleChange = (
     e:
@@ -53,13 +48,10 @@ const loginForm = () => {
 
   useEffect(() => {
     if (data) {
-      console.log("token sucessfully generated");
       localStorage.setItem('userInfo', JSON.stringify(data['token' as keyof Object]));
 
       router.push('/')
     } else if (error) {
-      console.log(error['data' as keyof Object]['message' as keyof Object]);
-
       const message: string = JSON.stringify(error['data' as keyof Object]['message' as keyof Object]).replace(/['"]+/g, '')
 
       setValues({ password: "", email: "" });

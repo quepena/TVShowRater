@@ -1,5 +1,4 @@
-import { Trim } from 'class-sanitizer';
-import { IsString, MinLength } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class RegisterDto {
   @IsString()

@@ -1,28 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { useGetRatingOfShowByUserQuery, useGetReviewsOfShowQuery, useGetShowByIdQuery, useRatingOfShowByUserMutation } from '../store/slices/apiSlice'
-import Image from 'next/image'
+import { useGetReviewsOfShowQuery, useGetShowByIdQuery, useRatingOfShowByUserMutation } from '../store/slices/apiSlice'
 import Stars from './Stars'
 
 const Review = (props) => {
-    const { data: reviewData, error, isLoading } = useGetReviewsOfShowQuery(props.show)
-    const { data: showData } = useGetShowByIdQuery(props.show)
-    const [findRating, { data: userRatingData }] = useRatingOfShowByUserMutation()
+    const { data: reviewData } = useGetReviewsOfShowQuery(props.show)
     const [reviews, setReviews] = useState(reviewData)
-
-
-    // useEffect(() => {
-    //     reviewData?.map((el) => {
-    //         console.log(el)
-
-    //         findRating({ user: el.user.id, show: props.show })
-
-    //         arr.push(userRatingData)
-    //         // console.log(userRatingData);
-
-    //     })
-    // }, [reviewData])
-    // console.log(arr);
-
 
     useEffect(() => {
         if (props.review != "" && reviewData)
@@ -48,7 +30,6 @@ const Review = (props) => {
                             <div>{el.review}</div>
                         </div>
                     </div>
-
                 )
             }
         </div >

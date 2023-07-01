@@ -4,11 +4,9 @@ import Image from 'next/image';
 import Link from 'next/link'
 import Search from '../../components/Search';
 import Loading from '../../components/Loading';
-// import { useGetListsQuery } from '../store/slices/listSlice';
-
 const MyShows = () => {
     const [getMe, { data: me }] = useGetMeMutation()
-    const [getLists, { data, error, isLoading, isSuccess }] = useGetListsByUserMutation()
+    const [getLists, { data, isSuccess }] = useGetListsByUserMutation()
 
     const [query, setQuery] = useState("")
     const [search, { data: searchData }] = useSearchMutation()
@@ -18,7 +16,6 @@ const MyShows = () => {
     const handleSearch = (name: string) => {
         setQuery(name);
     }
-    console.log(searchData);
     searchData?.map((el) => el.hasOwnProperty('addId') ? shows.push(el) : castCrew.push(el))
 
     useEffect(() => {
@@ -36,7 +33,7 @@ const MyShows = () => {
     useEffect(() => {
         search(query)
     }, [query])
-    
+
     return (
         <div className='mx-auto max-w-5xl'>
             {

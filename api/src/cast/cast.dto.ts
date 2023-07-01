@@ -6,7 +6,7 @@ export class CreateCastDto {
 
   @IsNotEmpty()
   photo: string;
-  
+
   @IsNotEmpty()
   biography: string;
 
@@ -16,7 +16,7 @@ export class CreateCastDto {
 export class CreateCastTvShowDto {
   @IsNotEmpty()
   character: string;
-  
+
   @IsNotEmpty()
   cast: number;
 

@@ -1,9 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
-import { useGoogleMutation } from '../store/slices/apiSlice';
 
 const Register = () => {
-  const [google, { isLoading, isSuccess, error, isError, data }] = useGoogleMutation();
 
   return (
     <>

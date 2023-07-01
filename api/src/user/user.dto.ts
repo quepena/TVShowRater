@@ -18,8 +18,4 @@ export class CreateUserDto {
 
     @IsBoolean()
     isAdmin: boolean;
-
-    lists: number[]
-
-    ratings: number[]
 }

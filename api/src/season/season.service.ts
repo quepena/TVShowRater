@@ -18,15 +18,6 @@ export class SeasonService {
         const season = new Season();
         season.numSeason = numSeason;
         season.tvShow = await this.tvShowRepository.findOne({ where: { id: tvShow } })
-        // season.episodes = []
-        // if (episodes) {
-        //     for (let i = 0; i < episodes.length; i++) {
-        //         const episode = await this.episodeRepository.findOne({
-        //             where: { id: episodes[i] }
-        //         });
-        //         season.episodes.push(episode);
-        //     }
-        // }
 
         return await this.seasonRepository.save(season);
     }
@@ -52,15 +43,6 @@ export class SeasonService {
         const season = new Season();
         season.numSeason = numSeason;
         season.tvShow = await this.tvShowRepository.findOne({ where: { id: tvShow } });
-        // season.episodes = [];
-        // if (episodes) {
-        //     for (let i = 0; i < episodes.length; i++) {
-        //         const episode = await this.episodeRepository.findOne({
-        //             where: { id: episodes[i] }
-        //         });
-        //         season.episodes.push(episode);
-        //     }
-        // }
 
         const newSeason = await this.seasonRepository.save(
             { id: Number(id), numSeason: season.numSeason, tvShow: season.tvShow }

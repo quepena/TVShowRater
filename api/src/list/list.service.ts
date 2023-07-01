@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { range } from 'rxjs';
-import { User, TvShow, Genre } from 'src/entities';
+import { User, TvShow } from 'src/entities';
 import { In, IsNull, Repository } from 'typeorm';
 import { CreateListDto } from './list.dto';
 import { List } from './list.entity';
@@ -22,8 +21,6 @@ export class ListService {
         else list.user = null
         list.tvShows = [];
         for (let i = 0; i < tvShows.length; i++) {
-            console.log(tvShows[i]);
-
             const tvShow = await this.tvShowRepository.findOne({
                 where: { id: tvShows[i] }
             });
@@ -72,11 +69,6 @@ export class ListService {
         const showsWGenres = [];
         (await tv).forEach((TvShow) => {
             showsWGenres.push(TvShow.id)
-            // console.log(show);
-
-            // showsWGenres.push(show)
-            // console.log(TvShow.id);
-
         })
 
         const showFunc = (el: number) => {
@@ -97,29 +89,10 @@ export class ListService {
             const g = showFunc(el)
             const gr = await g
 
-            // console.log(el, gr);
-
-
             showG.push(gr)
 
             if (gr.id == showsWGenres[showsWGenres.length - 1]) return showG
         })
-
-        // console.log(showG);
-
-
-
-
-        // console.log(shows);
-
-
-        // for i in range(tv.length) {
-        //     const tvGenre = this.tvShowRepository.findOne({
-        //         where: {
-        //             id: tv.id
-        //         }
-        //     })
-        // }
 
         return (await tv);
     }

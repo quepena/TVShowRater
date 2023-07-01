@@ -63,14 +63,7 @@ export class ListController {
                 if (show) shows.push(show.id)
             }
             const name = faker.random.words()
-            // let user = null
-            // let userId = 0
-            // while (!user) {
-            //     userId = getRandomInt(1, 20)
-            //     user = await this.userService.findUserById(userId);
-            // }
-            console.log(shows);
-            
+
             this.listService.createList({ name: name, tvShows: shows, user: 118 } as CreateListDto)
         }
 

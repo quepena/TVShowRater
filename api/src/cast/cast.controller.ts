@@ -82,13 +82,6 @@ export class CastController {
 
     @Get('faker/cast')
     async fakeCast() {
-        // const rounds = 20;
-        // function getRandomInt(min, max) {
-        //     min = Math.ceil(min);
-        //     max = Math.floor(max);
-        //     return Math.floor(Math.random() * (max - min) + min);
-        // }
-
         const options = {
             method: 'GET',
             url: `https://api.themoviedb.org/3/tv/popular?language=en-US&page=3`,
@@ -102,7 +95,6 @@ export class CastController {
         const allGenre = await res.json();
 
         for (let index = 1; index <= allGenre.results.length; index++) {
-            // for (let index = 0; index < rounds; index++) {
             const round = index;
 
             const options = {
@@ -116,116 +108,47 @@ export class CastController {
 
             const res = await fetch(options.url, options)
             const allCast = await res.json();
-            // console.log(allCast);
 
-            // console.log(allGenre);
-
-            // const show = await this.tvShowService.findShowByName(allGenre.tvShow.name);
-            // console.log(allGenre.tvShow.start_date)
-
-            // const castList = []
             if (allCast.cast.length > 0) {
                 for (const element of allCast.cast) {
-                    // const genre = await this.castService.findGenreByName(element.name)
                     const cast = await fetch(`https://api.themoviedb.org/3/person/${element.id}?language=en-US`, options)
                     const castRes = await cast.json()
-                    // console.log(castRes);
-
 
                     const exists = await this.castService.findCastByName(castRes.name)
-                    // if (!exists) {
                     await this.castService.createCast({ name: castRes.name, photo: `https://image.tmdb.org/t/p/w500/${castRes.profile_path}`, biography: castRes.biography, roles: [1] })
                     const elNew = await this.castService.findCastByName(castRes.name)
                     const addId = await fetch(`https://api.themoviedb.org/3/tv/${allGenre.results[index].id}/external_ids`, options)
                     const addIdRes = await addId.json()
-                    console.log(round);
-
-
-                    // console.log(element.id);
-
-                    // console.log(castResult.id);
 
                     const elTv = await this.tvShowService.findTVShowByAddId(addIdRes.imdb_id)
-                    console.log(elTv.addId);
-
-                    // console.log(await elNew);
-                    // console.log(await elTv)
 
                     for (const el of element.roles)
                         await this.castService.createCharacter({ character: el.character, cast: elNew.id, tvShow: elTv.id })
-                    // }
-                    // else continue
-
-                    // genreList.push(genre.id);
                 }
             }
 
             if (allCast.crew.length > 0) {
-                // console.log(round);
-
-
                 for (const element of allCast.crew) {
-                    // const genre = await this.castService.findGenreByName(element.name)
                     const cast = await fetch(`https://api.themoviedb.org/3/person/${element.id}?language=en-US`, options)
                     const castRes = await cast.json()
-                    // console.log(castRes);
-
 
                     const allJobs = []
                     for (const el of element.jobs) {
                         let elEx = await this.roleService.findRoleByName(el.job)
-                        // console.log(elEx);
 
                         if (!elEx) {
                             await this.roleService.createRole({ name: el.job })
                             elEx = await this.roleService.findRoleByName(el.job)
-                            console.log("stmh");
-
                         }
-
-                        console.log(elEx);
-
-
                         allJobs.push(elEx.id)
                     }
-
-                    const exists = await this.castService.findCastByName(castRes.name)
-                    // console.log(exists);
-                    // console.log(allJobs);
-
-
-                    // if (!exists)
                     const newCast = await this.castService.createCast({ name: castRes.name, photo: `https://image.tmdb.org/t/p/w500/${castRes.profile_path}`, biography: castRes.biography, roles: allJobs })
-                    // else continue
-                    // genreList.push(genre.id);
                     const addId = await fetch(`https://api.themoviedb.org/3/tv/${allGenre.results[index].id}/external_ids`, options)
                     const addIdRes = await addId.json()
                     const elTv = await this.tvShowService.findTVShowByAddId(addIdRes.imdb_id)
-                    console.log(elTv.addId);
                     await this.castService.createCharacter({ character: null, cast: newCast.id, tvShow: elTv.id })
-
                 }
             }
-
-            // allGenre.genres.forEach(async element => {
-            //     const genre = await this.genreService.findGenreByName(element.name)
-            //     const genreAsync = genre;
-
-            //     genreList.push(genreAsync);
-            // });
-
-            // const youtube = await fetch(`https://api.themoviedb.org/3/tv/${round}/videos?language=en-US`, options)
-            // const youtubeRes = await youtube.json()
-
-            // const addId = await fetch(`https://api.themoviedb.org/3/tv/${round}/external_ids`, options)
-            // const addIdRes = await addId.json()
-            // console.log(addIdRes.imdb_id);
-
-
-
-            // const genre = this.genreService.findGenreByName()
-
-            // this.tvShowService.createTvShow({ name: allGenre.name, genres: genreList, description: allGenre.overview, country: allGenre.origin_country, photo: `https://image.tmdb.org/t/p/w500/${allGenre.poster_path}`, length: allGenre.episode_run_time[0], trailer: `https://www.youtube.com/watch?v=${youtubeRes.results[0]?.key}`, year: allGenre.first_air_date, addId: addIdRes.imdb_id })
         }
 
         return 0;

@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../user.entity';
 import * as bcrypt from 'bcryptjs';
-import { config } from 'dotenv';
 import { TokenDto } from './auth.dto';
 
 @Injectable()
@@ -29,7 +28,7 @@ export class AuthHelper {
 
   // Generate JWT Token
   public generateToken(user: User): string {
-    return this.jwt.sign({ id: user.id}, { secret: process.env.JWT_KEY });
+    return this.jwt.sign({ id: user.id }, { secret: process.env.JWT_KEY });
   }
 
   // Validate User's password
@@ -64,9 +63,8 @@ export class AuthHelper {
   async getProfile(token: TokenDto): Promise<User> {
     const decoded: unknown = this.jwt.verify(token.token);
 
-    console.log();
     const user: User = await this.repository.findOne({ where: { id: decoded['id'] } });
-    
+
     return user;
   }
 }

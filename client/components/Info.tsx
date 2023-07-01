@@ -1,12 +1,12 @@
 import { useGetShowByIdQuery, useGetNumSeasonsByShowQuery, useGetCastByShowQuery, useGetCrewByShowQuery, useReviewMutation, useGetMeMutation } from '../store/slices/apiSlice'
 import Image from 'next/image'
 import { castTvShow } from '../types/castTvShow';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Review from './Review';
 import Link from 'next/link';
 
 const Info = (props) => {
-    const { data: showData, error, isLoading } = useGetShowByIdQuery(props.show)
+    const { data: showData } = useGetShowByIdQuery(props.show)
     const { data: numSeasons } = useGetNumSeasonsByShowQuery(props.show)
     const { data: castInfo } = useGetCastByShowQuery(props.show)
     const { data: crewInfo } = useGetCrewByShowQuery(props.show)
@@ -23,8 +23,6 @@ const Info = (props) => {
             token: local
         }
         getMe(details)
-        // userRatingData?.length == 1 ? null : null
-        // getRate({ user: me?.id, show: props.id })
     }, [])
 
     return (

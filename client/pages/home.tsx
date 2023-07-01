@@ -1,22 +1,12 @@
 import Link from 'next/link'
-import React, { Dispatch, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import NavBar from '../components/NavBar'
-import navButtons from '../components/NavButtons'
+import React from 'react'
 import { useGetAdminListsQuery } from '../store/slices/apiSlice'
-import { logout } from '../store/slices/userSlice'
-import { TvShow } from '../types/tvShow'
-// import { fetchUsers } from '../store/slices/userSlice'
 import Image from 'next/image'
-import Show from './shows/[show]'
-import router, { Router } from 'next/router'
 import Loading from '../components/Loading'
 
 const Hero = () => {
-  const { data: popular, error, isLoading } = useGetAdminListsQuery("Popular")
+  const { data: popular } = useGetAdminListsQuery("Popular")
   const { data, isSuccess } = useGetAdminListsQuery("Best Shows of All Time")
-  // data?.map((el: TvShow) => console.log(el));
-  
 
   return (
     <div>
@@ -24,9 +14,6 @@ const Hero = () => {
         isSuccess ?
           <div className='my-0 mx-auto max-w-7xl'>
             <div>
-              <button onClick={() => localStorage.removeItem("userInfo")}>
-                {/* find */}
-              </button>
               <div className='text-3xl mb-6'>Popular Shows</div>
               <div>
                 <div className='flex justify-between align-center'>

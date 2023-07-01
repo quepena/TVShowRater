@@ -25,12 +25,4 @@ export class CreateTvShowDto {
     length: number;
     
     trailer: string;
-
-    // seasons: number[]
-
-    // lists: number[]
-
-    // ratings: number[]
-
-    // castTvShow: number[]
 }

@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
-import { useCreateProgressMutation, useGetEpsBySeasonQuery, useGetSeasonsByShowQuery, useGetMeMutation, useFindShowProgressByUserByShowMutation, useGetListsByUserMutation, useEditListMutation, useGetEpsBySeasonMutMutation, useGetCountEpsByShowQuery, useGetShowByIdQuery } from "../store/slices/apiSlice";
-import { Season } from "../types/season";
+import {
+    useCreateProgressMutation, useGetEpsBySeasonQuery, useGetSeasonsByShowQuery,
+    useGetMeMutation, useFindShowProgressByUserByShowMutation, useGetListsByUserMutation,
+    useEditListMutation, useGetCountEpsByShowQuery, useGetShowByIdQuery
+} from "../store/slices/apiSlice";
 import { AiOutlineCaretUp, AiOutlineCaretDown } from 'react-icons/ai'
 
 const Tracker = (props) => {
     const [isOpen, setIsOpen] = useState(false)
     const { data: showData } = useGetShowByIdQuery(props.show)
-    const [season, setSeason] = useState("1")
+    const [setSeason] = useState("1")
     const [numS, setNumS] = useState("")
     const [seasonId, setSeasonId] = useState("")
-    const { data: seasonsData, error, isLoading } = useGetSeasonsByShowQuery(props.show)
+    const { data: seasonsData } = useGetSeasonsByShowQuery(props.show)
     const [getMe, { data: me }] = useGetMeMutation()
-    const [editList, { data: editData }] = useEditListMutation()
+    const [editList] = useEditListMutation()
 
     useEffect(() => {
         const local = JSON.parse(localStorage.getItem('userInfo'));
@@ -23,8 +26,7 @@ const Tracker = (props) => {
 
     const { data: epsData, isSuccess } = useGetEpsBySeasonQuery(seasonId)
 
-    const [createProgress, { data: progressData }] = useCreateProgressMutation()
-    const [checked, setChecked] = useState(false)
+    const [createProgress] = useCreateProgressMutation()
 
     const initialGenres = epsData && [...new Array(epsData.length)].map(() => false);
 
@@ -35,14 +37,10 @@ const Tracker = (props) => {
     const [findLists, { data: listsData }] = useGetListsByUserMutation()
 
     const [shows, setShows] = useState([])
-    const [watchedShows, setWatchedShows] = useState([])
-    const [watchlistShows, setWatchlistShows] = useState([])
+    const [setWatchedShows] = useState([])
+    const [setWatchlistShows] = useState([])
 
     const { data: countAllEps } = useGetCountEpsByShowQuery(props.show)
-
-    console.log(countAllEps);
-
-
 
     useEffect(() => {
         findShows({ user: me?.id, show: props.show });
@@ -53,8 +51,6 @@ const Tracker = (props) => {
     const [watchlist, setWatchlist] = useState([])
     const [watched, setWatched] = useState([])
 
-
-
     useEffect(() => {
         setList(listsData?.filter((el) => el.name == "Currently Watching"))
         setWatched(listsData?.filter((el) => el.name == "Watched"))
@@ -63,15 +59,6 @@ const Tracker = (props) => {
 
     useEffect(() => {
         if (isSuccess) {
-            // console.log([...new Array(epsData.length)].map(() => false));
-
-            // setName(showData?.name);
-            // setDesc(showData?.description);
-            // setPhoto(showData?.photo);
-            // setLength(showData?.length);
-            // setYear(showData?.year);
-            // setTrailer(showData?.trailer);
-            // initialGenres[index] = true
             setCheckedState([...initialGenres]);
         }
     }, [isSuccess])
@@ -79,30 +66,15 @@ const Tracker = (props) => {
     const [newEps, setNewEps] = useState([])
 
     useEffect(() => {
-        // progressByShowData && progressByShowData.map((el) => el.episode.numEp-1 && checkedState.map((item, index) => index === position ? !item : item))
         const eps = progressByShowData && progressByShowData.map((el) => el.episode.numEp)
-
         setNewEps(checkedState.map((item, index) => eps?.includes(index + 1) ? !item : item))
     }, [progressByShowData, checkedState])
 
     useEffect(() => {
-
         list && list[0] && list[0].tvShows && setShows(list[0].tvShows)
         watchlist && watchlist[0] && watchlist[0].tvShows && setWatchlistShows(watchlist[0].tvShows)
         watched && watched[0] && watched[0].tvShows && setWatchedShows(watched[0].tvShows)
-        
-
     }, [list])
-
-    // useEffect(() => {
-    //     console.log(allEps);
-    //     console.log(allEpsData);
-
-
-    //     allEps && allEpsData && setAllEps([...allEps, ...allEpsData]);
-    // }, [allEpsData])
-
-    // console.log(allEps);
 
     const [include, setInclude] = useState(false)
     useEffect(() => {
@@ -110,28 +82,17 @@ const Tracker = (props) => {
             const key = obj[0];
             const value = obj[1];
 
-            console.log(value);
-
             showData && value.id == showData.id && setInclude(true)
         });
     }, [shows])
 
-    progressByShowData && countAllEps && console.log(progressByShowData.length + 1, countAllEps[1]);
-    
-
     const handleOnChange = (el, position) => {
-        // setCheckedState([...initialGenres]);
-        console.log(el);
-
         const updatedCheckedState = checkedState.map((item, index) => index === position ? !item : item);
 
         setCheckedState([...updatedCheckedState]);
 
-
-
         if (progressByShowData && progressByShowData.length == 0 && !include) {
             const newShowsIds = shows.map((el) => parseInt(el.id))
-            console.log(list && list[0].id);
             const details = {
                 user: me?.id,
                 name: list[0].name,
@@ -152,7 +113,6 @@ const Tracker = (props) => {
         } else if (progressByShowData && countAllEps && progressByShowData.length + 1 == countAllEps[1] && include) {
             const newShows = list[0].tvShows.filter((el) => el.name != showData.name)
             const newShowsIds = newShows.map((el) => parseInt(el.id))
-            console.log(newShowsIds);
 
             const details = {
                 user: me?.id,
@@ -160,14 +120,10 @@ const Tracker = (props) => {
                 tvShows: [...newShowsIds]
             }
 
-            console.log(details);
-
-
             editList({ id: list[0].id, details: details })
             setInclude(false)
 
             const newShowsWatchedIds = shows.map((el) => parseInt(el.id))
-            console.log(list && list[0].id);
             const detailsWatchedList = {
                 user: me?.id,
                 name: list[0].name,
@@ -176,24 +132,13 @@ const Tracker = (props) => {
 
             editList({ id: watchlist[0].id, details: detailsWatchedList })
         }
-
-
-        // e.preventDefault()
-        console.log("check");
-        // console.log(e.target);
-
-        // if (e?.target?.checked === true) {
         const details = {
             user: me?.id,
             episode: el.id
         }
 
         createProgress(details)
-        // setChecked(true)
-        // }
-
     }
-
 
     return (
         <div className="h-[500px]">
@@ -242,7 +187,6 @@ const Tracker = (props) => {
             </div>
         </div>
     )
-
 };
 
 export default Tracker;

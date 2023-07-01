@@ -7,7 +7,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 const Edit = () => {
     const router = useRouter()
 
-    const { data: showData, isSuccess, error, isLoading } = useGetShowByIdQuery(router.query.id)
+    const { data: showData, isSuccess } = useGetShowByIdQuery(router.query.id)
 
     const [editShow, { isSuccess: editShowSuccess }] = useEditShowMutation()
 
@@ -93,33 +93,20 @@ const Edit = () => {
             genres: arr.map((el) => el.id)
         }
 
-        console.log(editShowSuccess);
-        console.log(button);
-        
-
         if (emptyErrors.filter((el) => el == true).length == 0 && button && !editShowSuccess) {
             editShow({ id: id, details: show })
-            console.log("1");
-
         }
 
         if (emptyErrors.filter((el) => el == true).length == 0 && button) {
             setEditError(false)
             setEditSuccess(true)
-            console.log("2");
-
         }
         else if (!editShowSuccess && button) {
             setEditError(true)
             setEditSuccess(false)
-            console.log("3");
-
         }
     }
-
-    console.log(editSuccess, editError);
-
-
+    
     return (
         <div className='max-w-2xl mx-auto mb-12'>
             <div className='flex'>

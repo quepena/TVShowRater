@@ -30,9 +30,6 @@ const NewList = () => {
     setShow([...newShows])
   }
 
-  console.log(shows);
-
-
   useEffect(() => {
     search(query)
   }, [query])
@@ -42,10 +39,9 @@ const NewList = () => {
 
   const [getMe, { data: me }] = useGetMeMutation()
 
-  const [createList, { data: listData, isSuccess }] = useCreateListMutation()
+  const [createList, { isSuccess }] = useCreateListMutation()
   const [name, setName] = useState("")
   const [error, setError] = useState(false)
-  const [toggle, setToggle] = useState(false)
 
   useEffect(() => {
     const local = JSON.parse(localStorage.getItem('userInfo'));
@@ -101,7 +97,6 @@ const NewList = () => {
               <div className='mr-2 w-full'>
                 {
                   <button onClick={(e) => {
-                    console.log(shows.some(element => element.photo == el.photo));
                     !shows.some(element => element.photo == el.photo) ?
                       addShow(el, e) : deleteShow(el, e)
                   }}>
