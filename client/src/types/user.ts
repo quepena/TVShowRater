@@ -5,6 +5,7 @@ export interface User {
     photo: string;
     password: string;
     isAdmin: boolean;
+    isOnboarded: boolean;
 }
 
 export interface IGenericResponse {

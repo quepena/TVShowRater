@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import SearchShows from '../../components/SearchShows'
+import SearchShows from '../../../components/SearchShows'
 import { useDeleteShowMutation, useSearchShowsMutation } from '../../store/slices/apiSlice'
 import Image from 'next/image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

@@ -27,6 +27,9 @@ export class User {
   @Column()
   isAdmin: boolean;
 
+  @Column()
+  isOnboarded: boolean;
+
   @OneToMany(type => List, list => list.user)
   lists: List[]
 

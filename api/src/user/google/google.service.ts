@@ -21,6 +21,7 @@ export class GoogleService {
         newUser.last_name = last_name;
         newUser.photo = photo;
         newUser.isAdmin = false;
+        newUser.isOnboarded = false;
         newUser.password = sub;
 
         const userExists = await this.repository.find({ where: { email: newUser.email } })

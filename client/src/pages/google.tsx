@@ -4,8 +4,8 @@ import axios from "axios";
 import router from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import Input from "../components/Input";
-import { validate } from "../components/Validation";
+import Input from "../../components/Input";
+import { validate } from "../../components/Validation";
 import { useGoogleMutation, useLoginMutation } from "../store/slices/apiSlice";
 import { Auth } from "../types/auth";
 

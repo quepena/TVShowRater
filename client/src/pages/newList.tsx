@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useCreateListMutation, useGetMeMutation, useSearchShowsMutation } from '../store/slices/apiSlice'
 import Image from 'next/image'
-import SearchShows from '../components/SearchShows'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router';
+import SearchShows from '@/components/SearchShows'
 
 const NewList = () => {
   const router = useRouter()

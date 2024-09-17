@@ -9,8 +9,8 @@ import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router';
-import SearchShows from '../../components/SearchShows';
-import Loading from '../../components/Loading';
+import SearchShows from '../../../components/SearchShows';
+import Loading from '../../../components/Loading';
 
 const List = (props) => {
   const router = useRouter();
@@ -115,7 +115,7 @@ const List = (props) => {
 
 
   return (
-    <div className='mx-auto max-w-5xl'>
+    <div>
       {
         isSuccess ?
           <div className=''>

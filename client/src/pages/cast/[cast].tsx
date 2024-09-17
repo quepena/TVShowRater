@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
-import Loading from '../../components/Loading';
+import Loading from '../../../components/Loading';
 
 const Cast = (props) => {
     const router = useRouter()

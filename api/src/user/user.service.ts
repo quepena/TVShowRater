@@ -25,16 +25,16 @@ export class UserService {
     }
 
     async updateUser(id: number, userDetails: CreateUserDto): Promise<User> {
-        const { name, last_name, email, photo, password, isAdmin } = userDetails;
         const user = new User();
-        user.name = name;
-        user.last_name = last_name;
-        user.email = email;
-        user.photo = photo;
-        user.password = password;
-        user.isAdmin = isAdmin;
+        user.name = userDetails.name;
+        user.last_name =  userDetails.last_name;
+        user.email =  userDetails.email;
+        user.photo =  userDetails.photo;
+        user.password =  userDetails.password;
+        user.isAdmin =  userDetails.isAdmin;
+        user.isOnboarded =  userDetails.isOnboarded;
 
-        const updatedUser = await this.userRepository.save({ id: Number(id), name: user.name, last_name: user.last_name, email: user.email, photo: user.photo, password: user.password, isAdmin: user.isAdmin });
+        const updatedUser = await this.userRepository.save({ ...userDetails });
 
         return updatedUser;
     }

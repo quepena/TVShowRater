@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import NavBar from './NavBar'
 import navButtons from './NavButtons'
 import { AiOutlineCaretDown, AiOutlineCaretUp } from 'react-icons/ai'
 import { useGetMeMutation } from '../store/slices/apiSlice'
 import { useRouter } from 'next/router'
+import NavBar from './NavBar'
 
 const Nav = () => {
   const router = useRouter()
@@ -13,7 +13,7 @@ const Nav = () => {
   const [loc, setLoc] = useState({})
 
   useEffect(() => {
-    if (localStorage.getItem('userInfo') == null || localStorage.getItem('userInfo') == "" || !localStorage.getItem('userInfo'))
+    if (localStorage.getItem('userInfo') == null || localStorage.getItem('userInfo') == "" || !localStorage.getItem('userInfo') || localStorage.getItem('userInfo') === "undefined")
       router.push("/login")
     else {
       const local = JSON.parse(localStorage.getItem('userInfo'));
@@ -33,7 +33,7 @@ const Nav = () => {
     <nav className='bg-sky-400 mb-12 sticky top-0 z-50'>
       <main className='my-0 mx-auto max-w-7xl text-center'>
         <div className='flex justify-between items-center'>
-          <div className='flex justify-center text-xl'>
+          <div className='flex justify-center items-center text-xl'>
             <Link href="/" className='font-semibold text-2xl mr-4'>
               TVShowRater
             </Link>

@@ -3,13 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { useChangeRateMutation, useDeleteRateMutation, useGetMeMutation, useGetMeanRatingByShowQuery, useGetRatingOfShowByUserMutMutation, useGetRatingOfShowByUserQuery, useGetShowByIdQuery, useReviewMutation } from '../../store/slices/apiSlice'
 import { TvShow } from '../../types/tvShow'
 import Image from 'next/image'
-import Toggle from '../../components/Toggle'
+import Toggle from '../../../components/Toggle'
 import { Rating } from 'react-simple-star-rating'
 import { useRateMutation } from '../../store/slices/apiSlice'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import moment from 'moment'
-import Loading from '../../components/Loading'
+import Loading from '../../../components/Loading'
 
 const Show = (props: TvShow) => {
     const router = useRouter()

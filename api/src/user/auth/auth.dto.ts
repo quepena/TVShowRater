@@ -18,6 +18,9 @@ export class RegisterDto {
 
   @IsString()
   public readonly isAdmin: boolean;
+
+  @IsString()
+  public readonly isOnboarded: boolean;
 }
 
 export class LoginDto {
