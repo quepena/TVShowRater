@@ -12,7 +12,7 @@ export default function App({ Component, ...rest }: AppProps) {
     return (
         <Provider store={store}>
             <ApiProvider api={apiSlice}>
-                <div className="bg-white w-full h-full">
+                <div className="bg-white w-full">
                     <Nav />
                     <div className="my-0 mx-auto max-w-7xl text-center">
                         <Component {...pageProps} />

@@ -9,6 +9,38 @@ import Link from "next/link";
 import Search from "src/components/Search";
 import Loading from "src/components/Loading";
 import { Card } from "@/components/ui/card";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/input";
+import { Button } from "@/components/ui/button";
+import { PlusIcon } from "lucide-react";
+import SearchShows from "@/components/SearchShows";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+const formSchema = z.object({
+    name: z.string().min(2, {
+        message: "Name must be at least 2 characters.",
+    }),
+});
+
 const MyShows = () => {
     const [getMe, { data: me }] = useGetMeMutation();
     const [getLists, { data, isSuccess }] = useGetListsByUserMutation();
@@ -40,6 +72,17 @@ const MyShows = () => {
     useEffect(() => {
         search(query);
     }, [query]);
+
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: "",
+        },
+    });
+
+    const onSubmit = (values: z.infer<typeof formSchema>) => {
+        console.log(values);
+    };
 
     return (
         <div>
@@ -116,12 +159,59 @@ const MyShows = () => {
                         </div>
                     ) : (
                         <div>
-                            <div className="text-xl bg-green-500 p-4 font-semibold w-[15%] text-center rounded mt-5 mb-2 ml-auto mr-24">
-                                <Link href="/newList">
-                                    <b>+</b> Add a list
-                                </Link>
-                            </div>
-                            <Card>
+                            <Dialog>
+                                <DialogTrigger className="flex w-full items-end">
+                                    <Button className="my-5 ml-auto">
+                                        <PlusIcon className="h-6 w-6 mr-2" />{" "}
+                                        Add a list
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle>
+                                            Create a new list
+                                        </DialogTitle>
+                                    </DialogHeader>
+                                    <Form {...form}>
+                                        <form
+                                            onSubmit={form.handleSubmit(
+                                                onSubmit
+                                            )}
+                                            className="space-y-8"
+                                        >
+                                            <FormField
+                                                control={form.control}
+                                                name="name"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>
+                                                            Name
+                                                        </FormLabel>
+                                                        <FormControl>
+                                                            <Input
+                                                                placeholder="My List"
+                                                                {...field}
+                                                            />
+                                                        </FormControl>
+                                                        <FormDescription>
+                                                            This is your list
+                                                            name.
+                                                        </FormDescription>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            <SearchShows
+                                                handleSearch={handleSearch}
+                                            />
+                                            <Button type="submit">
+                                                Submit
+                                            </Button>
+                                        </form>
+                                    </Form>
+                                </DialogContent>
+                            </Dialog>
+                            <ScrollArea className="h-[600px]">
                                 {data?.map((el) => (
                                     <Link
                                         key={el.id}
@@ -133,7 +223,7 @@ const MyShows = () => {
                                             },
                                         }}
                                     >
-                                        <div className="border-2 border-black rounded-xl p-5 flex mb-5 w-full h-[350px]">
+                                        <Card className="p-5 flex mb-5 w-full h-[350px]">
                                             <div className="relative top-0 left-0">
                                                 {el.tvShows &&
                                                 el.tvShows.length <= 1 ? (
@@ -238,10 +328,10 @@ const MyShows = () => {
                                                         : `${el.tvShows.length} shows`}
                                                 </div>
                                             </div>
-                                        </div>
+                                        </Card>
                                     </Link>
                                 ))}
-                            </Card>
+                            </ScrollArea>
                         </div>
                     )}
                 </div>

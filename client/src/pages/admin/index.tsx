@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import SearchShows from '../../../components/SearchShows'
 import { useDeleteShowMutation, useSearchShowsMutation } from '../../store/slices/apiSlice'
 import Image from 'next/image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
+import SearchShows from '@/components/SearchShows'
 
 const Admin = () => {
     const [query, setQuery] = useState("")
