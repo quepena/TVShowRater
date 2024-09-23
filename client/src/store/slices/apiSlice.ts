@@ -1,10 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import { List } from "../../types/list"
-import { Rating } from "../../types/rating"
-import { TvShow } from "../../types/tvShow"
-import { User } from "../../types/user"
-import { Review } from "../../types/review"
-import { Progress } from "../../types/progress"
+import { List } from "@/types/list"
+import { Rating } from "@/types/rating"
+import { TvShow } from "@/types/tvShow"
+import { User } from "@/types/user"
+import { Review } from "@/types/review"
+import { Progress } from "@/types/progress"
+import { Cast } from "@/types/cast"
 
 export const apiSlice = createApi({
     reducerPath: 'api',
@@ -163,7 +164,7 @@ export const apiSlice = createApi({
                 };
             }
         }),
-        getAdminLists: builder.query<TvShow, string>({
+        getAdminLists: builder.query<TvShow[], string>({
             query(name: string) {
                 const headers = {
                     'Content-Type': 'application/json',

@@ -1,29 +1,34 @@
-import Link from 'next/link'
-import React from 'react'
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import Link from "next/link";
+import React from "react";
 
 const Login = () => {
   return (
     <>
-      <div className='bg-gray-300 mb-12 sm:w-full md:max-w-md lg:max-w-lg mx-auto p-8 md:p-12 my-5 rounded-lg h-80'>
-        <div className='text-md font-semibold'>Sign In</div>
-        <div>
+      <Card className="mx-auto h-80 w-11/12 md:max-w-lg">
+        <CardHeader className="text-lg font-semibold">SIGN IN</CardHeader>
+        <CardContent className="flex w-full flex-col">
           <Link href="/google">
-            <div className='bg-gray-400 p-3 my-3'>
-              Continue with Google
-            </div>
+            <Button className="my-3 w-full p-3">Continue with Google</Button>
           </Link>
-          <Link href="/loginForm">
-            <div className='bg-gray-400 p-3 my-3'>
-              Sign in with E-mail
-            </div>
+          <Link href="/sign-in">
+            <Button className="my-3 w-full p-3">Sign in with E-mail</Button>
           </Link>
-        </div>
-        <div className='text-right'>
-          <Link href="/register">Don't have an account? Sign up</Link>
-        </div>
-      </div>
+        </CardContent>
+        <CardFooter className="justify-end text-right">
+          <Link href="/register">
+            Don't have an account? <Button variant="ghost">Sign up</Button>
+          </Link>
+        </CardFooter>
+      </Card>
     </>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

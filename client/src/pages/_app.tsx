@@ -2,9 +2,9 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
 import { ApiProvider } from "@reduxjs/toolkit/dist/query/react";
-import { apiSlice } from "src/store/slices/apiSlice";
-import { wrapper } from "src/store/store";
 import Nav from "@/components/Nav";
+import { wrapper } from "@/store/store";
+import { apiSlice } from "@/store/slices/apiSlice";
 
 export default function App({ Component, ...rest }: AppProps) {
     const { store, props } = wrapper.useWrappedStore(rest);

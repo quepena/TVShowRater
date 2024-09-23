@@ -44,7 +44,7 @@ const Nav = () => {
 
   return (
     <nav className="sticky top-0 z-50 mb-12 bg-sky-400">
-      <main className="mx-auto my-0 max-w-7xl text-center">
+      <main className="mx-auto my-0 max-w-7xl px-6 text-center">
         <div className="flex items-center justify-between">
           <div className="flex items-center justify-center text-xl">
             <Link href="/" className="mr-4 text-2xl font-semibold text-white">

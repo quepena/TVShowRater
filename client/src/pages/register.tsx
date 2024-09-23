@@ -1,28 +1,34 @@
-import Link from 'next/link'
-import React from 'react'
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import Link from "next/link";
+import React from "react";
 
 const Register = () => {
-
   return (
     <>
-      <div className='bg-gray-300 mb-12 sm:w-full md:max-w-md lg:max-w-lg mx-auto p-8 md:p-12 my-5 rounded-lg h-80'>
-        <div className='text-md font-semibold'>Sign Up</div>
-        <div>
+      <Card className="mx-auto h-80 w-11/12 md:max-w-lg">
+        <CardHeader className="text-lg font-semibold">SIGN UP</CardHeader>
+        <CardContent>
           <Link href="/google">
-              <div className='bg-gray-400 p-3 my-3'>Continue with Google</div>
+            <Button className="my-3 w-full p-3">Continue with Google</Button>
           </Link>
-          <Link href="/registerForm">
-            <div className='bg-gray-400 p-3 my-3'>
-              Sign up with E-mail
-            </div>
+          <Link href="/sign-up">
+            <Button className="my-3 w-full p-3">Sign up with E-mail</Button>
           </Link>
-        </div>
-        <div className='text-right'>
-          <Link href="/login">Already have an account? Sign in</Link>
-        </div>
-      </div>
+        </CardContent>
+        <CardFooter className="justify-end text-right">
+          <Link href="/login">
+            Already have an account? <Button variant="ghost">Sign in</Button>
+          </Link>
+        </CardFooter>
+      </Card>
     </>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;
