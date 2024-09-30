@@ -32,7 +32,12 @@ const Hero = () => {
                         }}
                       >
                         <div className="relative h-[280px] w-[180px]">
-                          <Image src={el.photo} alt={el?.cast?.name} fill />
+                          <Image
+                            src={el.photo}
+                            alt={el?.cast?.name}
+                            fill
+                            sizes="280px"
+                          />
                         </div>
                       </Link>
                     ) : (
@@ -51,6 +56,7 @@ const Hero = () => {
                             src="/placeholder.png"
                             alt={el?.cast?.name}
                             fill
+                            sizes="280px"
                           />
                         </div>
                       </Link>
@@ -78,7 +84,12 @@ const Hero = () => {
                         }}
                       >
                         <div className="relative h-[280px] w-[180px]">
-                          <Image src={el.photo} alt={el?.cast?.name} fill />
+                          <Image
+                            src={el.photo}
+                            alt={el?.cast?.name}
+                            fill
+                            sizes="280px"
+                          />
                         </div>
                       </Link>
                     ) : (
@@ -97,6 +108,7 @@ const Hero = () => {
                             src="/placeholder.png"
                             alt={el?.cast?.name}
                             fill
+                            sizes="280px"
                           />
                         </div>
                       </Link>

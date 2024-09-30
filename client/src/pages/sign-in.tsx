@@ -72,7 +72,7 @@ const loginForm = () => {
         "userInfo",
         JSON.stringify(data["token" as keyof Object]),
       );
-
+      
       router.push("/");
     } else if (error) {
       const message: string = JSON.stringify(
@@ -89,8 +89,8 @@ const loginForm = () => {
     email: z.string().email({
       message: "Email must be valid.",
     }),
-    password: z.string().min(8, {
-      message: "Password must be at least 8 symbols",
+    password: z.string().min(4, {
+      message: "Password must be at least 4 symbols",
     }),
   });
 

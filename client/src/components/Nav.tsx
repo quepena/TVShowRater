@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import navButtons from "./NavButtons";
 import { AiOutlineCaretDown, AiOutlineCaretUp } from "react-icons/ai";
 import { useGetMeMutation } from "../store/slices/apiSlice";
@@ -14,33 +14,86 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
+import { User } from "@/types/user";
 
-const Nav = () => {
+interface Props {
+  me: User | undefined;
+  setLogout: Dispatch<SetStateAction<boolean>>;
+  isLoggedIn: boolean;
+}
+
+const Nav = (props: Props) => {
+  const { me, setLogout } = props;
   const router = useRouter();
-  const [getMe, { data: me }] = useGetMeMutation();
   const [isOpen, setIsOpen] = useState(false);
-  const [loc, setLoc] = useState({});
+  // const [getMe, { data: me, isSuccess }] = useGetMeMutation();
+  // const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  // const [isOpen, setIsOpen] = useState(false);
+  // const [loc, setLoc] = useState({});
+  // const [logout, setLogout] = useState(false);
 
-  useEffect(() => {
-    if (
-      localStorage.getItem("userInfo") == null ||
-      localStorage.getItem("userInfo") == "" ||
-      !localStorage.getItem("userInfo") ||
-      localStorage.getItem("userInfo") === "undefined"
-    )
-      router.push("/login");
-    else {
-      const local = JSON.parse(localStorage.getItem("userInfo"));
-      const details = {
-        token: local,
-      };
-      getMe(details);
-    }
-  }, []);
+  // // useEffect(() => {
+  // //   const checkUserData = () => {
+  // //     const item = localStorage.getItem("userInfo");
 
-  useEffect(() => {
-    if (me && me.hasOwnProperty("id")) setLoc(me);
-  }, [me]);
+  // //     if (item == "" || !item || item === "undefined") {
+  // //       router.push("/login");
+  // //     } else {
+  // //       const details = {
+  // //         token: JSON.parse(item),
+  // //       };
+  // //       getMe(details);
+  // //     }
+  // //   };
+
+  // //   if (logout) {
+  // //     localStorage.removeItem("userInfo");
+  // //     setLogout(false);
+  // //     router.push("/login");
+  // //   }
+
+  // //   checkUserData();
+  // //   window.addEventListener("storage", checkUserData);
+
+  // //   return () => {
+  // //     window.removeEventListener("storage", checkUserData);
+  // //   };
+  // // }, [logout]);
+
+  // useEffect(() => {
+  //   const item = localStorage.getItem("userInfo");
+
+  //   if (item == "" || !item || item === "undefined") {
+  //     router.push("/login");
+  //   } else {
+  //     const details = {
+  //       token: JSON.parse(item),
+  //     };
+  //     getMe(details);
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   if (
+  //     localStorage.getItem("userInfo") == null ||
+  //     localStorage.getItem("userInfo") == "" ||
+  //     !localStorage.getItem("userInfo") ||
+  //     localStorage.getItem("userInfo") === "undefined"
+  //   )
+  //     router.push("/login");
+  //   else {
+  //     const local = JSON.parse(localStorage.getItem("userInfo"));
+  //     const details = {
+  //       token: local,
+  //     };
+  //     getMe(details);
+  //   }
+  // }, [localStorage.getItem("userInfo")]);
+
+  // useEffect(() => {
+  //   console.log(me);
+  //   if (me) setIsLoggedIn(true);
+  // }, [me]);
 
   return (
     <nav className="sticky top-0 z-50 mb-12 bg-sky-400">
@@ -70,6 +123,18 @@ const Nav = () => {
                       <Link onClick={() => setIsOpen(false)} href="/admin">
                         <div>Admin panel</div>
                       </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <div
+                        onClick={() => {
+                          localStorage.removeItem("userInfo");
+                          // setIsLoggedIn(false);
+                          setLogout(true);
+                        }}
+                      >
+                        Logout
+                      </div>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
